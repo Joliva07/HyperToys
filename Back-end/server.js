@@ -1,19 +1,25 @@
-const db = require('./app/config/databse.config');
+const express = require("express");
+const db = require("./app/config/databse.config"); // Importas el objeto db
+const clientesRoutes = require("./app/routes/router");
 
-async function startServer() {
-    try {
-        console.log('Intentando conectar a la base de datos...');
-        await db.sequelize.authenticate();
-        console.log('Conexión a la base de datos establecida correctamente.');
-        // Aquí puedes iniciar tu servidor, por ejemplo, con Express
-        // const express = require('express');
-        // const app = express();
-        // app.listen(3000, () => {
-        //     console.log('Servidor escuchando en el puerto 3000');
-        // });
-    } catch (error) {
-        console.error('No se pudo conectar a la base de datos:', error);
-    }
-}
+const app = express();
+app.use(express.json());
 
-startServer();
+// Importar rutas
+app.use("/clientes", clientesRoutes);
+
+// Iniciar servidor
+const PORT = process.env.PORT || 3000;
+
+// Usa db.sequelize en lugar de sequelize directamente
+db.sequelize.authenticate()
+    .then(() => {
+        console.log("Conectado a la base de datos");
+        return db.sequelize.sync(); // Sincroniza modelos si es necesario
+    })
+    .then(() => {
+        app.listen(PORT, () => {
+            console.log(`Servidor corriendo en http://localhost:${PORT}`);
+        });
+    })
+    .catch(error => console.error("Error conectando a la BD:", error));

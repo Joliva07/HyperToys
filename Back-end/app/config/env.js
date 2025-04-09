@@ -1,9 +1,9 @@
 module.exports = {
-    DB_USER: 'USR_PROYECTO',
-    DB_PASSWORD: 'password.',
+    DB_USER: 'C##HYPER',
+    DB_PASSWORD: '1234',
     DB_HOST: 'localhost',
     DB_PORT: '1521',
-    DB_NAME: 'HyperToys',
+    DB_NAME: 'xe',
     pool: {
       max: 5,
       min: 0,
