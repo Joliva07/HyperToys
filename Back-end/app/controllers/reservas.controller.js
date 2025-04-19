@@ -24,6 +24,7 @@ async function getNextDetalleReservaId() {
 
 
 exports.realizarReserva = async (req, res) => {
+    //console.log("Llego a la ruta /reservas");
     const t = await db.sequelize.transaction();
 
     try {
@@ -52,6 +53,8 @@ exports.realizarReserva = async (req, res) => {
             fecha_limite_pago: fechaLimitePago
         }, { transaction: t });
 
+        let idDetalleReservaContador = 1;
+
         for (const producto of productos) {
             const { id_producto, cantidad } = producto;
 
@@ -59,12 +62,12 @@ exports.realizarReserva = async (req, res) => {
                 throw new Error('Datos incompletos en los productos');
             }
 
-            const idDetalle = await getNextDetalleReservaId();
+            //const idDetalle = await getNextDetalleReservaId();
             await DetalleReserva.create({
                 id_reserva: idReserva,
                 id_producto,
                 cantidad,
-                id_detalle_reserva: idDetalle// Puedes ajustar cómo generas este ID
+                id_detalle_reserva: idDetalleReservaContador++// Puedes ajustar cómo generas este ID
             }, { transaction: t });
         }
 

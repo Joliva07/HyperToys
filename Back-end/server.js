@@ -5,11 +5,16 @@ const clientesRoutes = require("./app/routes/router");
 const app = express();
 app.use(express.json());
 
+const cors = require('cors');
+
+app.use(cors()); // Permite todas las conexiones (modo dev seguro)
+
+
 // Importar rutas
 app.use("/clientes", clientesRoutes);
 
 // Iniciar servidor
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 
 // Usa db.sequelize en lugar de sequelize directamente
 db.sequelize.authenticate()

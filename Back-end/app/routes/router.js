@@ -1,6 +1,17 @@
 const express = require('express');
 const router = express.Router();
 
+const authController = require('../controllers/auth.controller');
+
+// Ruta de login
+router.post('/login', authController.login);
+
+// Ejemplo de ruta protegida
+router.get('/protected', authController.verifyToken, (req, res) => {
+    res.json({ message: 'Acceso concedido', userId: req.userId });
+});
+
+
 const clienteController = require('../controllers/cliente.controller');
 
 // CRUD Routes
