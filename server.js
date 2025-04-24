@@ -1,25 +1,39 @@
 const express = require("express");
-const db = require("./app/config/databse.config"); // Importas el objeto db
+const cors = require('cors'); // 💡 Lo subimos arriba
+const bodyParser = require('body-parser');
+const db = require("./app/config/databse.config");
 const clientesRoutes = require("./app/routes/clientes");
 
 const app = express();
-app.use(express.json());
 
-// Importar rutas
+// ✅ CORS debe ir primero
+app.use(cors({
+  origin: 'http://localhost:5173',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
+
+app.post('/clientes/pagos/webhook', bodyParser.raw({ type: 'application/json' }));
+
+// Middlewares generales
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// ⚠️ Webhook de Stripe necesita body crudo
+app.use('/clientes/pagos/webhook', 
+  bodyParser.raw({ type: 'application/json' }) // Solo en esta ruta
+);
+
+// Rutas
 app.use("/clientes", clientesRoutes);
 
 // Iniciar servidor
 const PORT = process.env.PORT || 3000;
-
-// Usa db.sequelize en lugar de sequelize directamente
 db.sequelize.authenticate()
-    .then(() => {
-        console.log("Conectado a la base de datos");
-        return db.sequelize.sync(); // Sincroniza modelos si es necesario
-    })
-    .then(() => {
-        app.listen(PORT, () => {
-            console.log(`Servidor corriendo en http://localhost:${PORT}`);
-        });
-    })
-    .catch(error => console.error("Error conectando a la BD:", error));
+  .then(() => db.sequelize.sync())
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Servidor corriendo en http://localhost:${PORT}`);
+    });
+  })
+  .catch(error => console.error("❌ Error al iniciar el servidor:", error));

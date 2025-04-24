@@ -1,0 +1,83 @@
+// /app/controllers/pago.controller.js
+const stripe = require('../config/stripe.config.js');
+const db = require('../config/databse.config.js');
+const env = require('../config/env');
+const Factura = db.Facturas;
+const Cliente = db.Clientes;
+
+// Crear sesión de pago en Stripe
+exports.createPaymentIntent = async (req, res) => {
+  try {
+    const { ID_CLIENTE, ID_PRODUCTOS, TOTAL_PAGAR } = req.body;
+
+    // 1. Validar cliente
+    const cliente = await Cliente.findByPk(ID_CLIENTE);
+    if (!cliente) {
+      return res.status(404).json({ error: "Cliente no encontrado" });
+    }
+
+    // 2. Crear factura en estado "pendiente"
+    const nuevaFactura = await Factura.create({
+      ID_CLIENTE,
+      TOTAL_PAGAR,
+      ESTADO_PAGO: 'pendiente'
+    });
+
+    // 3. Crear sesión de pago en Stripe
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: ID_PRODUCTOS.map(producto => ({
+        price_data: {
+          currency: 'usd',
+          product_data: {
+            name: producto.NOMBRE,
+          },
+          unit_amount: Math.round(producto.PRECIO * 100), // Stripe usa centavos
+        },
+        quantity: producto.CANTIDAD,
+      })),
+      mode: 'payment',
+      success_url: `${env.FRONTEND_URL}/pago-exitoso?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${env.FRONTEND_URL}/carrito`,
+      metadata: {
+        factura_id: nuevaFactura.ID_FACTURA
+      }
+    });
+
+    res.json({ url: session.url });
+  } catch (error) {
+    console.error('Error en pago:', error);
+    res.status(500).json({ error: "Error al procesar pago" });
+  }
+};
+
+// Webhook para confirmar pagos
+exports.stripeWebhook = async (req, res) => {
+  const sig = req.headers['stripe-signature'];
+  let event;
+
+  try {
+    event = stripe.webhooks.constructEvent(
+      req.rawBody,
+      sig,
+      process.env.STRIPE_WEBHOOK_SECRET
+    );
+  } catch (err) {
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
+
+  // Manejar evento de pago exitoso
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object;
+    
+    // Actualizar factura en la BD
+    await Factura.update({
+      ESTADO_PAGO: 'completado'
+      // STRIPE_PAYMENT_ID: session.payment_intent
+    }, {
+      where: { ID_FACTURA: session.metadata.factura_id }
+    });
+  }
+
+  res.json({ received: true });
+};
