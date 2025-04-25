@@ -1,30 +1,41 @@
 const express = require("express");
-const db = require("./app/config/databse.config"); // Importas el objeto db
-const clientesRoutes = require("./app/routes/router");
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const db = require("./app/config/databse.config");
+const clientesRoutes = require("./app/routes/router"); // Aquí tienes tus rutas actuales
+const pagoController = require("./app/controllers/pago.controller"); // Añadimos controlador de pago
 
 const app = express();
+
+// ✅ Primero, configurar CORS
+app.use(cors({
+  origin: 'http://localhost:3000', // tu frontend (React)
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
+
+// Ruta especial para el webhook de Stripe
+// ✅ Ruta especial para Webhook de Stripe (solo esta usa body crudo)
+app.post(
+  '/HyperToys/pagos/webhook',
+  bodyParser.raw({ type: 'application/json' }),
+  pagoController.stripeWebhook
+);
+
+// Middlewares normales para el resto
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-const cors = require('cors');
-
-app.use(cors()); // Permite todas las conexiones (modo dev seguro)
-
-
-// Importar rutas
-app.use("/clientes", clientesRoutes);
+// Tus rutas normales
+app.use("/HyperToys", clientesRoutes);
 
 // Iniciar servidor
 const PORT = process.env.PORT || 4000;
-
-// Usa db.sequelize en lugar de sequelize directamente
 db.sequelize.authenticate()
-    .then(() => {
-        console.log("Conectado a la base de datos");
-        return db.sequelize.sync(); // Sincroniza modelos si es necesario
-    })
-    .then(() => {
-        app.listen(PORT, () => {
-            console.log(`Servidor corriendo en http://localhost:${PORT}`);
-        });
-    })
-    .catch(error => console.error("Error conectando a la BD:", error));
+  .then(() => db.sequelize.sync())
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Servidor corriendo en http://localhost:${PORT}`);
+    });
+  })
+  .catch(error => console.error("Error conectando a la BD:", error));

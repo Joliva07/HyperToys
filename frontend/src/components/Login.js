@@ -1,30 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
+import { CarritoContext } from '../context/CarritoContext';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [token, setToken] = useState(localStorage.getItem('token') || null);
     const [error, setError] = useState('');
+    const navigate = useNavigate();
+    const { setClienteId } = useContext(CarritoContext);
 
     const handleLogin = async (e) => {
         e.preventDefault();
         setError('');
-
+    
         try {
-            const response = await axios.post('http://localhost:4000/clientes/login', {
+            const response = await axios.post('http://localhost:4000/HyperToys/login', {
                 username,
                 password,
             });
-
+    
             const token = response.data.token;
+            const id = response.data.id;
+    
             setToken(token);
             localStorage.setItem('token', token);
+            setClienteId(id); // guardamos el ID en el contexto
+    
+            navigate('/catalogo'); // redirige al catálogo
         } catch (err) {
             console.error('Respuesta del servidor:', err.response?.data);
             setError(err.response?.data?.error || 'Error al iniciar sesión');
         }
-    };
+    };    
 
     const handleLogout = () => {
         setToken(null);
@@ -34,7 +43,7 @@ const Login = () => {
     const accessProtectedRoute = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get('http://localhost:4000/clientes/protected', {
+            const response = await axios.get('http://localhost:4000/HyperToys/protected', {
                 headers: {
                     Authorization: token,
                 },
@@ -48,7 +57,7 @@ const Login = () => {
 
     return (
         <div className="container mt-5">
-            <h1 className="text-center">Login con React + JWT</h1>
+            <h1 className="text-center">Login HyperToys</h1>
 
             {!token ? (
                 <form onSubmit={handleLogin}>
@@ -78,6 +87,9 @@ const Login = () => {
 
                     <button type="submit" className="btn btn-primary">
                         Iniciar sesión
+                    </button>
+                    <button type="button" className="btn btn-secondary ms-2" onClick={() => window.location.href = '/registro'}>
+                        Registrarse
                     </button>
                 </form>
             ) : (

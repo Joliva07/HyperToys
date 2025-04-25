@@ -33,7 +33,7 @@ exports.login = async (req, res) => {
         const token = jwt.sign({ id: cliente.ID_CLIENTE }, JWT_SECRET, { expiresIn: '1h' });
 
         console.log('Login exitoso, token generado');
-        res.json({ token });
+        res.json({ token, id: cliente.ID_CLIENTE });
     } catch (error) {
         console.error('Error en el inicio de sesión:', error);
         res.status(500).json({ error: 'Error en el inicio de sesión' });

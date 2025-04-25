@@ -15,11 +15,11 @@ router.get('/protected', authController.verifyToken, (req, res) => {
 const clienteController = require('../controllers/cliente.controller');
 
 // CRUD Routes
-router.post('/', clienteController.createCliente); // Create
-router.get('/', clienteController.getAllClientes); // Read all
-router.get('/:id', clienteController.getClienteById); // Read one
-router.put('/:id', clienteController.updateCliente); // Update
-router.delete('/:id', clienteController.deleteCliente); // Delete
+router.post('/crearUsuario', clienteController.createCliente); // Create
+//router.get('/verClientes', clienteController.getAllClientes); // Read all
+router.get('/cliente/:id', clienteController.getClienteById); // Read one
+router.put('/actualizarcliente/:id', clienteController.updateCliente); // Update
+router.delete('/eliminarcliente/:id', clienteController.deleteCliente); // Delete
 
 const DetalleReserva = require('../controllers/reservas.controller.js');
 
@@ -29,5 +29,26 @@ router.get('/reservas/:id_cliente', DetalleReserva.retrieveReservasByCliente);
 router.get('/reservas/:idReserva/detalles', DetalleReserva.getDetallesByReserva);
 //router.put('/reservas/:idReserva', DetalleReserva.actualizarReserva);
 router.delete('/reservas/:idReserva', DetalleReserva.eliminarReserva);
+
+const listaProductosController = require('../controllers/listaProductos.controller'); 
+
+// Nuevas Rutas GET para Productos
+router.get('/productos/all', listaProductosController.getAllProductos);          // GET /clientes/productos
+router.get('/productos/:id', listaProductosController.getProductoById); 
+
+const facturaController = require('../controllers/factura.controller');
+
+router.post('/realizarcompra',facturaController.realizarCompra);
+router.get('/verfactura/:id_cliente', facturaController.retrieveFacturasByCliente);
+
+const pagoController = require('../controllers/pago.controller');
+const bodyParser = require('body-parser'); // 👈 Nuevo requerimiento
+
+// 👇 Nuevas Rutas de Pago (Stripe)
+router.post('/pagar', pagoController.createPaymentIntent); // Crear intención de pago
+router.post('/pagos/webhook', 
+  bodyParser.raw({ type: 'application/json' }), // 🔥 Importante para webhook
+  pagoController.stripeWebhook
+);
 
 module.exports = router;
