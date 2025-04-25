@@ -43,8 +43,12 @@ const Sequelize = require('sequelize');
 const oracledb = require('oracledb');
 
 const sequelize = new Sequelize(env.DB_NAME, env.DB_USER, env.DB_PASSWORD, {
-    host: 'localhost', // Cambia esto a 'localhost' para una conexión local
-    dialect: 'oracle',
+  host: env.DB_HOST,
+  port: env.DB_PORT,
+  dialect: 'oracle',
+  dialectOptions: {
+    serviceName: 'XE' // O 'xepdb1' si usas la PDB
+  },
     dialectModule: oracledb,
     pool: {
       max: env.pool.max,
@@ -59,5 +63,8 @@ const db = {};
 
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
+
+db.Factura = require('../models/factura.model.js')(sequelize,Sequelize);
+db.DetalleFactura = require('../models/detalle_factura.model.js')(sequelize,Sequelize)
 
 module.exports = db;
