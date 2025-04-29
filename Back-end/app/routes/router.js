@@ -40,6 +40,8 @@ const facturaController = require('../controllers/factura.controller');
 
 router.post('/realizarcompra',facturaController.realizarCompra);
 router.get('/verfactura/:id_cliente', facturaController.retrieveFacturasByCliente);
+router.get('/facturas/:idFactura/detalles', facturaController.getDetallesByFactura);
+
 
 const pagoController = require('../controllers/pago.controller');
 const bodyParser = require('body-parser'); // 👈 Nuevo requerimiento

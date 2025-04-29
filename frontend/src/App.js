@@ -3,6 +3,9 @@ import { CarritoProvider } from './context/CarritoContext'; // ¡Muy importante!
 import Login from './components/Login';
 import Registro from './components/Registro';
 import Catalogo from './components/Catalogo';
+import ConfirmarCompra from './components/ConfirmarCompra';
+import PagoExitoso from './components/PagoExitoso'; // nuevo
+import PerfilCliente from './components/PerfilCliente';
 
 function App() {
   return (
@@ -12,6 +15,9 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/registro" element={<Registro />} />
           <Route path="/catalogo" element={<Catalogo />} />
+          <Route path="/confirmar-compra" element={<ConfirmarCompra />} />
+          <Route path="/pago-exitoso" element={<PagoExitoso />} />
+          <Route path="/perfil" element={<PerfilCliente />} />
         </Routes>
       </Router>
     </CarritoProvider>

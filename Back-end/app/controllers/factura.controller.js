@@ -1,6 +1,7 @@
 const db = require('../config/databse.config');
 const Facturas = db.Factura;
 const DetalleFacturas = db.DetalleFactura;
+const ListaProductos = db.ListaProductos;
 
 async function getNextFacturaNumber() {
     try {
@@ -129,6 +130,53 @@ exports.retrieveFacturasByCliente = async (req, res) => {
         console.error("Error al obtener las facturas:", error);
         res.status(500).json({
             message: "Error al obtener las facturas",
+            error: error.message
+        });
+    }
+};
+
+exports.getDetallesByFactura = async (req, res) => {
+    const { idFactura } = req.params;
+
+    if (isNaN(idFactura)) {
+        return res.status(400).json({
+            message: "El ID de la factura debe ser un valor numérico válido."
+        });
+    }
+
+    const idFacturaNum = parseInt(idFactura, 10);
+
+    try {
+        const detalles = await DetalleFacturas.findAll({
+            where: { id_factura: idFacturaNum },
+            include: [{
+                model: ListaProductos,
+                as: 'ListaProducto', // 👈 Modelo correcto
+                attributes: ['NOMBRE', 'PRECIO'], // 👈 Campos reales en Oracle
+                required: true
+            }]
+        });
+
+        if (detalles.length === 0) {
+            return res.status(404).json({
+                message: `No se encontraron detalles para la factura con ID ${idFacturaNum}.`
+            });
+        }
+
+        const detallesFormateados = detalles.map(det => ({
+            nombre_producto: det.ListaProducto.NOMBRE,
+            precio_unitario: det.ListaProducto.PRECIO,
+            cantidad: det.cantidad
+        }));
+
+        res.status(200).json({
+            message: `Detalles de la factura con ID ${idFacturaNum} obtenidos exitosamente.`,
+            detalles: detallesFormateados
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: "Ocurrió un error al obtener los detalles de la factura.",
             error: error.message
         });
     }

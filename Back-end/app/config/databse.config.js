@@ -26,4 +26,10 @@ db.ListaProductos = require('../models/listaProductos.model.js')(sequelize, Sequ
 db.Factura = require('../models/factura.model.js')(sequelize,Sequelize);
 db.DetalleFactura = require('../models/detalle_factura.model.js')(sequelize,Sequelize)
 
+db.DetalleFactura.belongsTo(db.ListaProductos, {
+  foreignKey: 'id_producto',
+  as: 'ListaProducto'
+});
+
+
 module.exports = db;

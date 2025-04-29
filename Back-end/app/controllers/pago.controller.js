@@ -1,35 +1,21 @@
-// /app/controllers/pago.controller.js
 const stripe = require('../config/stripe.config.js');
 const db = require('../config/databse.config.js');
 const env = require('../config/env');
 const Factura = db.Factura;
-const Cliente = db.Clientes;
+const DetalleFactura = db.DetalleFactura;
 const facturaController = require('./factura.controller');
+const Cliente = db.Clientes;
 
 // Crear sesión de pago en Stripe
 exports.createPaymentIntent = async (req, res) => {
   try {
     const { ID_CLIENTE, ID_PRODUCTOS, TOTAL_PAGAR } = req.body;
 
-    // 1. Validar cliente
     const cliente = await Cliente.findByPk(ID_CLIENTE);
     if (!cliente) {
       return res.status(404).json({ error: "Cliente no encontrado" });
     }
 
-    // 🔥 Obtener un nuevo ID_FACTURA de la secuencia
-    const id_factura = await facturaController.getNextFacturaNumber();
-
-    // 2. Crear factura en estado "pendiente"
-    const nuevaFactura = await Factura.create({
-      id_factura: id_factura,
-      id_cliente: ID_CLIENTE,
-      total_pagar: TOTAL_PAGAR,
-      fecha_factura: new Date(), // Opcional si quieres guardar la fecha
-      // estado_pago: 'pendiente' // Si tienes columna ESTADO_PAGO
-    });
-
-    // 3. Crear sesión de pago en Stripe
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: ID_PRODUCTOS.map(producto => ({
@@ -46,7 +32,9 @@ exports.createPaymentIntent = async (req, res) => {
       success_url: `${env.FRONTEND_URL}/pago-exitoso?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${env.FRONTEND_URL}/carrito`,
       metadata: {
-        factura_id: id_factura
+        id_cliente: ID_CLIENTE,
+        productos: JSON.stringify(ID_PRODUCTOS),
+        total_pagar: TOTAL_PAGAR
       }
     });
 
@@ -72,17 +60,43 @@ exports.stripeWebhook = async (req, res) => {
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
-  // Manejar evento de pago exitoso
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
-    
-    // Actualizar factura en la BD
-    await Factura.update({
-      ESTADO_PAGO: 'completado'
-      // STRIPE_PAYMENT_ID: session.payment_intent
-    }, {
-      where: { ID_FACTURA: session.metadata.factura_id }
-    });
+    const t = await db.sequelize.transaction();
+
+    try {
+      const id_cliente = session.metadata.id_cliente;
+      const productos = JSON.parse(session.metadata.productos);
+      const total_pagar = session.metadata.total_pagar;
+
+      const id_factura = await facturaController.getNextFacturaNumber();
+
+      // Crear Factura
+      const nuevaFactura = await Factura.create({
+        id_factura: id_factura,
+        id_cliente: id_cliente,
+        total_pagar: total_pagar,
+        fecha_factura: new Date()
+      }, { transaction: t });
+
+      // Crear Detalles de Factura
+      let idDetalleIncremental = 1;
+      for (const producto of productos) {
+        await DetalleFactura.create({
+          id_detalle_factura: idDetalleIncremental++,
+          id_factura: id_factura,
+          id_producto: producto.id_producto,
+          cantidad: producto.CANTIDAD
+        }, { transaction: t });
+      }
+
+      await t.commit();
+      console.log(`✅ Factura ${id_factura} creada exitosamente con detalles después de pago.`);
+
+    } catch (error) {
+      await t.rollback();
+      console.error('Error creando Factura después del pago:', error);
+    }
   }
 
   res.json({ received: true });
