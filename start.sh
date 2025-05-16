@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "=== Iniciando backend ==="
-cd backend
+cd Back-end
 npm install --save-dev wait-on
 node server.js
 
