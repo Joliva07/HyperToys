@@ -2,6 +2,7 @@
 
 echo "=== Iniciando backend ==="
 cd backend
+npm install --save-dev wait-on
 node server.js
 
 # Esperar a que el backend esté disponible
