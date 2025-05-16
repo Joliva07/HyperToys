@@ -27,11 +27,19 @@ module.exports = (sequelize, Sequelize) => {
       ID_PROVEEDOR: {
         type: Sequelize.INTEGER,
         allowNull: false
+      },
+      IMAGEN: {
+        type: Sequelize.BLOB,
+        allowNull: false
+      },
+      PUNTOS: {
+        type: Sequelize.INTEGER,
+        allowNull: false
       }
     }, {
       tableName: "LISTA_PRODUCTOS",
       timestamps: false,
-      schema: "C##HYPER"  // Asegúrate de usar tu esquema Oracle
+      schema: "HYPER"  // Asegúrate de usar tu esquema Oracle
     });
   
     return ListaProducto;

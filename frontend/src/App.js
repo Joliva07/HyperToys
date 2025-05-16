@@ -6,6 +6,7 @@ import Catalogo from './components/Catalogo';
 import ConfirmarCompra from './components/ConfirmarCompra';
 import PagoExitoso from './components/PagoExitoso'; // nuevo
 import PerfilCliente from './components/PerfilCliente';
+import ProductoDetalle from './components/ProductoDetalle';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/confirmar-compra" element={<ConfirmarCompra />} />
           <Route path="/pago-exitoso" element={<PagoExitoso />} />
           <Route path="/perfil" element={<PerfilCliente />} />
+          <Route path="/producto/:id" element={<ProductoDetalle />} />
         </Routes>
       </Router>
     </CarritoProvider>

@@ -36,6 +36,12 @@ const listaProductosController = require('../controllers/listaProductos.controll
 router.get('/productos/all', listaProductosController.getAllProductos);          // GET /clientes/productos
 router.get('/productos/:id', listaProductosController.getProductoById); 
 
+const tipoProductoController = require('../controllers/tipoProducto.controller');
+
+// Rutas para Tipos de Producto
+router.get('/tipos-producto/all', tipoProductoController.getAllTiposProducto);
+router.get('/tipos-producto/:id', tipoProductoController.getTipoProductoById);
+
 const facturaController = require('../controllers/factura.controller');
 
 router.post('/realizarcompra',facturaController.realizarCompra);

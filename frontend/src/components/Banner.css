@@ -1,0 +1,46 @@
+/* Banner.css */
+.banner-carrusel {
+    margin-bottom: 2rem;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .banner-carrusel img {
+    height: 400px;
+    object-fit: cover;
+  }
+  
+  .banner-caption {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 1.5rem;
+    border-radius: 8px;
+    bottom: 20%;
+  }
+  
+  .btn-banner {
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 0.5rem 1.5rem;
+    border-radius: 50px;
+    font-weight: bold;
+    transition: all 0.3s;
+  }
+  
+  .btn-banner:hover {
+    background-color: #ff4757;
+    transform: scale(1.05);
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .banner-carrusel img {
+      height: 250px;
+    }
+    
+    .banner-caption {
+      bottom: 10%;
+      padding: 1rem;
+    }
+  }

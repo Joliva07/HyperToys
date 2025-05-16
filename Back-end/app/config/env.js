@@ -1,9 +1,10 @@
 module.exports = {
-    DB_USER: 'C##HYPER',
-    DB_PASSWORD: '1234',
-    DB_HOST: 'localhost',
-    DB_PORT: '1521',
-    DB_NAME: 'xe',
+    DB_USER: 'HYPER',
+    DB_PASSWORD: 'Hyp3rT0ys_2025',
+    DB_SSL:'CN=adb.mx-monterrey-1.oraclecloud.com, O=Oracle Corporation, L=Redwood City, ST=California, C=US',
+    DB_HOST: 'adb.mx-monterrey-1.oraclecloud.com',  // Cambia Pandnaceous por 127.0.0.1 para asegurar la conexión local
+    DB_PORT: '1522',
+    DB_NAME: 'g412e364b6296c0_hypertoysdb_low.adb.oraclecloud.com',
     pool: {
       max: 5,
       min: 0,

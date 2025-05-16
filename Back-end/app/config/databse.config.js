@@ -3,16 +3,19 @@ const { Sequelize } = require('sequelize');
 const oracledb = require('oracledb');
 
 const sequelize = new Sequelize(env.DB_NAME, env.DB_USER, env.DB_PASSWORD, {
-    host: env.DB_HOST,
-    dialect: 'oracle',
-    dialectModule: oracledb,
-    pool: {
-      max: env.pool.max,
-      min: env.pool.min,
-      acquire: env.pool.acquire,
-      idle: env.pool.idle,
-    },
-    logging: false,
+  host: env.DB_HOST,
+  dialect: 'oracle',
+  dialectModule: oracledb,
+  dialectOptions: {
+    connectString: `(description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=${env.DB_PORT})(host=${env.DB_HOST}))(connect_data=(service_name=${env.DB_NAME}))(security=(ssl_server_cert_dn="${env.DB_SSL}")))`
+  },
+  pool: {
+    max: env.pool.max,
+    min: env.pool.min,
+    acquire: env.pool.acquire,
+    idle: env.pool.idle,
+  },
+  logging: false, // Opcional: desactiva el logging si no lo necesitas
 });
 
 const db = {};

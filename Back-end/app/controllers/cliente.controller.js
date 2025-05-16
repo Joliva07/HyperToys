@@ -7,7 +7,7 @@ const moment = require('moment');
 async function getNextClienteId() {
     try {
         const result = await db.sequelize.query(
-            `SELECT "C##HYPER"."SEQ_CLIENTE".NEXTVAL AS ID_CLIENTE FROM DUAL`, 
+            `SELECT "HYPER"."SEQ_CLIENTE".NEXTVAL AS ID_CLIENTE FROM DUAL`, 
             { type: db.sequelize.QueryTypes.SELECT }
         );
         return result[0].ID_CLIENTE;

@@ -35,11 +35,15 @@ module.exports = (sequelize, Sequelize) => {
       CONTRASENA: {
         type: Sequelize.STRING(100),
         allowNull: false
+      },
+      PUNTOS: {
+        type: Sequelize.INTEGER,
+        allowNull: false
       }
     }, {
       tableName: "CLIENTES",
       timestamps: false,
-      schema: "C##HYPER"  // Especifica el esquema de Oracle
+      schema: "HYPER"  // Especifica el esquema de Oracle
     });
   
     return Clientes;
