@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "bcryptjs": "^3.0.2"
+    "bcryptjs": "^3.0.2",
     "concurrently": "^9.1.2"
   },
   "scripts": {
