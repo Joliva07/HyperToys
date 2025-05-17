@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "bcryptjs": "^3.0.2"
+    "concurrently": "^9.1.2"
   },
   "scripts": {
   "dev": "concurrently \"cd Back-end && node server.js\" \"cd frontend && npm start\""
