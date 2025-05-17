@@ -7,7 +7,7 @@ node server.js
 
 # Esperar a que el backend esté disponible
 echo "=== Esperando a que el backend responda en http://localhost:3000 ==="
-npx wait-on https://hypertoys.onrender.com
+npx wait-on http://localhost:3000
 
 echo "=== Backend listo. Iniciando frontend ==="
 cd ../frontend
