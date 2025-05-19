@@ -28,6 +28,7 @@ db.DetalleReserva = require('../models/detallereserva.model.js')(sequelize, Sequ
 db.ListaProductos = require('../models/listaProductos.model.js')(sequelize, Sequelize);
 db.Factura = require('../models/factura.model.js')(sequelize,Sequelize);
 db.DetalleFactura = require('../models/detalle_factura.model.js')(sequelize,Sequelize)
+db.TipoProductos = require('../models/tipoProducto.model.js')(sequelize,Sequelize)
 
 db.DetalleFactura.belongsTo(db.ListaProductos, {
   foreignKey: 'id_producto',
