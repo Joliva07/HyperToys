@@ -16,14 +16,14 @@ const PerfilCliente = () => {
   useEffect(() => {
     const obtenerDatos = async () => {
       try {
-        const clienteRes = await axios.get(`https://hypertoys.onrender.com/HyperToys/cliente/${clienteId}`);
+        const clienteRes = await axios.get(`https://back-hypertoys.onrender.com/HyperToys/cliente/${clienteId}`);
         setCliente(clienteRes.data);
         setFormulario(clienteRes.data);
 
-        const facturasRes = await axios.get(`https://hypertoys.onrender.com/HyperToys/verfactura/${clienteId}`);
+        const facturasRes = await axios.get(`https://back-hypertoys.onrender.com/HyperToys/verfactura/${clienteId}`);
         setFacturas(facturasRes.data.facturas);
 
-        const reservasRes = await axios.get(`https://hypertoys.onrender.com/HyperToys/reservas/${clienteId}`);
+        const reservasRes = await axios.get(`https://back-hypertoys.onrender.com/HyperToys/reservas/${clienteId}`);
         setReservas(reservasRes.data.reservas);
       } catch (error) {
         console.error('Error al obtener datos:', error);
@@ -49,7 +49,7 @@ const PerfilCliente = () => {
         return;
       }
       
-      const res = await axios.get(`https://hypertoys.onrender.com/HyperToys/facturas/${idFactura}/detalles`);
+      const res = await axios.get(`https://back-hypertoys.onrender.com/HyperToys/facturas/${idFactura}/detalles`);
       setDetalleFactura(res.data.detalles);
       setFacturaExpandida(idFactura);
     } catch (error) {
@@ -61,7 +61,7 @@ const PerfilCliente = () => {
 
   const handleGuardar = async () => {
     try {
-      await axios.put(`https://hypertoys.onrender.com/HyperToys/actualizarcliente/${clienteId}`, formulario);
+      await axios.put(`https://back-hypertoys.onrender.com/HyperToys/actualizarcliente/${clienteId}`, formulario);
       alert('Perfil actualizado correctamente');
       setCliente(formulario);
       setEditando(false);

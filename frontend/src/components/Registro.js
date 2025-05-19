@@ -23,7 +23,7 @@ const Registro = () => {
     e.preventDefault();
     setMensaje('');
     try {
-      const res = await axios.post('https://hypertoys.onrender.com/HyperToys/crearUsuario', form);
+      const res = await axios.post('https://back-hypertoys.onrender.com/HyperToys/crearUsuario', form);
       setMensaje('✅ Registro exitoso. Ahora puedes iniciar sesión.');
       setRegistroExitoso(true);
     } catch (err) {
