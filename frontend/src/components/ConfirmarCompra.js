@@ -43,7 +43,7 @@ const ConfirmarCompra = () => {
 
       const totalPagar = carrito.reduce((acc, p) => acc + p.PRECIO * p.cantidad, 0);
 
-      const response = await axios.post('http://localhost:4000/HyperToys/pagar', {
+      const response = await axios.post('https://hypertoys.onrender.com/HyperToys/pagar', {
         ID_CLIENTE: clienteId,
         ID_PRODUCTOS: productosFormateados,
         TOTAL_PAGAR: totalPagar

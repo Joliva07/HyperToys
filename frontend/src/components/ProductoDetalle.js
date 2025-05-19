@@ -13,7 +13,7 @@ const ProductoDetalle = () => {
   useEffect(() => {
     const obtenerProducto = async () => {
       try {
-        const res = await axios.get(`http://localhost:4000/HyperToys/productos/${id}`);
+        const res = await axios.get(`https://hypertoys.onrender.com/HyperToys/productos/${id}`);
         setProducto(res.data);
       } catch (error) {
         console.error('Error al obtener producto:', error);
