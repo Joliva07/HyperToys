@@ -38,7 +38,7 @@ module.exports = (sequelize, Sequelize) => {
       },
       PUNTOS_COMPRA: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: true
       }
     }, {
       tableName: "CLIENTES",
