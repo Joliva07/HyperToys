@@ -56,19 +56,21 @@ exports.realizarReserva = async (req, res) => {
     }, { transaction: t });
 
     // Agregar detalles
-    let idDetalleReservaContador = 1;
     for (const producto of productos) {
       if (!producto.id_producto || !producto.cantidad) {
         throw new Error('Datos incompletos en los productos');
       }
 
+      const idDetalle = await getNextDetalleReservaId(); // ⚠️ aquí usamos la secuencia
+
       await DetalleReserva.create({
-        id_detalle_reserva: idDetalleReservaContador++,
+        id_detalle_reserva: idDetalle,
         id_reserva: idReserva,
         id_producto: producto.id_producto,
         cantidad: producto.cantidad
       }, { transaction: t });
     }
+
 
     await t.commit();
     res.status(201).json({ message: 'Reserva realizada con éxito', reserva: nuevaReserva });
