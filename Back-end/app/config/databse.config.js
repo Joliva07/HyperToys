@@ -35,7 +35,7 @@ db.DetalleFactura.belongsTo(db.ListaProductos, {
   as: 'ListaProducto'
 });
 
-db.DetalleReserva.belongsTo(ListaProductos, {
+db.DetalleReserva.belongsTo(db.ListaProductos, {
   foreignKey: 'id_producto',
   as: 'ListaProducto'
 });
