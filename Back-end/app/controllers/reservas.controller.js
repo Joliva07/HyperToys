@@ -28,90 +28,86 @@ exports.realizarReserva = async (req, res) => {
   try {
     const { id_cliente, productos, fechaReserva, total_reserva } = req.body;
 
-    // Validación básica
-    if (!id_cliente || !total_reserva || !productos || productos.length === 0 || !fechaReserva) {
+    if (!id_cliente || !productos || productos.length === 0 || !fechaReserva || total_reserva == null) {
       return res.status(400).json({ message: 'Datos incompletos en la solicitud' });
     }
 
-    // Obtener nuevo ID de reserva
-    const idReserva = await getNextReservaNumber();
-
-    // Preparar fechas
     const parsedFechaReserva = new Date(fechaReserva);
     if (isNaN(parsedFechaReserva)) {
       return res.status(400).json({ message: 'Formato de fecha inválido' });
     }
     parsedFechaReserva.setHours(0, 0, 0, 0);
 
+    // Calcular fecha límite de pago (1 día antes)
     const fechaLimitePago = new Date(parsedFechaReserva);
     fechaLimitePago.setDate(fechaLimitePago.getDate() - 1);
 
-    // Crear reserva
+    const idReserva = await getNextReservaNumber();
+
+    // 🔥 Solo se agrega total_reserva aquí
     const nuevaReserva = await Reserva.create({
       id_reserva: idReserva,
       id_cliente,
       fecha_reserva: parsedFechaReserva,
       fecha_limite_pago: fechaLimitePago,
-      total_reserva
+      total_reserva  // 👈 agregado
     }, { transaction: t });
 
-    // Agregar detalles
+    let idDetalleReservaContador = 1;
+
     for (const producto of productos) {
-      if (!producto.id_producto || !producto.cantidad) {
+      const { id_producto, cantidad } = producto;
+
+      if (!id_producto || !cantidad) {
         throw new Error('Datos incompletos en los productos');
       }
 
-      const idDetalle = await getNextDetalleReservaId(); // ⚠️ aquí usamos la secuencia
-
       await DetalleReserva.create({
-        id_detalle_reserva: idDetalle,
         id_reserva: idReserva,
-        id_producto: producto.id_producto,
-        cantidad: producto.cantidad
+        id_producto,
+        cantidad,
+        id_detalle_reserva: idDetalleReservaContador++
       }, { transaction: t });
     }
 
-
     await t.commit();
     res.status(201).json({ message: 'Reserva realizada con éxito', reserva: nuevaReserva });
-
   } catch (error) {
     await t.rollback();
-    console.error('Error en la reserva:', error);
+    console.error('Error en la reserva:', error.message || error);
     res.status(500).json({ message: 'Error al realizar la reserva', error: error.message || error });
   }
 };
 
 
 exports.retrieveReservasByCliente = async (req, res) => {
-  try {
-    const { id_cliente } = req.params;
+    try {
+        const { id_cliente } = req.params;
 
-    const reservas = await Reserva.findAll({
-      where: { id_cliente },
-      attributes: ['id_reserva', 'fecha_reserva', 'fecha_limite_pago', 'total_reserva']
-    });
+        const reservas = await Reserva.findAll({
+            where: { id_cliente },
+            attributes: ['id_reserva', 'fecha_reserva', 'fecha_limite_pago','total_reserva']
+        });
 
-    if (reservas.length === 0) {
-      return res.status(404).json({
-        message: `No se encontraron reservas para el cliente con ID ${id_cliente}.`
-      });
+        if (reservas.length === 0) {
+            return res.status(404).json({
+                message: `No se encontraron reservas para el cliente con ID ${id_cliente}.`
+            });
+        }
+
+        res.status(200).json({
+            message: `Reservas para el cliente con ID ${id_cliente} obtenidas exitosamente.`,
+            reservas
+        });
+
+    } catch (error) {
+        console.error("Error al obtener las reservas:", error);
+        res.status(500).json({
+            message: "Error al obtener las reservas",
+            error: error.message
+        });
     }
-
-    res.status(200).json({
-      message: `Reservas para el cliente con ID ${id_cliente} obtenidas exitosamente.`,
-      reservas
-    });
-
-  } catch (error) {
-    console.error("Error al obtener las reservas:", error);
-    res.status(500).json({
-      message: "Error al obtener las reservas",
-      error: error.message
-    });
-  }
 };
-
 
 exports.getDetallesByReserva = async (req, res) => {
     const { idReserva } = req.params;
