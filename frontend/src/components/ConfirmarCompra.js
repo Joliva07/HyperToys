@@ -78,10 +78,13 @@ const ConfirmarCompra = () => {
 
       const fechaReserva = new Date(); // Fecha actual para la reserva
 
+      const totalReserva = carrito.reduce((acc, p) => acc + p.PRECIO * p.cantidad, 0);
+
       const response = await axios.post('https://back-hypertoys.onrender.com/HyperToys/reservas', {
         id_cliente: clienteId,
         productos: productosFormateados,
-        fechaReserva: fechaReserva.toISOString()
+        fechaReserva: fechaReserva.toISOString(),
+        total_reserva: totalReserva
       });
 
       alert('Reserva realizada con éxito');

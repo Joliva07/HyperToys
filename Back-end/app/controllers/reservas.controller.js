@@ -26,10 +26,14 @@ exports.realizarReserva = async (req, res) => {
   const t = await db.sequelize.transaction();
 
   try {
-    const { id_cliente, productos, fechaReserva } = req.body;
+    const { id_cliente, productos, fechaReserva, total_reserva } = req.body;
 
-    if (!id_cliente || !productos || productos.length === 0 || !fechaReserva) {
+    if (!id_cliente || !productos || productos.length === 0 || !fechaReserva || total_reserva == null) {
       return res.status(400).json({ message: 'Datos incompletos en la solicitud' });
+    }
+
+    if (typeof total_reserva !== 'number' || total_reserva <= 0) {
+      return res.status(400).json({ message: 'El total de la reserva es inválido' });
     }
 
     const parsedFechaReserva = new Date(fechaReserva);
@@ -43,8 +47,15 @@ exports.realizarReserva = async (req, res) => {
 
     const idReserva = await getNextReservaNumber();
 
-    // Calcular TOTAL_RESERVA desde LISTA_PRODUCTOS
-    let totalReserva = 0;
+    const nuevaReserva = await Reserva.create({
+      id_reserva: idReserva,
+      id_cliente,
+      fecha_reserva: parsedFechaReserva,
+      fecha_limite_pago: fechaLimitePago,
+      total_reserva
+    }, { transaction: t });
+
+    let idDetalleReservaContador = 1;
 
     for (const producto of productos) {
       const { id_producto, cantidad } = producto;
@@ -52,37 +63,6 @@ exports.realizarReserva = async (req, res) => {
       if (!id_producto || !cantidad) {
         throw new Error('Datos incompletos en los productos');
       }
-
-      const result = await db.sequelize.query(
-        `SELECT PRECIO FROM HYPER.LISTA_PRODUCTOS WHERE ID_PRODUCTO = :id`,
-        {
-          replacements: { id: id_producto },
-          type: db.Sequelize.QueryTypes.SELECT,
-          transaction: t
-        }
-      );
-
-      if (!result.length) {
-        throw new Error(`Producto con ID ${id_producto} no encontrado en LISTA_PRODUCTOS`);
-      }
-
-      const precio = parseFloat(result[0].PRECIO);
-      totalReserva += precio * cantidad;
-    }
-
-    // Crear la reserva
-    const nuevaReserva = await Reserva.create({
-      id_reserva: idReserva,
-      id_cliente,
-      fecha_reserva: parsedFechaReserva,
-      fecha_limite_pago: fechaLimitePago,
-      total_reserva: totalReserva
-    }, { transaction: t });
-
-    let idDetalleReservaContador = 1;
-
-    for (const producto of productos) {
-      const { id_producto, cantidad } = producto;
 
       await DetalleReserva.create({
         id_reserva: idReserva,
@@ -97,10 +77,11 @@ exports.realizarReserva = async (req, res) => {
 
   } catch (error) {
     await t.rollback();
-    console.error('Error en la reserva:', error.message || error);
+    console.error('Error en la reserva:', error);
     res.status(500).json({ message: 'Error al realizar la reserva', error: error.message || error });
   }
 };
+
 
 
 exports.retrieveReservasByCliente = async (req, res) => {
