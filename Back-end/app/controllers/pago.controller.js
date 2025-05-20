@@ -30,7 +30,7 @@ exports.createPaymentIntent = async (req, res) => {
       })),
       mode: 'payment',
       success_url: `${env.FRONTEND_URL}/#/pago-exitoso?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${env.FRONTEND_URL}/carrito`,
+      cancel_url: `${env.FRONTEND_URL}/confirmar-compra`,
       metadata: {
         id_cliente: ID_CLIENTE,
         productos: JSON.stringify(ID_PRODUCTOS),

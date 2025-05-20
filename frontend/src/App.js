@@ -1,3 +1,4 @@
+//import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import { CarritoProvider } from './context/CarritoContext'; // ¡Muy importante!
 import Login from './components/Login';
