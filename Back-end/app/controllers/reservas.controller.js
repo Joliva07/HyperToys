@@ -136,8 +136,8 @@ exports.getDetallesByReserva = async (req, res) => {
         p.NOMBRE AS nombre_producto,
         p.PRECIO AS precio_unitario,
         d.CANTIDAD
-      FROM DETALLE_RESERVAS d
-      JOIN LISTA_PRODUCTOS p ON d.ID_PRODUCTO = p.ID_PRODUCTO
+      FROM HYPER.DETALLE_RESERVAS d
+      JOIN HYPER.LISTA_PRODUCTOS p ON d.ID_PRODUCTO = p.ID_PRODUCTO
       WHERE d.ID_RESERVA = :id
     `, {
       replacements: { id: idReservaNum },
