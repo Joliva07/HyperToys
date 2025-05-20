@@ -119,39 +119,51 @@ exports.retrieveReservasByCliente = async (req, res) => {
 
 
 exports.getDetallesByReserva = async (req, res) => {
-    const { idReserva } = req.params;
+  const { idReserva } = req.params;
 
-    if (isNaN(idReserva)) {
-        return res.status(400).json({
-            message: "El ID de la reserva debe ser un valor numérico válido."
-        });
+  if (isNaN(idReserva)) {
+    return res.status(400).json({
+      message: "El ID de la reserva debe ser un valor numérico válido."
+    });
+  }
+
+  const idReservaNum = parseInt(idReserva, 10);
+
+  try {
+    const detalles = await db.sequelize.query(`
+      SELECT 
+        dp.ID_PRODUCTO,
+        p.NOMBRE AS nombre_producto,
+        p.PRECIO AS precio_unitario,
+        dp.CANTIDAD
+      FROM DETALLE_RESERVAS dp
+      JOIN LISTA_PRODUCTOS p ON dp.ID_PRODUCTO = p.ID_PRODUCTO
+      WHERE dp.ID_RESERVA = :id
+    `, {
+      replacements: { id: idReservaNum },
+      type: db.Sequelize.QueryTypes.SELECT
+    });
+
+    if (!detalles.length) {
+      return res.status(404).json({
+        message: `No se encontraron detalles para la reserva con ID ${idReservaNum}.`
+      });
     }
 
-    const idReservaNum = parseInt(idReserva, 10);
+    res.status(200).json({
+      message: `Detalles de la reserva obtenidos exitosamente.`,
+      detalles
+    });
 
-    try {
-        const detalles = await DetalleReserva.findAll({
-            where: { id_reserva: idReservaNum }
-        });
-
-        if (detalles.length === 0) {
-            return res.status(404).json({
-                message: `No se encontraron detalles para la reserva con ID ${idReservaNum}.`
-            });
-        }
-
-        res.status(200).json({
-            message: `Detalles de la reserva con ID ${idReservaNum} obtenidos exitosamente.`,
-            detalles
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            message: "Ocurrió un error al obtener los detalles de la reserva.",
-            error: error.message
-        });
-    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Ocurrió un error al obtener los detalles de la reserva.",
+      error: error.message
+    });
+  }
 };
+
 
 exports.eliminarReserva = async (req, res) => {
     const { idReserva } = req.params;
