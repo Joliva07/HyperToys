@@ -202,8 +202,8 @@ const PerfilCliente = () => {
               <div className="d-flex justify-content-between align-items-center">
                 <div>
                   <strong>Reserva #{reserva.id_reserva}</strong> - 
-                  Fecha Reserva: {new Date(reserva.fecha_reserva).toLocaleDateString()} - 
-                  Fecha Límite Pago: {new Date(reserva.fecha_limite_pago).toLocaleDateString()} -
+                  Fecha Reserva: reserva.fecha_reserva.split('T')[0].split('-').reverse().join('/') - 
+                  Fecha Límite Pago: reserva.fecha_reserva.split('T')[0].split('-').reverse().join('/') -
                   Total: Q{reserva.total_reserva.toFixed(2)}
                 </div>
                 <button
