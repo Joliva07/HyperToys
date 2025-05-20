@@ -11,7 +11,8 @@ const PerfilCliente = () => {
   const [reservas, setReservas] = useState([]);
   const [facturaExpandida, setFacturaExpandida] = useState(null);
   const [detalleFactura, setDetalleFactura] = useState([]);
-
+  const [reservaExpandida, setReservaExpandida] = useState(null);
+  const [detalleReserva, setDetalleReserva] = useState([]);
 
   useEffect(() => {
     const obtenerDatos = async () => {
@@ -57,7 +58,23 @@ const PerfilCliente = () => {
       alert('No se pudo cargar el detalle de esta factura.');
     }
   };
-  
+
+  const verDetalleReserva = async (idReserva) => {
+    try {
+      if (reservaExpandida === idReserva) {
+        setReservaExpandida(null);
+        setDetalleReserva([]);
+        return;
+      }
+
+      const res = await axios.get(`https://back-hypertoys.onrender.com/HyperToys/reservas/${idReserva}/detalles`);
+      setDetalleReserva(res.data.detalles);
+      setReservaExpandida(idReserva);
+    } catch (error) {
+      console.error('Error al obtener detalle de reserva:', error);
+      alert('No se pudo cargar el detalle de esta reserva.');
+    }
+  };
 
   const handleGuardar = async () => {
     try {
@@ -179,16 +196,41 @@ const PerfilCliente = () => {
       {reservas.length === 0 ? (
         <p>No tienes reservas registradas.</p>
       ) : (
-        <ul className="list-group">
+        <ul className="list-group mb-5">
           {reservas.map((reserva, idx) => (
             <li key={idx} className="list-group-item">
-              <strong>Reserva #{reserva.id_reserva}</strong> - 
-              Fecha Reserva: {new Date(reserva.fecha_reserva).toLocaleDateString()} - 
-              Fecha Límite Pago: {new Date(reserva.fecha_limite_pago).toLocaleDateString()}
+              <div className="d-flex justify-content-between align-items-center">
+                <div>
+                  <strong>Reserva #{reserva.id_reserva}</strong> - 
+                  Fecha Reserva: {new Date(reserva.fecha_reserva).toLocaleDateString()} - 
+                  Fecha Límite Pago: {new Date(reserva.fecha_limite_pago).toLocaleDateString()}
+                </div>
+                <button
+                  className="btn btn-sm btn-outline-primary"
+                  onClick={() => verDetalleReserva(reserva.id_reserva)}
+                >
+                  {reservaExpandida === reserva.id_reserva ? '-' : '+'}
+                </button>
+              </div>
+
+              {/* Mostrar detalle si está expandido */}
+              {reservaExpandida === reserva.id_reserva && (
+                <ul className="list-group mt-3">
+                  {detalleReserva.length === 0 ? (
+                    <li className="list-group-item">No hay productos en esta reserva.</li>
+                  ) : (
+                    detalleReserva.map((prod, index) => (
+                      <li key={index} className="list-group-item">
+                        Producto ID: {prod.id_producto} | Cantidad: {prod.cantidad}
+                      </li>
+                    ))
+                  )}
+                </ul>
+              )}
             </li>
           ))}
         </ul>
-      )}
+        )}
     </div>
   );
 };
