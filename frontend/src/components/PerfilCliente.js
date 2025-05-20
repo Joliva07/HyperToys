@@ -180,7 +180,7 @@ const PerfilCliente = () => {
                   ) : (
                     detalleFactura.map((producto, index) => (
                       <li key={index} className="list-group-item">
-                        Producto: {producto.nombre_producto} | Cantidad: {producto.cantidad} | Precio: Q{producto.precio_unitario} | Subtotal: Q{(prod.precio_unitario * prod.cantidad).toFixed(2)}
+                        Producto: {producto.nombre_producto} | Cantidad: {producto.cantidad} | Precio: Q{producto.precio_unitario} | Subtotal: Q{(producto.precio_unitario * producto.cantidad).toFixed(2)}
                       </li>
                     ))
                   )}
