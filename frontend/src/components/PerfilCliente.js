@@ -203,7 +203,7 @@ const PerfilCliente = () => {
                 <div>
                   <strong>Reserva #{reserva.id_reserva}</strong> - 
                   Fecha Reserva: {new Date(reserva.fecha_reserva).toLocaleDateString()} - 
-                  Fecha Límite Pago: {new Date(reserva.fecha_limite_pago).toLocaleDateString()}
+                  Fecha Límite Pago: {new Date(reserva.fecha_limite_pago).toLocaleDateString()} -
                   Total: Q{reserva.total_reserva.toFixed(2)}
                 </div>
                 <button
@@ -222,7 +222,7 @@ const PerfilCliente = () => {
                   ) : (
                     detalleReserva.map((prod, index) => (
                       <li key={index} className="list-group-item">
-                        Producto: {prod.nombre_producto} | Cantidad: {prod.cantidad} | Precio: Q{prod.precio_unitario} | Subtotal: Q{(prod.precio_unitario * prod.cantidad).toFixed(2)}
+                        Producto: {producto.nombre_producto} | Cantidad: {producto.cantidad} | Precio: Q{producto.precio_unitario} | Subtotal: Q{(producto.precio_unitario * producto.cantidad).toFixed(2)}
                       </li>
                     ))
                   )}

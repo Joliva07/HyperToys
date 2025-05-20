@@ -132,13 +132,13 @@ exports.getDetallesByReserva = async (req, res) => {
   try {
     const detalles = await db.sequelize.query(`
       SELECT 
-        dp.ID_PRODUCTO,
+        d.ID_PRODUCTO,
         p.NOMBRE AS nombre_producto,
         p.PRECIO AS precio_unitario,
-        dp.CANTIDAD
-      FROM DETALLE_RESERVAS dp
-      JOIN LISTA_PRODUCTOS p ON dp.ID_PRODUCTO = p.ID_PRODUCTO
-      WHERE dp.ID_RESERVA = :id
+        d.CANTIDAD
+      FROM DETALLE_RESERVAS d
+      JOIN LISTA_PRODUCTOS p ON d.ID_PRODUCTO = p.ID_PRODUCTO
+      WHERE d.ID_RESERVA = :id
     `, {
       replacements: { id: idReservaNum },
       type: db.Sequelize.QueryTypes.SELECT
@@ -163,6 +163,7 @@ exports.getDetallesByReserva = async (req, res) => {
     });
   }
 };
+
 
 
 exports.eliminarReserva = async (req, res) => {
