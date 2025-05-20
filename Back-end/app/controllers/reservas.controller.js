@@ -28,14 +28,15 @@ exports.realizarReserva = async (req, res) => {
   try {
     const { id_cliente, productos, fechaReserva, total_reserva } = req.body;
 
-    if (!id_cliente || !productos || productos.length === 0 || !fechaReserva || total_reserva == null) {
+    // Validación básica
+    if (!id_cliente || !total_reserva || !productos || productos.length === 0 || !fechaReserva) {
       return res.status(400).json({ message: 'Datos incompletos en la solicitud' });
     }
 
-    if (typeof total_reserva !== 'number' || total_reserva <= 0) {
-      return res.status(400).json({ message: 'El total de la reserva es inválido' });
-    }
+    // Obtener nuevo ID de reserva
+    const idReserva = await getNextReservaNumber();
 
+    // Preparar fechas
     const parsedFechaReserva = new Date(fechaReserva);
     if (isNaN(parsedFechaReserva)) {
       return res.status(400).json({ message: 'Formato de fecha inválido' });
@@ -45,18 +46,7 @@ exports.realizarReserva = async (req, res) => {
     const fechaLimitePago = new Date(parsedFechaReserva);
     fechaLimitePago.setDate(fechaLimitePago.getDate() - 1);
 
-    const idReserva = await getNextReservaNumber();
-
-    console.log("Campos para crear reserva:", {
-      id_reserva,
-      id_cliente,
-      fecha_reserva,
-      fecha_limite_pago,
-      total_reserva: totalNumber
-    });
-
-    console.log("Tipo de total_reserva:", typeof totalNumber);
-
+    // Crear reserva
     const nuevaReserva = await Reserva.create({
       id_reserva: idReserva,
       id_cliente,
@@ -65,20 +55,18 @@ exports.realizarReserva = async (req, res) => {
       total_reserva
     }, { transaction: t });
 
+    // Agregar detalles
     let idDetalleReservaContador = 1;
-
     for (const producto of productos) {
-      const { id_producto, cantidad } = producto;
-
-      if (!id_producto || !cantidad) {
+      if (!producto.id_producto || !producto.cantidad) {
         throw new Error('Datos incompletos en los productos');
       }
 
       await DetalleReserva.create({
+        id_detalle_reserva: idDetalleReservaContador++,
         id_reserva: idReserva,
-        id_producto,
-        cantidad,
-        id_detalle_reserva: idDetalleReservaContador++
+        id_producto: producto.id_producto,
+        cantidad: producto.cantidad
       }, { transaction: t });
     }
 
@@ -87,11 +75,10 @@ exports.realizarReserva = async (req, res) => {
 
   } catch (error) {
     await t.rollback();
-    console.error('Error en la reserva:', error.message || error);
+    console.error('Error en la reserva:', error);
     res.status(500).json({ message: 'Error al realizar la reserva', error: error.message || error });
   }
 };
-
 
 
 exports.retrieveReservasByCliente = async (req, res) => {
