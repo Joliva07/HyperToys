@@ -14,5 +14,5 @@ module.exports = {
     STRIPE_SECRET_KEY: 'sk_test_51RDv6zBSQYARwyezzfyJOrCpvbNfWWGUPfnWCGiWcW53XMvLPkVUcwFmPmKZtuzmGOYJYnzkLKnUwfBFokTSxVRI00B5YD2Sv8',
     STRIPE_WEBHOOK_SECRET: 'whsec_tu_webhook_secret',
     STRIPE_PUBLIC_KEY: 'pk_test_51RDv6zBSQYARwyeznfVje7jgu6rXEfmFfGiOH58ThsVwaz77zxZvLqyYFCsZoCX6OsaGgErxsEAJxaN9P85OveC500Y1UxYIwd',
-    FRONTEND_URL: 'http://localhost:3000'
+    FRONTEND_URL: 'https://hypertoys-front.onrender.com'
   };
