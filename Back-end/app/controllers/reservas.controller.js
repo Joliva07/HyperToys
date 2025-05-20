@@ -47,6 +47,16 @@ exports.realizarReserva = async (req, res) => {
 
     const idReserva = await getNextReservaNumber();
 
+    console.log("Campos para crear reserva:", {
+      id_reserva,
+      id_cliente,
+      fecha_reserva,
+      fecha_limite_pago,
+      total_reserva: totalNumber
+    });
+
+    console.log("Tipo de total_reserva:", typeof totalNumber);
+
     const nuevaReserva = await Reserva.create({
       id_reserva: idReserva,
       id_cliente,
