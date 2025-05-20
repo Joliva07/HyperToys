@@ -222,7 +222,7 @@ const PerfilCliente = () => {
                   ) : (
                     detalleReserva.map((prod, index) => (
                       <li key={index} className="list-group-item">
-                        Producto: {producto.nombre_producto} | Cantidad: {producto.cantidad} | Precio: Q{producto.precio_unitario} | Subtotal: Q{(producto.precio_unitario * producto.cantidad).toFixed(2)}
+                        Producto: {prod.nombre_producto} | Cantidad: {prod.cantidad} | Precio: Q{prod.precio_unitario} | Subtotal: Q{(prod.precio_unitario * prod.cantidad).toFixed(2)}
                       </li>
                     ))
                   )}
