@@ -21,6 +21,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         field: 'FECHA_LIMITE_PAGO'
       },
+      total_reserva: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+        field: 'TOTAL_RESERVA'
+      }
     }, {
       tableName: "RESERVAS",
       timestamps: false

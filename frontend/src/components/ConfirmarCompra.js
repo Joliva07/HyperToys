@@ -56,6 +56,43 @@ const ConfirmarCompra = () => {
     }
   };
 
+
+  const handleReserva = async () => {
+    if (!carrito.length) {
+      alert("Tu carrito está vacío. Por favor agrega productos.");
+      return;
+    }
+
+    const carritoValido = carrito.every(p => p.NOMBRE && p.PRECIO && p.cantidad > 0);
+
+    if (!carritoValido) {
+      alert("Tu carrito contiene productos inválidos. Por favor actualízalo.");
+      return;
+    }
+
+    try {
+      const productosFormateados = carrito.map(p => ({
+        id_producto: p.ID_PRODUCTO,
+        cantidad: p.cantidad
+      }));
+
+      const fechaReserva = new Date(); // Fecha actual para la reserva
+
+      const response = await axios.post('https://back-hypertoys.onrender.com/HyperToys/reservas', {
+        id_cliente: clienteId,
+        productos: productosFormateados,
+        fechaReserva: fechaReserva.toISOString()
+      });
+
+      alert('Reserva realizada con éxito');
+      setCarrito([]);
+    } catch (error) {
+      console.error('Error al realizar la reserva:', error);
+      alert('Hubo un error al hacer la reserva.');
+    }
+  };
+
+
   return (
     <div className="container mt-5">
       <h2>Confirmar Compra</h2>
@@ -82,6 +119,10 @@ const ConfirmarCompra = () => {
           <button className="btn btn-success" onClick={handleConfirmar}>
             Confirmar y Pagar
           </button>
+          <button className="btn btn-warning ms-2" onClick={handleReserva}>
+            Reservar
+          </button>
+
         </>
       )}
     </div>
