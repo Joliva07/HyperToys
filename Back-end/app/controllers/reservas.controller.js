@@ -1,6 +1,7 @@
 const db = require('../config/databse.config.js');
 const Reserva = db.Reserva;
 const DetalleReserva = db.DetalleReserva;
+const ListaProductos = db.ListaProductos; // Asegúrate que esté importado
 
 async function getNextReservaNumber() {
     try {
@@ -117,7 +118,6 @@ exports.retrieveReservasByCliente = async (req, res) => {
   }
 };
 
-
 exports.getDetallesByReserva = async (req, res) => {
   const { idReserva } = req.params;
 
@@ -130,18 +130,14 @@ exports.getDetallesByReserva = async (req, res) => {
   const idReservaNum = parseInt(idReserva, 10);
 
   try {
-    const detalles = await db.sequelize.query(`
-      SELECT 
-        d.ID_PRODUCTO,
-        p.NOMBRE AS nombre_producto,
-        p.PRECIO AS precio_unitario,
-        d.CANTIDAD
-      FROM HYPER.DETALLE_RESERVAS d
-      JOIN HYPER.LISTA_PRODUCTOS p ON d.ID_PRODUCTO = p.ID_PRODUCTO
-      WHERE d.ID_RESERVA = :id
-    `, {
-      replacements: { id: idReservaNum },
-      type: db.Sequelize.QueryTypes.SELECT
+    const detalles = await DetalleReserva.findAll({
+      where: { id_reserva: idReservaNum },
+      include: [{
+        model: ListaProductos,
+        as: 'ListaProducto',
+        attributes: ['NOMBRE', 'PRECIO'],
+        required: true
+      }]
     });
 
     if (!detalles.length) {
@@ -150,9 +146,15 @@ exports.getDetallesByReserva = async (req, res) => {
       });
     }
 
+    const detallesFormateados = detalles.map(det => ({
+      nombre_producto: det.ListaProducto.NOMBRE,
+      precio_unitario: det.ListaProducto.PRECIO,
+      cantidad: det.cantidad
+    }));
+
     res.status(200).json({
-      message: `Detalles de la reserva obtenidos exitosamente.`,
-      detalles
+      message: `Detalles de la reserva con ID ${idReservaNum} obtenidos exitosamente.`,
+      detalles: detallesFormateados
     });
 
   } catch (error) {
@@ -163,6 +165,7 @@ exports.getDetallesByReserva = async (req, res) => {
     });
   }
 };
+
 
 
 

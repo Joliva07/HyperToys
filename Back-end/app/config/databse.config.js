@@ -35,5 +35,10 @@ db.DetalleFactura.belongsTo(db.ListaProductos, {
   as: 'ListaProducto'
 });
 
+db.DetalleReserva.belongsTo(ListaProductos, {
+  foreignKey: 'id_producto',
+  as: 'ListaProducto'
+});
+
 
 module.exports = db;
