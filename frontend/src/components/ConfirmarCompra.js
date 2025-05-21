@@ -42,6 +42,7 @@ const ConfirmarCompra = () => {
 
     try {
       const productosFormateados = carrito.map(p => ({
+        id_producto: p.ID_PRODUCTO,
         NOMBRE: p.NOMBRE,
         PRECIO: p.PRECIO,
         CANTIDAD: p.cantidad
