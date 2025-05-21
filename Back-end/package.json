@@ -1,5 +1,15 @@
 {
+  "name": "hypertoys-backend",
+  "version": "1.0.0",
+  "description": "Backend API for HyperToys store",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js"
+  },
   "dependencies": {
+    "axios": "^1.9.0",
+    "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
@@ -8,5 +18,8 @@
     "sequelize": "^6.37.6",
     "sequelize-oracle": "^3.3.2-0.0",
     "stripe": "^18.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
