@@ -29,6 +29,7 @@ router.get('/reservas/:id_cliente', DetalleReserva.retrieveReservasByCliente);
 router.get('/reservas/:idReserva/detalles', DetalleReserva.getDetallesByReserva);
 //router.put('/reservas/:idReserva', DetalleReserva.actualizarReserva);
 router.delete('/reservas/:idReserva', DetalleReserva.eliminarReserva);
+router.get('/reserva/:id_reserva/cliente/:id_cliente', DetalleReserva.getReservaByIdAndCliente);
 
 const listaProductosController = require('../controllers/listaProductos.controller'); 
 
