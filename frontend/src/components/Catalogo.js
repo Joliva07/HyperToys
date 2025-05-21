@@ -6,23 +6,26 @@ import Banner from './Banner'
 import '../context/Catalogo.css';
 
 const Catalogo = () => {
+  const [pagina, setPagina] = useState(1);
+  const [totalPaginas, setTotalPaginas] = useState(1);
   const [productos, setProductos] = useState([]);
   const [cantidades, setCantidades] = useState({});
   const { agregarProducto, cerrarSesion } = useContext(CarritoContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const obtenerProductos = async () => {
-      try {
-        const res = await axios.get('https://back-hypertoys.onrender.com/HyperToys/productos/all');
-        setProductos(res.data.productos);
-      } catch (error) {
-        console.error('Error al obtener productos:', error);
-      }
-    };
+  const obtenerProductos = async () => {
+    try {
+      const res = await axios.get(`https://back-hypertoys.onrender.com/HyperToys/productos/all?page=${pagina}`);
+      setProductos(res.data.productos);
+      setTotalPaginas(res.data.pages);
+    } catch (error) {
+      console.error('Error al obtener productos:', error);
+    }
+  };
 
-    obtenerProductos();
-  }, []);
+  obtenerProductos();
+}, [pagina]);
 
   const handleCantidadChange = (id, valor) => {
     setCantidades({ ...cantidades, [id]: parseInt(valor) });
@@ -103,6 +106,17 @@ const Catalogo = () => {
               </div>
             </div>
           </div>
+        ))}
+      </div>
+      <div className="d-flex justify-content-center mt-4">
+        {[...Array(totalPaginas)].map((_, i) => (
+          <button
+            key={i}
+            className={`btn mx-1 ${pagina === i + 1 ? 'btn-primary' : 'btn-outline-primary'}`}
+            onClick={() => setPagina(i + 1)}
+          >
+            {i + 1}
+          </button>
         ))}
       </div>
     </div>

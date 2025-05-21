@@ -16,9 +16,9 @@ const PagoExitoso = () => {
 
   return (
     <div className="container mt-5 text-center">
-      <h2>¡Pago exitoso! 🎉</h2>
+      <h2>🎉 ¡Gracias por tu compra! 🧾</h2>
       {sessionId ? (
-        <p>Tu ID de sesión de pago es: <strong>{sessionId}</strong></p>
+        <p>Tu pedido ha sido procesado exitosamente. En breve podrás ver tu factura en tu perfil.</p>
       ) : (
         <p>No se encontró la sesión de pago.</p>
       )}
