@@ -14,6 +14,23 @@ app.use(cors({
   credentials: true
 }));
 
+// Middleware para construir req.rawBody SOLO para Stripe
+app.use((req, res, next) => {
+  if (req.originalUrl === '/HyperToys/pagos/webhook') {
+    req.rawBody = '';
+    req.setEncoding('utf8');
+    req.on('data', chunk => {
+      req.rawBody += chunk;
+    });
+    req.on('end', () => {
+      next();
+    });
+  } else {
+    next();
+  }
+});
+
+
 // Ruta especial para el webhook de Stripe
 // ✅ Ruta especial para Webhook de Stripe (solo esta usa body crudo)
 app.post(
