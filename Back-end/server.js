@@ -30,7 +30,6 @@ app.use((req, res, next) => {
   }
 });
 
-
 // Ruta especial para el webhook de Stripe
 // ✅ Ruta especial para Webhook de Stripe (solo esta usa body crudo)
 app.post(
