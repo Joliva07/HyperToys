@@ -3,7 +3,8 @@ import { CarritoContext } from '../context/CarritoContext';
 import axios from 'axios';
 
 const ConfirmarCompra = () => {
-  const { carrito, setCarrito, eliminarProducto, clienteId } = useContext(CarritoContext);
+  const { carrito, setCarrito, eliminarProducto, clienteId: rawClienteId } = useContext(CarritoContext);
+  const clienteId = parseInt(rawClienteId, 10);
 
   const [idReservaInput, setIdReservaInput] = useState('');
   const [reservaVerificada, setReservaVerificada] = useState(null);
@@ -41,16 +42,22 @@ const ConfirmarCompra = () => {
 
     try {
       const productosFormateados = carrito.map(p => ({
-        id_producto: p.ID_PRODUCTO,
-        cantidad: p.cantidad
+        NOMBRE: p.NOMBRE,
+        PRECIO: p.PRECIO,
+        CANTIDAD: p.cantidad
       }));
 
-      const response = await axios.post('https://back-hypertoys.onrender.com/HyperToys/pagar', {
+      const payload = {
         ID_CLIENTE: clienteId,
         ID_PRODUCTOS: productosFormateados,
         TOTAL_PAGAR: totalPagar
-      });
+      };
 
+      if (reservaVerificada) {
+        payload.ID_RESERVA = reservaVerificada.id_reserva;
+      }
+
+      const response = await axios.post('https://back-hypertoys.onrender.com/HyperToys/pagar', payload);
       window.location.href = response.data.url;
     } catch (error) {
       console.error('Error al procesar la compra:', error);
@@ -64,7 +71,7 @@ const ConfirmarCompra = () => {
       return;
     }
 
-    if (reservaVerificada) return; // deshabilitado si ya hay una reserva verificada
+    if (reservaVerificada) return;
 
     try {
       const productosFormateados = carrito.map(p => ({
