@@ -14,6 +14,11 @@ exports.createPaymentIntent = async (req, res) => {
       return res.status(404).json({ error: "Cliente no encontrado" });
     }
 
+    const productosMinimos = ID_PRODUCTOS.map(p => ({
+      id_producto: p.id_producto,
+      cantidad: p.CANTIDAD
+    }));
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: ID_PRODUCTOS.map(producto => ({
@@ -31,7 +36,7 @@ exports.createPaymentIntent = async (req, res) => {
       cancel_url: `${env.FRONTEND_URL}/confirmar-compra`,
       metadata: {
         id_cliente: ID_CLIENTE,
-        productos: JSON.stringify(ID_PRODUCTOS),
+        productos: JSON.stringify(productosMinimos),
         total_pagar: TOTAL_PAGAR
       }
     });
