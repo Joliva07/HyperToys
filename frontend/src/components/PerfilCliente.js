@@ -11,19 +11,20 @@ const PerfilCliente = () => {
   const [reservas, setReservas] = useState([]);
   const [facturaExpandida, setFacturaExpandida] = useState(null);
   const [detalleFactura, setDetalleFactura] = useState([]);
-
+  const [reservaExpandida, setReservaExpandida] = useState(null);
+  const [detalleReserva, setDetalleReserva] = useState([]);
 
   useEffect(() => {
     const obtenerDatos = async () => {
       try {
-        const clienteRes = await axios.get(`http://localhost:4000/HyperToys/cliente/${clienteId}`);
+        const clienteRes = await axios.get(`https://back-hypertoys.onrender.com/HyperToys/cliente/${clienteId}`);
         setCliente(clienteRes.data);
         setFormulario(clienteRes.data);
 
-        const facturasRes = await axios.get(`http://localhost:4000/HyperToys/verfactura/${clienteId}`);
+        const facturasRes = await axios.get(`https://back-hypertoys.onrender.com/HyperToys/verfactura/${clienteId}`);
         setFacturas(facturasRes.data.facturas);
 
-        const reservasRes = await axios.get(`http://localhost:4000/HyperToys/reservas/${clienteId}`);
+        const reservasRes = await axios.get(`https://back-hypertoys.onrender.com/HyperToys/reservas/${clienteId}`);
         setReservas(reservasRes.data.reservas);
       } catch (error) {
         console.error('Error al obtener datos:', error);
@@ -49,7 +50,7 @@ const PerfilCliente = () => {
         return;
       }
       
-      const res = await axios.get(`http://localhost:4000/HyperToys/facturas/${idFactura}/detalles`);
+      const res = await axios.get(`https://back-hypertoys.onrender.com/HyperToys/facturas/${idFactura}/detalles`);
       setDetalleFactura(res.data.detalles);
       setFacturaExpandida(idFactura);
     } catch (error) {
@@ -57,11 +58,27 @@ const PerfilCliente = () => {
       alert('No se pudo cargar el detalle de esta factura.');
     }
   };
-  
+
+  const verDetalleReserva = async (idReserva) => {
+    try {
+      if (reservaExpandida === idReserva) {
+        setReservaExpandida(null);
+        setDetalleReserva([]);
+        return;
+      }
+
+      const res = await axios.get(`https://back-hypertoys.onrender.com/HyperToys/reservas/${idReserva}/detalles`);
+      setDetalleReserva(res.data.detalles);
+      setReservaExpandida(idReserva);
+    } catch (error) {
+      console.error('Error al obtener detalle de reserva:', error);
+      alert('No se pudo cargar el detalle de esta reserva.');
+    }
+  };
 
   const handleGuardar = async () => {
     try {
-      await axios.put(`http://localhost:4000/HyperToys/actualizarcliente/${clienteId}`, formulario);
+      await axios.put(`https://back-hypertoys.onrender.com/HyperToys/actualizarcliente/${clienteId}`, formulario);
       alert('Perfil actualizado correctamente');
       setCliente(formulario);
       setEditando(false);
@@ -163,7 +180,7 @@ const PerfilCliente = () => {
                   ) : (
                     detalleFactura.map((producto, index) => (
                       <li key={index} className="list-group-item">
-                        Producto: {producto.nombre_producto} | Cantidad: {producto.cantidad} | Precio: Q{producto.precio_unitario}
+                        Producto: {producto.nombre_producto} | Cantidad: {producto.cantidad} | Precio: Q{producto.precio_unitario} | Subtotal: Q{(producto.precio_unitario * producto.cantidad).toFixed(2)}
                       </li>
                     ))
                   )}
@@ -179,16 +196,42 @@ const PerfilCliente = () => {
       {reservas.length === 0 ? (
         <p>No tienes reservas registradas.</p>
       ) : (
-        <ul className="list-group">
+        <ul className="list-group mb-5">
           {reservas.map((reserva, idx) => (
             <li key={idx} className="list-group-item">
-              <strong>Reserva #{reserva.id_reserva}</strong> - 
-              Fecha Reserva: {new Date(reserva.fecha_reserva).toLocaleDateString()} - 
-              Fecha Límite Pago: {new Date(reserva.fecha_limite_pago).toLocaleDateString()}
+              <div className="d-flex justify-content-between align-items-center">
+                <div>
+                  <strong>Reserva #{reserva.id_reserva}</strong> - 
+                  Fecha Reserva: {reserva.fecha_reserva.split('T')[0].split('-').reverse().join('/')} - 
+                  Fecha Límite Pago: {reserva.fecha_limite_pago.split('T')[0].split('-').reverse().join('/')} -
+                  Total: Q{reserva.total_reserva.toFixed(2)}
+                </div>
+                <button
+                  className="btn btn-sm btn-outline-primary"
+                  onClick={() => verDetalleReserva(reserva.id_reserva)}
+                >
+                  {reservaExpandida === reserva.id_reserva ? '-' : '+'}
+                </button>
+              </div>
+
+              {/* Mostrar detalle si está expandido */}
+              {reservaExpandida === reserva.id_reserva && (
+                <ul className="list-group mt-3">
+                  {detalleReserva.length === 0 ? (
+                    <li className="list-group-item">No hay productos en esta reserva.</li>
+                  ) : (
+                    detalleReserva.map((prod, index) => (
+                      <li key={index} className="list-group-item">
+                        Producto: {prod.nombre_producto} | Cantidad: {prod.cantidad} | Precio: Q{prod.precio_unitario} | Subtotal: Q{(prod.precio_unitario * prod.cantidad).toFixed(2)}
+                      </li>
+                    ))
+                  )}
+                </ul>
+              )}
             </li>
           ))}
         </ul>
-      )}
+        )}
     </div>
   );
 };

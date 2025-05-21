@@ -1,10 +1,8 @@
 const stripe = require('../config/stripe.config.js');
 const db = require('../config/databse.config.js');
 const env = require('../config/env');
-const Factura = db.Factura;
-const DetalleFactura = db.DetalleFactura;
-const facturaController = require('./factura.controller');
 const Cliente = db.Clientes;
+const axios = require('axios'); // 👈 NUEVO
 
 // Crear sesión de pago en Stripe
 exports.createPaymentIntent = async (req, res) => {
@@ -29,8 +27,8 @@ exports.createPaymentIntent = async (req, res) => {
         quantity: producto.CANTIDAD,
       })),
       mode: 'payment',
-      success_url: `${env.FRONTEND_URL}/pago-exitoso?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${env.FRONTEND_URL}/carrito`,
+      success_url: `${env.FRONTEND_URL}/#/pago-exitoso?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${env.FRONTEND_URL}/confirmar-compra`,
       metadata: {
         id_cliente: ID_CLIENTE,
         productos: JSON.stringify(ID_PRODUCTOS),
@@ -54,48 +52,35 @@ exports.stripeWebhook = async (req, res) => {
     event = stripe.webhooks.constructEvent(
       req.rawBody,
       sig,
-      process.env.STRIPE_WEBHOOK_SECRET
+      env.STRIPE_WEBHOOK_SECRET // 👈 usa env, no process.env directamente
     );
   } catch (err) {
+    console.error("❌ Error verificando la firma del webhook:", err.message);
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
-    const t = await db.sequelize.transaction();
+
+    console.log("✅ Webhook recibido: checkout.session.completed");
+    console.log("📦 Metadata recibida:", session.metadata);
 
     try {
-      const id_cliente = session.metadata.id_cliente;
-      const productos = JSON.parse(session.metadata.productos);
-      const total_pagar = session.metadata.total_pagar;
+      const payload = {
+        id_cliente: session.metadata.id_cliente,
+        total_pagar: session.metadata.total_pagar,
+        productos: JSON.parse(session.metadata.productos)
+      };
 
-      const id_factura = await facturaController.getNextFacturaNumber();
+      // 👇 Llama a tu propia API de backend para crear factura
+      const response = await axios.post(
+        'https://back-hypertoys.onrender.com/HyperToys/realizarcompra',
+        payload
+      );
 
-      // Crear Factura
-      const nuevaFactura = await Factura.create({
-        id_factura: id_factura,
-        id_cliente: id_cliente,
-        total_pagar: total_pagar,
-        fecha_factura: new Date()
-      }, { transaction: t });
-
-      // Crear Detalles de Factura
-      let idDetalleIncremental = 1;
-      for (const producto of productos) {
-        await DetalleFactura.create({
-          id_detalle_factura: idDetalleIncremental++,
-          id_factura: id_factura,
-          id_producto: producto.id_producto,
-          cantidad: producto.CANTIDAD
-        }, { transaction: t });
-      }
-
-      await t.commit();
-      console.log(`✅ Factura ${id_factura} creada exitosamente con detalles después de pago.`);
-
+      console.log("✅ Respuesta de la API /realizarcompra:", response.data);
     } catch (error) {
-      await t.rollback();
-      console.error('Error creando Factura después del pago:', error);
+      console.error("❌ Error al llamar API /realizarcompra:", error.response?.data || error.message);
     }
   }
 

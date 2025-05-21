@@ -9,7 +9,7 @@ const app = express();
 
 // ✅ Primero, configurar CORS
 app.use(cors({
-  origin: 'http://localhost:3000', // tu frontend (React)
+  origin: 'https://hypertoys-front.onrender.com', // tu frontend (React)
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));

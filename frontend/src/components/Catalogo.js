@@ -14,7 +14,7 @@ const Catalogo = () => {
   useEffect(() => {
     const obtenerProductos = async () => {
       try {
-        const res = await axios.get('http://localhost:4000/HyperToys/productos/all');
+        const res = await axios.get('https://back-hypertoys.onrender.com/HyperToys/productos/all');
         setProductos(res.data.productos);
       } catch (error) {
         console.error('Error al obtener productos:', error);
