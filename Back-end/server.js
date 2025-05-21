@@ -47,7 +47,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/HyperToys", clientesRoutes);
 
 // Iniciar servidor
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 1522;
 db.sequelize.authenticate()
   .then(() => db.sequelize.sync())
   .then(() => {

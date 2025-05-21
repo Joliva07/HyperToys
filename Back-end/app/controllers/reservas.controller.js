@@ -214,3 +214,40 @@ exports.eliminarReserva = async (req, res) => {
         });
     }
 };
+
+
+exports.getReservaByIdAndCliente = async (req, res) => {
+    const { id_reserva, id_cliente } = req.params;
+
+    if (isNaN(id_reserva) || isNaN(id_cliente)) {
+        return res.status(400).json({
+            message: "El ID de la reserva y el ID del cliente deben ser valores numéricos válidos."
+        });
+    }
+
+    try {
+        const reserva = await Reserva.findOne({
+            where: {
+                id_reserva: parseInt(id_reserva),
+                id_cliente: parseInt(id_cliente)
+            }
+        });
+
+        if (!reserva) {
+            return res.status(404).json({
+                message: `No se encontró la reserva con ID ${id_reserva} para el cliente con ID ${id_cliente}.`
+            });
+        }
+
+        res.status(200).json({
+            message: "Reserva obtenida exitosamente.",
+            reserva
+        });
+    } catch (error) {
+        console.error("Error al obtener la reserva:", error);
+        res.status(500).json({
+            message: "Ocurrió un error al obtener la reserva.",
+            error: error.message
+        });
+    }
+};

@@ -22,12 +22,12 @@ const Login = () => {
         setError('');
 
         try {
+
             const response = await axios.post(
                 'https://back-hypertoys.onrender.com/HyperToys/login',
                 { username, password },
                 { withCredentials: true } // 👈 esto es lo que habilita las cookies/tokens cross-domain
             );
-
 
             const token = response.data.token;
             const id = response.data.id;
