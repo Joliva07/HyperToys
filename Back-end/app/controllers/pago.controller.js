@@ -8,6 +8,7 @@ const axios = require('axios'); // 👈 NUEVO
 exports.createPaymentIntent = async (req, res) => {
   try {
     const { ID_CLIENTE, ID_PRODUCTOS, TOTAL_PAGAR } = req.body;
+    console.log("🧪 ID_PRODUCTOS recibido:", ID_PRODUCTOS);
 
     const cliente = await Cliente.findByPk(ID_CLIENTE);
     if (!cliente) {
