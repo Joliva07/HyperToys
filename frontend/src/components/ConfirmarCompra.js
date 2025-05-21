@@ -148,12 +148,12 @@ const ConfirmarCompra = () => {
             {reservaError && <p className="text-danger mt-2">{reservaError}</p>}
             {reservaVerificada && (
               <p className="text-success mt-2">
-                Reserva válida encontrada. Total Q{reservaVerificada.total_reserva.toFixed(2)}
+                Reserva válida encontrada. Total ${reservaVerificada.total_reserva.toFixed(2)}
               </p>
             )}
           </div>
 
-          <h4>Total: Q{totalPagar.toFixed(2)}</h4>
+          <h4>Total: ${totalPagar.toFixed(2)}</h4>
           <button className="btn btn-success" onClick={handleConfirmar}>
             Confirmar y Pagar
           </button>

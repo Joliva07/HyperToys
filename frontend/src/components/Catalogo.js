@@ -85,7 +85,7 @@ const Catalogo = () => {
                   {producto.NOMBRE}
                 </h5>
                 <p className="card-text">{producto.DESCRIPCION}</p>
-                <p><strong>Precio:</strong> Q{producto.PRECIO}</p>
+                <p><strong>Precio:</strong> ${producto.PRECIO}</p>
                 <label>Cantidad:</label>
                 <input
                   type="number"

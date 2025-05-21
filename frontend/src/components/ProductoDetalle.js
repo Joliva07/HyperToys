@@ -43,7 +43,7 @@ const ProductoDetalle = () => {
         />
       )}
       <p><strong>Descripción:</strong> {producto.DESCRIPCION}</p>
-      <p><strong>Precio:</strong> Q{producto.PRECIO}</p>
+      <p><strong>Precio:</strong> ${producto.PRECIO}</p>
       <p><strong>Puntos:</strong> {producto.PUNTOS}</p>
       <div className="d-flex flex-column align-items-center">
         <label>Cantidad:</label>
