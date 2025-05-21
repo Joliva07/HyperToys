@@ -1,9 +1,13 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { CarritoContext } from '../context/CarritoContext';
 import axios from 'axios';
 
 const ConfirmarCompra = () => {
   const { carrito, setCarrito, eliminarProducto, clienteId } = useContext(CarritoContext);
+
+  const [idReservaInput, setIdReservaInput] = useState('');
+  const [reservaVerificada, setReservaVerificada] = useState(null);
+  const [reservaError, setReservaError] = useState('');
 
   const aumentarCantidad = (id) => {
     const actualizado = carrito.map(p =>
@@ -19,29 +23,27 @@ const ConfirmarCompra = () => {
     setCarrito(actualizado);
   };
 
-  const totalPagar = carrito.reduce((acc, p) => acc + p.PRECIO * p.cantidad, 0);
+  const totalProductos = carrito.reduce((acc, p) => acc + p.PRECIO * p.cantidad, 0);
+  const totalReserva = reservaVerificada ? reservaVerificada.total_reserva : 0;
+  const totalPagar = totalProductos + totalReserva;
 
   const handleConfirmar = async () => {
-    if (!carrito.length) {
-      alert("Tu carrito está vacío. Por favor agrega productos.");
+    if (!carrito.length && !reservaVerificada) {
+      alert("No hay productos ni reserva para procesar.");
       return;
     }
 
     const carritoValido = carrito.every(p => p.NOMBRE && p.PRECIO && p.cantidad > 0);
-
     if (!carritoValido) {
-      alert("Tu carrito contiene productos inválidos. Por favor actualízalo.");
+      alert("Tu carrito contiene productos inválidos.");
       return;
     }
 
     try {
       const productosFormateados = carrito.map(p => ({
-        NOMBRE: p.NOMBRE,
-        PRECIO: p.PRECIO,
-        CANTIDAD: p.cantidad
+        id_producto: p.ID_PRODUCTO,
+        cantidad: p.cantidad
       }));
-
-      const totalPagar = carrito.reduce((acc, p) => acc + p.PRECIO * p.cantidad, 0);
 
       const response = await axios.post('https://back-hypertoys.onrender.com/HyperToys/pagar', {
         ID_CLIENTE: clienteId,
@@ -56,19 +58,13 @@ const ConfirmarCompra = () => {
     }
   };
 
-
   const handleReserva = async () => {
     if (!carrito.length) {
-      alert("Tu carrito está vacío. Por favor agrega productos.");
+      alert("Tu carrito está vacío.");
       return;
     }
 
-    const carritoValido = carrito.every(p => p.NOMBRE && p.PRECIO && p.cantidad > 0);
-
-    if (!carritoValido) {
-      alert("Tu carrito contiene productos inválidos. Por favor actualízalo.");
-      return;
-    }
+    if (reservaVerificada) return; // deshabilitado si ya hay una reserva verificada
 
     try {
       const productosFormateados = carrito.map(p => ({
@@ -76,11 +72,10 @@ const ConfirmarCompra = () => {
         cantidad: p.cantidad
       }));
 
-      const fechaReserva = new Date(); // Fecha actual para la reserva
-
+      const fechaReserva = new Date();
       const totalReserva = carrito.reduce((acc, p) => acc + p.PRECIO * p.cantidad, 0);
 
-      const response = await axios.post('https://back-hypertoys.onrender.com/HyperToys/reservas', {
+      await axios.post('https://back-hypertoys.onrender.com/HyperToys/reservas', {
         id_cliente: clienteId,
         productos: productosFormateados,
         fechaReserva: fechaReserva.toISOString(),
@@ -95,10 +90,21 @@ const ConfirmarCompra = () => {
     }
   };
 
+  const verificarReserva = async () => {
+    setReservaError('');
+    try {
+      const response = await axios.get(`https://back-hypertoys.onrender.com/HyperToys/reserva/${idReservaInput}/cliente/${clienteId}`);
+      setReservaVerificada(response.data.reserva);
+    } catch (error) {
+      console.error('Error al verificar reserva:', error);
+      setReservaError('No se encontró la reserva.');
+    }
+  };
 
   return (
     <div className="container mt-5">
       <h2>Confirmar Compra</h2>
+
       {carrito.length === 0 ? (
         <p>No hay productos en el carrito.</p>
       ) : (
@@ -118,14 +124,38 @@ const ConfirmarCompra = () => {
               </li>
             ))}
           </ul>
+
+          <div className="mb-3">
+            <label htmlFor="reservaId" className="form-label">Agregar ID de Reserva Existente:</label>
+            <input
+              type="text"
+              className="form-control"
+              id="reservaId"
+              value={idReservaInput}
+              onChange={(e) => setIdReservaInput(e.target.value)}
+            />
+            <button className="btn btn-info mt-2" onClick={verificarReserva}>
+              Verificar Reserva
+            </button>
+            {reservaError && <p className="text-danger mt-2">{reservaError}</p>}
+            {reservaVerificada && (
+              <p className="text-success mt-2">
+                Reserva válida encontrada. Total Q{reservaVerificada.total_reserva.toFixed(2)}
+              </p>
+            )}
+          </div>
+
           <h4>Total: Q{totalPagar.toFixed(2)}</h4>
           <button className="btn btn-success" onClick={handleConfirmar}>
             Confirmar y Pagar
           </button>
-          <button className="btn btn-warning ms-2" onClick={handleReserva}>
-            Reservar
+          <button
+            className="btn btn-warning ms-2"
+            onClick={handleReserva}
+            disabled={!!reservaVerificada}
+          >
+            Solo Reservar
           </button>
-
         </>
       )}
     </div>
