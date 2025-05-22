@@ -4,7 +4,7 @@ const ListaProducto = db.ListaProductos;
 // Obtener todos los productos (con paginación)
 exports.getAllProductos = async (req, res) => {
   try {
-    const { page = 1, limit = 10 } = req.query;
+    const { page = 1, limit = 12 } = req.query;
     const offset = (page - 1) * limit;
 
     const { count, rows } = await ListaProducto.findAndCountAll({

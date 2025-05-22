@@ -55,7 +55,11 @@ const ProductoDetalle = () => {
           value={cantidad}
           onChange={(e) => setCantidad(e.target.value)}
         />
-        <button className="btn btn-primary" onClick={handleAgregarAlCarrito}>
+        <button
+          className="btn btn-primary"
+          onClick={handleAgregarAlCarrito}
+          disabled={producto.STOCK === 0 || ['Agotado', 'Descontinuado'].includes(producto.DISPONIBILIDAD)}
+        >
           Agregar al carrito
         </button>
       </div>
