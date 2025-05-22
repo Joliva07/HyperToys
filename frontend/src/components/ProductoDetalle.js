@@ -44,7 +44,7 @@ const ProductoDetalle = () => {
       )}
       <p><strong>Descripción:</strong> {producto.DESCRIPCION}</p>
       <p><strong>Precio:</strong> ${producto.PRECIO}</p>
-      <p><strong>Disponibilidad:</strong> {producto.ID_DISPONIBILIDAD}</p>
+      <p><strong>Disponibilidad:</strong> {producto.DISPONIBILIDAD}</p>
       <p><strong>Stock disponible:</strong> {producto.STOCK}</p>
       <div className="d-flex flex-column align-items-center">
         <label>Cantidad:</label>

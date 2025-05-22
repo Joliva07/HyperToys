@@ -90,8 +90,8 @@ const Catalogo = () => {
                 </h5>
                 <p className="card-text">{producto.DESCRIPCION}</p>
                 <p><strong>Precio:</strong> ${producto.PRECIO}</p>
-                <p><strong>Disponibilidad:</strong>{producto.DISPONIBILIDAD}</p>
-                <p><strong>Stock disponible:</strong>{producto.STOCK}</p>
+                <p><strong>Disponibilidad:</strong> {producto.DISPONIBILIDAD}</p>
+                <p><strong>Stock disponible:</strong> {producto.STOCK}</p>
                 <label>Cantidad:</label>
                 <input
                   type="number"
