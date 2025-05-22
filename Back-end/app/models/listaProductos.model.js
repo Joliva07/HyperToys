@@ -28,6 +28,10 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.INTEGER,
         allowNull: false
       },
+      ID_DISPONIBILIDAD: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      },
       IMAGEN: {
         type: Sequelize.BLOB,
         allowNull: false
@@ -35,6 +39,10 @@ module.exports = (sequelize, Sequelize) => {
       PUNTOS: {
         type: Sequelize.INTEGER,
         allowNull: false
+      },
+      STOCK: {
+        type: Sequelize.INTEGER,
+        allowNull: true
       }
     }, {
       tableName: "LISTA_PRODUCTOS",

@@ -77,6 +77,7 @@ const Catalogo = () => {
                   alt={producto.NOMBRE}
                   className="card-img-top"
                   style={{ maxHeight: '200px', objectFit: 'contain' }}
+                  onClick={() => navigate(`/producto/${producto.ID_PRODUCTO}`)}
                 />
               )}
               <div className="card-body d-flex flex-column">
@@ -89,6 +90,8 @@ const Catalogo = () => {
                 </h5>
                 <p className="card-text">{producto.DESCRIPCION}</p>
                 <p><strong>Precio:</strong> ${producto.PRECIO}</p>
+                <p><strong>Disponibilidad:</strong>{producto.ID_DISPONIBILIDAD}</p>
+                <p><strong>Stock disponible:</strong>{producto.STOCK}</p>
                 <label>Cantidad:</label>
                 <input
                   type="number"

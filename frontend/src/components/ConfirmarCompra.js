@@ -128,7 +128,7 @@ const ConfirmarCompra = () => {
                     <button className="btn btn-outline-danger btn-sm" onClick={() => eliminarProducto(p.ID_PRODUCTO)}>🗑️ Eliminar</button>
                   </div>
                 </div>
-                <span>Q{(p.PRECIO * p.cantidad).toFixed(2)}</span>
+                <span>${(p.PRECIO * p.cantidad).toFixed(2)}</span>
               </li>
             ))}
           </ul>
