@@ -21,7 +21,7 @@ exports.getAllProductos = async (req, res) => {
     const productosConImagen = rows.map(p => ({
       ...p.dataValues,
       IMAGEN: p.IMAGEN ? p.IMAGEN.toString('base64') : null,
-      DISPONIBILIDAD: p.disponibilidad?.NOMBRE || 'Sin definir'
+      DISPONIBILIDAD: p.disponibilidad?.DISPONIBILIDAD || 'Sin definir'
     }));
 
     res.json({
