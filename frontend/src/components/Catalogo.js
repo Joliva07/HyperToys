@@ -76,7 +76,7 @@ const Catalogo = () => {
                   src={`data:image/jpeg;base64,${producto.IMAGEN}`}
                   alt={producto.NOMBRE}
                   className="card-img-top"
-                  style={{ maxHeight: '200px', objectFit: 'contain' }}
+                  style={{ cursor: 'pointer', maxHeight: '200px', objectFit: 'contain' }}
                   onClick={() => navigate(`/producto/${producto.ID_PRODUCTO}`)}
                 />
               )}
@@ -90,7 +90,7 @@ const Catalogo = () => {
                 </h5>
                 <p className="card-text">{producto.DESCRIPCION}</p>
                 <p><strong>Precio:</strong> ${producto.PRECIO}</p>
-                <p><strong>Disponibilidad:</strong>{producto.ID_DISPONIBILIDAD}</p>
+                <p><strong>Disponibilidad:</strong>{producto.DISPONIBILIDAD}</p>
                 <p><strong>Stock disponible:</strong>{producto.STOCK}</p>
                 <label>Cantidad:</label>
                 <input

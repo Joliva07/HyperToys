@@ -29,6 +29,7 @@ db.ListaProductos = require('../models/listaProductos.model.js')(sequelize, Sequ
 db.Factura = require('../models/factura.model.js')(sequelize,Sequelize);
 db.DetalleFactura = require('../models/detalle_factura.model.js')(sequelize,Sequelize)
 db.TipoProductos = require('../models/tipoProducto.model.js')(sequelize,Sequelize)
+db.Disponibilidad = require('../models/disponibilidad.model.js')(sequelize, Sequelize);
 
 db.DetalleFactura.belongsTo(db.ListaProductos, {
   foreignKey: 'id_producto',
@@ -38,6 +39,11 @@ db.DetalleFactura.belongsTo(db.ListaProductos, {
 db.DetalleReserva.belongsTo(db.ListaProductos, {
   foreignKey: 'id_producto',
   as: 'ListaProducto'
+});
+
+db.ListaProductos.belongsTo(db.Disponibilidad, {
+  foreignKey: 'ID_DISPONIBILIDAD',
+  as: 'disponibilidad'
 });
 
 

@@ -10,12 +10,18 @@ exports.getAllProductos = async (req, res) => {
     const { count, rows } = await ListaProducto.findAndCountAll({
       offset: parseInt(offset),
       limit: parseInt(limit),
-      order: [['NOMBRE', 'ASC']]
+      order: [['NOMBRE', 'ASC']],
+      include: [{
+        model: db.Disponibilidad,
+        as: 'disponibilidad',
+        attributes: ['DISPONIBILIDAD']
+      }]
     });
 
     const productosConImagen = rows.map(p => ({
       ...p.dataValues,
-      IMAGEN: p.IMAGEN ? p.IMAGEN.toString('base64') : null
+      IMAGEN: p.IMAGEN ? p.IMAGEN.toString('base64') : null,
+      DISPONIBILIDAD: p.disponibilidad?.NOMBRE || 'Sin definir'
     }));
 
     res.json({
