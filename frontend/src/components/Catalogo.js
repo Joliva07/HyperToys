@@ -103,7 +103,7 @@ const Catalogo = () => {
                 <button
                   className="btn btn-primary"
                   onClick={() => handleAgregarAlCarrito(producto)}
-                  disabled={producto.STOCK === 0 || ['Agotado', 'Descontinuado'.includes(producto.DISPONIBILIDAD)]}
+                  disabled={producto.STOCK === 0 || ['Agotado', 'Descontinuado'].includes(producto.DISPONIBILIDAD)}
                 >
                   Agregar al Carrito
                 </button>
