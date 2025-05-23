@@ -51,20 +51,9 @@ const Catalogo = () => {
     <div className="container mt-5">
       <header className="catalogo-header sticky-top">
           <h1 className="titulo-principal">
-            <span className="texto-hyper">Hyper</span>
-            <span className="texto-toys">Toys</span>
+            <span className="texto-hyper">Cáta</span>
+            <span className="texto-toys">logo</span>
           </h1>
-        <div className="botones-header">
-        <button className="btn btn-perfil" onClick={() => navigate('/perfil')}>
-          <i className="bi bi-person-fill"></i> 👤 Mi Perfil
-        </button>
-          <button className="btn btn-carrito" onClick={() => navigate('/confirmar-compra')}>
-            🛒 Ver Carrito
-          </button>
-          <button className="btn btn-rojo" onClick={() => { cerrarSesion(); navigate('/'); }}>
-            🚪 Cerrar Sesión
-          </button>
-        </div>
       </header>
       <Banner />
       <div className="row">

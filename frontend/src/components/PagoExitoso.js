@@ -22,7 +22,7 @@ const PagoExitoso = () => {
       ) : (
         <p>No se encontró la sesión de pago.</p>
       )}
-      <Link to="/catalogo" className="btn btn-primary mt-3">
+      <Link to="/" className="btn btn-primary mt-3">
         Volver al catálogo
       </Link>
     </div>

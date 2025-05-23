@@ -154,6 +154,27 @@ return (
               </div>
             </div>
 
+                      <div className="card mb-4 bg-dark">
+            <label htmlFor="reservaId" className="form-label">Agregar ID de Reserva Existente:</label>
+            <input
+              type="text"
+              className="form-control"
+              id="reservaId"
+              value={idReservaInput}
+              onChange={(e) => setIdReservaInput(e.target.value)}
+            />
+            <button className="btn btn-info mt-2" onClick={verificarReserva}>
+              Verificar Reserva
+            </button>
+            {reservaError && <p className="text-danger mt-2">{reservaError}</p>}
+            {reservaVerificada && (
+              <p className="text-success mt-2">
+                Reserva válida encontrada. Total ${reservaVerificada.total_reserva.toFixed(2)}
+              </p>
+            )}
+          </div>    
+
+
             <div className="card mb-4 bg-dark">
               <div className="card-body">
                 <p><strong>Envío estimado:</strong></p>
