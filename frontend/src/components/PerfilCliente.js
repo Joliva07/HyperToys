@@ -5,6 +5,7 @@ import axios from 'axios';
 import './Login.css'; 
 
 const PerfilCliente = () => {
+  const navigate = useNavigate();
   const { clienteId } = useContext(CarritoContext);
   const [cliente, setCliente] = useState(null);
   const [formulario, setFormulario] = useState({});
