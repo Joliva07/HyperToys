@@ -1,0 +1,212 @@
+/* Estilos generales */
+.about-us-container {
+  font-family: 'Poppins', sans-serif;
+  color: #333;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Hero Section */
+.about-hero {
+  background: url('https://images.unsplash.com/photo-1608889825103-eb5a6f5ad72d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+  height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.hero-overlay {
+  background-color: rgba(106, 17, 203, 0.85);
+  color: white;
+  padding: 2rem;
+  text-align: center;
+  border-radius: 10px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hero-overlay h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.hero-overlay p {
+  font-size: 1.5rem;
+  font-weight: 300;
+}
+
+/* Nuestra Historia */
+.our-story {
+  padding: 5rem 0;
+  background-color: #f9f9f9;
+}
+
+.our-story h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+  color: #6a11cb;
+}
+
+.story-content {
+  max-width: 800px;
+  margin: 0 auto 3rem;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+.story-content p {
+  margin-bottom: 1.5rem;
+}
+
+.team-image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* Nuestra Misión */
+.our-mission {
+  padding: 5rem 0;
+  background-color: #fff;
+}
+
+.our-mission h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+  color: #6a11cb;
+}
+
+.mission-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.mission-card {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease;
+}
+
+.mission-card:hover {
+  transform: translateY(-10px);
+}
+
+.mission-icon {
+  font-size: 3rem;
+  color: #6a11cb;
+  margin-bottom: 1.5rem;
+}
+
+.mission-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+/* Valores */
+.our-values {
+  padding: 5rem 0;
+  background-color: #f9f9f9;
+}
+
+.our-values h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+  color: #6a11cb;
+}
+
+.values-list {
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  padding: 3rem;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.values-list ul {
+  list-style-type: none;
+}
+
+.values-list li {
+  margin-bottom: 1.5rem;
+  padding-left: 2rem;
+  position: relative;
+  font-size: 1.1rem;
+}
+
+.values-list li:before {
+  content: "★";
+  color: #6a11cb;
+  position: absolute;
+  left: 0;
+}
+
+/* CTA */
+.about-cta {
+  padding: 5rem 0;
+  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+  color: white;
+  text-align: center;
+}
+
+.about-cta h2 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+}
+
+.cta-button {
+  background: white;
+  color: #6a11cb;
+  border: none;
+  padding: 1rem 3rem;
+  font-size: 1.2rem;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.cta-button:hover {
+  background: #f8f8f8;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero-overlay h1 {
+    font-size: 2rem;
+  }
+  
+  .hero-overlay p {
+    font-size: 1.2rem;
+  }
+  
+  .our-story, .our-mission, .our-values, .about-cta {
+    padding: 3rem 0;
+  }
+  
+  .mission-cards {
+    grid-template-columns: 1fr;
+  }
+}

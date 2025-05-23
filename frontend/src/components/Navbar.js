@@ -59,7 +59,7 @@ const Navbar = () => {
               <span className="nav-link">Inicio</span>
             </li>
             <li className="nav-item">
-              <span className="nav-link">Acerca de nosotros</span>
+              <span className="nav-link" onClick={() => navigate('/AboutUs')} >Acerca de nosotros</span>
             </li>
             <li className="nav-item" onClick={() => navigate('/perfil')}>
               <span className="nav-link">

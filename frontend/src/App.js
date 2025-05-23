@@ -10,6 +10,7 @@ import PerfilCliente from './components/PerfilCliente';
 import ProductoDetalle from './components/ProductoDetalle';
 import Footer from './components/Footer';
 import Navbar from './components/Navbar';
+import AboutUs from './components/AboutUs';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
@@ -28,6 +29,7 @@ function App() {
           <Route path="/pago-exitoso" element={<PagoExitoso />} />
           <Route path="/perfil" element={<PerfilCliente />} />
           <Route path="/producto/:id" element={<ProductoDetalle />} />
+          <Route path="/AboutUs" element={<AboutUs />} />
         </Routes>
       </div>
       <Footer />
