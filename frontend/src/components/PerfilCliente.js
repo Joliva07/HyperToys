@@ -6,6 +6,7 @@ import './Login.css';
 
 const PerfilCliente = () => {
   const navigate = useNavigate();
+  const {cerrarSesion } = useContext(CarritoContext);
   const { clienteId } = useContext(CarritoContext);
   const [cliente, setCliente] = useState(null);
   const [formulario, setFormulario] = useState({});
