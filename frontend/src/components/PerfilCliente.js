@@ -263,7 +263,7 @@ const PerfilCliente = () => {
         <div className="col-sm-6 left-side">
           <div className="login-img">
             <img
-              src="/LOGO.PNG"
+              src="/LOGO.png"
               alt="Logo HyperToys"
               className="logo-login img-fluid"
             />

@@ -106,7 +106,7 @@ const Registro = () => {
 
             <div className="login-img">
                         <img
-                            src="/LOGO.PNG"
+                            src="/LOGO.png"
                             alt="Logo HyperToys"
                             className="logo-login img-fluid" /* Agrega la clase aquí */
                             />
