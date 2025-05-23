@@ -52,7 +52,7 @@ const Login = () => {
                     <div className="col-sm-6 left-side">
                         <div className="login-img">
                         <img
-                            src="/LOGO.PNG"
+                            src="/LOGO.png"
                             alt="Logo HyperToys"
                             className="logo-login img-fluid" /* Agrega la clase aquí */
                             />
@@ -73,7 +73,7 @@ const Login = () => {
                         <div className="form">
                             <form onSubmit={handleLogin}>
                                 <div className="form-group">
-                                    <label htmlFor="form2">Email</label>
+                                    <label htmlFor="form2">Usuario</label>
                                     <input
                                         type="text"
                                         id="form2"

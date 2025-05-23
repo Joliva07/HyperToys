@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Registro = () => {
   const [form, setForm] = useState({
@@ -35,39 +36,96 @@ const Registro = () => {
     window.location.href = '/';
   };
 
+  const navigate = useNavigate();
+
   return (
-    <div className="container mt-5">
-      <h2>Registro de Cliente</h2>
-      {!registroExitoso && (
-        <form onSubmit={handleSubmit}>
-          {Object.entries(form).map(([key, val]) => (
-            <div className="mb-3" key={key}>
-              <label className="form-label">{key.replace('_', ' ')}</label>
-              <input
-                type={key === 'FECHA_NACIMIENTO' ? 'date' : 'text'}
-                name={key}
-                className="form-control"
-                value={val}
-                onChange={handleChange}
-                required={key !== 'NIT'}
-              />
+    <>
+    
+    <div className="login-wrapper">
+        
+      <div className="container">
+        <div className="row main">
+
+          <div className="col-sm-6 right-side">
+            <h1>Registro</h1>
+            <p>Completa el formulario para crear tu cuenta.</p>
+
+            <div className="form">
+              {!registroExitoso && (
+                <form onSubmit={handleSubmit}>
+                  {Object.entries(form).map(([key, val]) => (
+                    <div className="form-group" key={key}>
+                      <label className="form-label">
+                        {key.replace('_', ' ').toLowerCase().replace(/^\w/, c => c.toUpperCase())}
+                      </label>
+                      <input
+                        type={key === 'FECHA_NACIMIENTO' ? 'date' : 'text'}
+                        name={key}
+                        className="form-control"
+                        value={val}
+                        onChange={handleChange}
+                        required={key !== 'NIT'}
+                      />
+                    </div>
+                  ))}
+
+                  <div className="form-group row" style={{ marginTop: '20px' }}>
+                    <div className="col-xs-12 text-center">
+                      <button type="submit" className="btn btn-deep-purple btn-half">
+                        Registrarse
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              )}
+
+              {mensaje && (
+                <div className="alert alert-info mt-3">{mensaje}</div>
+              )}
+
+              {registroExitoso && (
+                <div className="form-group row" style={{ marginTop: '20px' }}>
+                  <div className="col-xs-12 text-center">
+                    <button className="btn btn-outline-secondary btn-half" onClick={irAlLogin}>
+                      Iniciar sesión
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
-          ))}
-          <button type="submit" className="btn btn-success">Registrarse</button>
-        </form>
-      )}
+          </div>
 
-      {mensaje && (
-        <div className="alert alert-info mt-3">{mensaje}</div>
-      )}
+         <div className="col-sm-6 left-side">
+            <button 
+              className="btn btn-outline-light mb-3" 
+              onClick={() => navigate('/login')}
+               style={{ marginTop: '20px', display: 'block', transition: 'all 0.3s ease' }}
+            >
+              ← Volver
+            </button>
 
-      {registroExitoso && (
-        <button className="btn btn-primary mt-3" onClick={irAlLogin}>
-          Iniciar Sesión
-        </button>
-      )}
+            <div className="login-img">
+                        <img
+                            src="/LOGO.PNG"
+                            alt="Logo HyperToys"
+                            className="logo-login img-fluid" /* Agrega la clase aquí */
+                            />
+
+                    </div>
+
+            <h1>¡Únete a HyperToys!</h1>
+            <p>Crea tu cuenta para explorar un mundo de diversión.</p>
+            <p>Regístrate fácilmente y comienza tu aventura.</p>
+          </div>        
+
+
+        </div>
+      </div>
     </div>
+    
+    </>
   );
+
 };
 
 export default Registro;

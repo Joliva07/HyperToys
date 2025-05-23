@@ -41,7 +41,7 @@ const Navbar = () => {
       <div className="container d-flex justify-content-between align-items-center">
         <h1 className="navbar-brand mb-0" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
         <img
-  src={isScrolling ? "/LOGO2.PNG" : "/LOGOBLANCO.PNG"}
+  src={isScrolling ? "/LOGO2.png" : "/LOGOBLANCO.png"}
   alt="Logo HyperToys"
   className="logonav img-fluid"
 />

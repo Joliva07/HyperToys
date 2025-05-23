@@ -102,11 +102,3 @@
   transform: scale(1.02);
   opacity: 0.9;
 }
-
-/* --- Botón deshabilitado --- */
-button:disabled {
-  background-color: #ccc !important;
-  border-color: #ccc !important;
-  cursor: not-allowed !important;
-  color: #666 !important;
-}
