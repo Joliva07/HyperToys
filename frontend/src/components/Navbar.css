@@ -1,0 +1,79 @@
+.navbar-custom {
+  background-color: #212529; /* Color oscuro inicial */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, padding 0.3s ease;
+  padding-bottom: 15px; /* Espacio de separación al final */
+}
+
+.navbar-custom.scrolled {
+  background-color: #ffffff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding-bottom: 0; /* Reduce el espacio al hacer scroll */
+}
+
+/* Texto claro inicial, oscuro al hacer scroll */
+.navbar-custom .nav-link,
+.navbar-custom .navbar-brand,s
+.navbar-custom .navbar-toggler {
+  color: #f8f9fa !important; /* Color claro inicial */
+}
+
+.navbar-custom.scrolled .nav-link,
+.navbar-custom.scrolled .navbar-brand,
+.navbar-custom.scrolled .navbar-toggler {
+  color: #333 !important; /* Color oscuro al hacer scroll- Color de iconos y letras */
+}
+
+/* Iconos sociales */
+.navbar-icons .nav-icon {
+  font-size: 1rem;
+  color: #adb5bd; /* Color gris claro para contrastar con fondo oscuro */
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.navbar-custom.scrolled .navbar-icons .nav-icon {
+  color: #555; /* Color original al hacer scroll */
+}
+
+/* Botón Blocks */
+.navbar-custom .btn-outline-dark {
+  color: #f8f9fa;
+  border-color: #f8f9fa;
+}
+
+.navbar-custom.scrolled .btn-outline-dark {
+  color: #212529;
+  border-color: #212529;
+}
+
+/* Efecto hover para los links */
+.navbar-custom .nav-link:hover {
+  color: #ffffff !important;
+  opacity: 0.8;
+}
+
+.navbar-custom.scrolled .nav-link:hover {
+  color: #000 !important;
+}
+
+.navbar-custom .nav-link {
+  cursor: pointer; /* ✅ Cambia cursor a mano */
+}
+
+.logonav {
+  width: 60px; /* Aumenté el tamaño */
+  height: auto;
+  display: block; /* Para que el margen auto funcione */
+  margin: 0 auto; /* Centra horizontalmente */
+}
+
+/* Logo blanco para navbar oscuro */
+.navbar-custom .logonav {
+  filter: brightness(1) invert(0); /* ⚡ Lo hace blanco/gris claro */
+  transition: filter 0.3s ease;
+}
+
+/* Logo normal al hacer scroll (fondo claro) */
+.navbar-custom.scrolled .logonav {
+  filter: none; /* Vuelve a colores originales */
+}

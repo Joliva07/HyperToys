@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway:100,400,700&display=swap');
+
+.login-wrapper {
+    /*background-image: url('https://i.ytimg.com/vi/Q3_fuZVyFtY/maxresdefault.jpg');*/
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
+.btn-half {
+    width: 100%;
+}
+
+
+.main {
+    margin-top: 70px;
+    box-shadow: 0px 0px 14px rgba(0, 0, 0, 0.24);
+    padding: 0;
+}
+
+.left-side {
+    padding: 0 0 100px;
+    background: #9100ff;
+    color: white;
+}
+
+.left-side h1 {
+    font-size: 60px;
+    font-weight: 900;
+    padding: 50px 20px 10px 26px;
+}
+
+.left-side p {
+    font-weight: 600;
+    padding: 10px 20px 10px 26px;
+}
+
+.fb, .tw {
+    display: inline-block;
+    margin: 10px 26px 0 26px;
+    padding: 10px 15px;
+    border-radius: 18px;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+    text-decoration: none;
+    box-shadow: 0px 0px 14px rgba(0, 0, 0, 0.24);
+}
+
+.fb {
+    background: #2d6bb7;
+}
+
+.tw {
+    background: #20c1ed;
+}
+
+.right-side {
+    padding: 30px 20px 100px;
+    background: white;
+    min-height: 514px;
+}
+
+.right-side h1 {
+    font-size: 30px;
+    font-weight: 700;
+    padding: 50px 10px 10px 50px;
+}
+
+.right-side p {
+    font-weight: 600;
+    padding: 10px 50px 20px 50px;
+}
+
+.form {
+    padding: 0 50px;
+}
+
+.form-control {
+    box-shadow: none;
+    border-radius: 0;
+    border-bottom: 1px solid #9100ff;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+}
+
+.btn-deep-purple {
+    background: #84d14e !important;
+    border: none;
+    border-radius: 18px;
+    padding: 8px 20px;
+    color: #fff !important;
+    font-weight: 600;
+    text-align: center;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.btn-deep-purple:hover,
+.btn-deep-purple:focus {
+    background: #6db838 !important;
+    color: #fff !important;
+    box-shadow: 0px 0px 14px rgba(0, 0, 0, 0.3);
+    text-decoration: none;
+}
+
+.logo-login {
+  width: 200px; /* Aumenté el tamaño */
+  height: auto;
+  display: block; /* Para que el margen auto funcione */
+  margin: 0 auto; /* Centra horizontalmente */
+}
