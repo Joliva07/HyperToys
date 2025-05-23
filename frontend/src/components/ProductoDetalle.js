@@ -26,7 +26,7 @@ const ProductoDetalle = () => {
   const handleAgregarAlCarrito = () => {
     agregarProducto({ ...producto, cantidad: parseInt(cantidad) });
     alert('¡Producto agregado al carrito!');
-    navigate('/catalogo');
+    navigate('/');
   };
 
   if (!producto) return <div className="container mt-5">Cargando producto...</div>;
