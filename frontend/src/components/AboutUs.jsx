@@ -21,15 +21,19 @@ const navigate = useNavigate();
           <h2>¿Quiénes somos?</h2>
           <div className="story-content">
             <p>
-              HyperToys nació en 2018 cuando nuestro fundador, Carlos Mendez, buscaba regalos para sus sobrinos 
-              y se dio cuenta de que faltaba magia en las tiendas de juguetes tradicionales. Lo que comenzó como 
-              un pequeño local en el centro de Medellín, hoy es la tienda de juguetes en línea más innovadora 
-              de Latinoamérica.
+              HyperToys nació en 2018 cuando nuestro fundador, Carlos "The Wizard" Mendez, 
+              buscaba figuras de edición limitada de su anime favorito y descubrió que 
+              Latinoamérica merecía un verdadero santuario geek. Lo que comenzó como 
+              un pequeño local en Medellín lleno de figuras de acción, mangas y 
+              coleccionables, hoy es el e-commerce especializado más grande en cultura 
+              pop de la región.
             </p>
             <p>
-              Nos especializamos en juguetes que combinan diversión con aprendizaje, tecnología con creatividad, 
-              y fantasía con realidad. Cada producto en nuestro catálogo es cuidadosamente seleccionado para 
-              despertar la imaginación de niños y adultos por igual.
+              Somos el Hub definitivo para fans de anime, videojuegos, cómics y 
+              tecnología. Desde figuras Figma hasta réplicas de armas de tus juegos 
+              favoritos, cada producto en nuestro catálogo pasa por nuestro "Geek Test": 
+              debe despertar esa chispa de emoción que solo los verdaderos fans 
+              entendemos.
             </p>
           </div>
           <img src="/team.jpeg" alt="Equipo HyperToys" />
@@ -44,12 +48,12 @@ const navigate = useNavigate();
             <div className="mission-card">
               <FontAwesomeIcon icon="rocket" className="mission-icon" />
               <h3>Innovación</h3>
-              <p>Buscamos constantemente los juguetes más novedosos y tecnológicos del mercado</p>
+              <p>Buscamos constantemente los productos más novedosos y tecnológicos del mercado</p>
             </div>
             <div className="mission-card">
               <FontAwesomeIcon icon="child" className="mission-icon" />
-              <h3>Diversión Educativa</h3>
-              <p>Cada juguete debe estimular la creatividad y el aprendizaje</p>
+              <h3>Comunidad Geek</h3>
+              <p>No solo vendemos productos, construimos el punto de encuentro para la tribu geek latinoamericana</p>
             </div>
             <div className="mission-card">
               <FontAwesomeIcon icon="smile" className="mission-icon" />
@@ -71,10 +75,10 @@ const navigate = useNavigate();
           <h2>Nuestros Valores</h2>
           <div className="values-list">
             <ul>
-              <li><strong>Pasión por el juego:</strong> Creemos que jugar es esencial a cualquier edad</li>
-              <li><strong>Calidad premium:</strong> Todos nuestros productos pasan rigurosas pruebas</li>
-              <li><strong>Sostenibilidad:</strong> Priorizamos juguetes ecológicos y materiales responsables</li>
-              <li><strong>Comunidad:</strong> Apoyamos talleres educativos y donaciones a niños necesitados</li>
+              <li><strong>Autenticidad Geek:</strong> Todos en nuestro equipo pasamos el "Nerd Test"</li>
+              <li><strong>Ediciones Especiales:</strong> Priorizamos lanzamientos exclusivos y limited edition</li>
+              <li><strong>Know the Lore:</strong> Nuestro equipo conoce cada detalle de los productos que vendemos</li>
+              <li><strong>Convenciones VIP:</strong> Patrocinamos eventos geek y llevamos productos exclusivos</li>
             </ul>
           </div>
         </div>
