@@ -8,21 +8,31 @@ import ConfirmarCompra from './components/ConfirmarCompra';
 import PagoExitoso from './components/PagoExitoso'; // nuevo
 import PerfilCliente from './components/PerfilCliente';
 import ProductoDetalle from './components/ProductoDetalle';
+import Footer from './components/Footer';
+import Navbar from './components/Navbar';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 function App() {
   return (
     <CarritoProvider>
       <Router>
+      <div className="app-wrapper">
+        <Navbar />
+        <div className="app-content">
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/" element={<Catalogo />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/registro" element={<Registro />} />
-          <Route path="/catalogo" element={<Catalogo />} />
           <Route path="/confirmar-compra" element={<ConfirmarCompra />} />
           <Route path="/pago-exitoso" element={<PagoExitoso />} />
           <Route path="/perfil" element={<PerfilCliente />} />
           <Route path="/producto/:id" element={<ProductoDetalle />} />
         </Routes>
-      </Router>
+      </div>
+      <Footer />
+    </div>
+  </Router>
     </CarritoProvider>
   );
 }
