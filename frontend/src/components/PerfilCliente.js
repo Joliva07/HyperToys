@@ -93,7 +93,7 @@ const PerfilCliente = () => {
   };
 
   if (!cliente) {
-    return <div className="container mt-5">No estas registrado, inicia sesión, ve al login </div>;
+    return <div className="container mt-5">No estas registrado, inicia sesión, ve al <a className="nav-item" onClick={() => navigate('/login')}>login</a> </div>;
   }
 
   const handleCerrarSesion = () => {
