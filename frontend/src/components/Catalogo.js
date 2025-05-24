@@ -10,7 +10,7 @@ const Catalogo = () => {
   const [totalPaginas, setTotalPaginas] = useState(1);
   const [productos, setProductos] = useState([]);
   const [cantidades, setCantidades] = useState({});
-  const { agregarProducto, cerrarSesion } = useContext(CarritoContext);
+  const { agregarProducto, cerrarSesion, clienteId } = useContext(CarritoContext);
   const navigate = useNavigate();
 
   useEffect(() => {
