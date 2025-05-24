@@ -11,10 +11,12 @@ import '../context/Catalogo.css';
 const Navbar = () => {
   const navigate = useNavigate();
   const [nombreUsuario, setNombreUsuario] = useState('');
+  const [logueado, setLogueado] = useState(false);
   const { carrito } = React.useContext(CarritoContext);
   const totalItems = carrito.reduce((acc, item) => acc + item.cantidad, 0);
   const [open, setOpen] = useState(false);
   const [isScrolling, setIsScrolling] = useState(false);
+
 
   const handleToggle = () => setOpen(!open);
 
@@ -35,21 +37,23 @@ const Navbar = () => {
   }, []);
 
 useEffect(() => {
-  const actualizarNombre = () => {
+  const actualizarEstadoSesion  = () => {
     const token = localStorage.getItem('token');
     const nombre = localStorage.getItem('nombreCompleto');
 
     if (token && nombre && nombre !== 'undefined undefined') {
       setNombreUsuario(nombre);
+      setLogueado(true);
     } else {
       setNombreUsuario('');
+      setLogueado(false);
     }
   };
 
   window.addEventListener('storage', actualizarNombre);
-  actualizarNombre(); // también al cargar
+  actualizarEstadoSesion(); // también al cargar
 
-  return () => window.removeEventListener('storage', actualizarNombre);
+  return () => window.removeEventListener('storage', actualizarEstadoSesion);
 }, []);
 
 
@@ -98,13 +102,19 @@ useEffect(() => {
             <i className="fa-brands fa-twitter nav-icon"></i>
             <i className="fa-brands fa-facebook nav-icon"></i>
             <i className="fa-brands fa-instagram nav-icon"></i>                
+           {logueado ? (
+            <button className="btn btn-outline-danger btn-sm" onClick={cerrarSesion}>
+              <FontAwesomeIcon icon="sign-out-alt" className="me-2" />
+              Cerrar sesión
+            </button>
+          ) : (
             <a onClick={() => navigate('/login')} rel="noreferrer">
               <button className="btn btn-outline-dark btn-sm">
-              <FontAwesomeIcon icon="sign-in-alt" className="me-2" />
-              Login
-            </button>
+                <FontAwesomeIcon icon="sign-in-alt" className="me-2" />
+                Login
+              </button>
             </a>
-
+          )}
           </div>
         </div>
       </div>
