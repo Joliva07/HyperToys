@@ -54,7 +54,6 @@ export function CarritoProvider({ children }) {
     localStorage.removeItem('token');
     localStorage.removeItem('nombreCompleto');
     window.dispatchEvent(new Event('storage')); // actualiza el navbar
-    navigate('/login');
   };
 
   return (
