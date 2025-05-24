@@ -10,6 +10,7 @@ import '../context/Catalogo.css';
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const [nombreUsuario, setNombreUsuario] = useState('');
   const { carrito } = React.useContext(CarritoContext);
   const totalItems = carrito.reduce((acc, item) => acc + item.cantidad, 0);
   const [open, setOpen] = useState(false);
@@ -33,6 +34,23 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+useEffect(() => {
+  const actualizarNombre = () => {
+    const token = localStorage.getItem('token');
+    const nombre = localStorage.getItem('nombreCompleto');
+
+    if (token && nombre && nombre !== 'undefined undefined') {
+      setNombreUsuario(nombre);
+    } else {
+      setNombreUsuario('');
+    }
+  };
+
+  window.addEventListener('storage', actualizarNombre);
+  actualizarNombre(); // también al cargar
+
+  return () => window.removeEventListener('storage', actualizarNombre);
+}, []);
 
 
   return (
@@ -40,13 +58,7 @@ const Navbar = () => {
     <nav className={`navbar-custom navbar navbar-expand-lg fixed-top ${isScrolling ? 'scrolled' : ''}`}>
       <div className="container d-flex justify-content-between align-items-center">
         <h1 className="navbar-brand mb-0" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
-        <img
-  src={isScrolling ? "/LOGO2.png" : "/LOGOBLANCO.png"}
-  alt="Logo HyperToys"
-  className="logonav img-fluid"
-/>
-
-          
+        <img src={isScrolling ? "/LOGO2.png" : "/LOGOBLANCO.png"} alt="Logo HyperToys" className="logonav img-fluid"/>
         </h1>
 
         <button className="navbar-toggler" type="button" onClick={handleToggle}>
@@ -64,7 +76,7 @@ const Navbar = () => {
             <li className="nav-item" onClick={() => navigate('/perfil')}>
               <span className="nav-link">
                 <FontAwesomeIcon icon="circle-user" className="me-2" />
-                Mi Perfil
+                {nombreUsuario ? nombreUsuario : 'Mi Perfil'}
               </span>
             </li>
 

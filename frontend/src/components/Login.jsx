@@ -24,24 +24,35 @@ const Login = () => {
         setError('');
 
         try {
+        const response = await axios.post(
+            'https://back-hypertoys.onrender.com/HyperToys/login',
+            { username, password },
+            { withCredentials: true }
+        );
 
-            const response = await axios.post(
-                'https://back-hypertoys.onrender.com/HyperToys/login',
-                { username, password },
-                { withCredentials: true } // 👈 esto es lo que habilita las cookies/tokens cross-domain
-            );
+        const token = response.data.token;
+        const id = response.data.id;
 
-            const token = response.data.token;
-            const id = response.data.id;
+        localStorage.setItem('token', token);
+        localStorage.setItem('clienteId', id);
+        setClienteId(id);
 
-            localStorage.setItem('token', token);
-            setClienteId(id);
+        // 🔁 Obtenemos el nombre desde el backend
+        const clienteRes = await axios.get(`https://back-hypertoys.onrender.com/HyperToys/cliente/${id}`);
+        const nombres = clienteRes.data.NOMBRES;
+        const apellidos = clienteRes.data.APELLIDOS;
 
-            navigate('/');
-        } catch (err) {
-            console.error('Respuesta del servidor:', err.response?.data);
-            setError(err.response?.data?.error || 'Error al iniciar sesión');
+        if (nombres && apellidos) {
+            localStorage.setItem('nombreCompleto', `${nombres} ${apellidos}`);
+            window.dispatchEvent(new Event('storage')); // 👈 Notifica al Navbar
         }
+
+        navigate('/');
+        } catch (err) {
+        console.error('Respuesta del servidor:', err.response?.data);
+        setError(err.response?.data?.error || 'Error al iniciar sesión');
+        }
+
     };
 
     return (
