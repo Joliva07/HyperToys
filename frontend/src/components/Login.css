@@ -113,3 +113,7 @@
   display: block; /* Para que el margen auto funcione */
   margin: 0 auto; /* Centra horizontalmente */
 }
+
+.nav-item{
+    cursor: pointer;
+}

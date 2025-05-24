@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CarritoContext } from '../context/CarritoContext';
 import './Navbar.css';
@@ -56,7 +56,7 @@ useEffect(() => {
     }
   };
 
-  window.addEventListener('storage', actualizarNombre);
+  window.addEventListener('storage', actualizarEstadoSesion);
   actualizarEstadoSesion(); // también al cargar
 
   return () => window.removeEventListener('storage', actualizarEstadoSesion);

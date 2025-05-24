@@ -200,6 +200,8 @@ return (
                 </button>
               </div>            
             </div>
+      <div className="col-md-4">
+        <div className="card-header py-3">
             <div className="card mb-4 bg-dark">
             <label htmlFor="reservaId" className="form-label">Agregar ID de Reserva Existente:</label>
             <input
@@ -219,6 +221,8 @@ return (
               </p>
             )}
           </div> 
+        </div>  
+      </div>       
           </div>
         </div>
       </div>
