@@ -16,6 +16,10 @@ module.exports = (sequelize, Sequelize) => {
         cantidad: {
             type: Sequelize.INTEGER,
             field: 'CANTIDAD'
+        },
+        id_reserva: {
+            type: Sequelize.INTEGER,
+            field: 'ID_RESERVA'
         }
     }, {
         tableName: 'DETALLE_FACTURAS',

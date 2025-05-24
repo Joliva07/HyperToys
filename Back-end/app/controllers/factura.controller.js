@@ -17,69 +17,53 @@ async function getNextFacturaNumber() {
 }
 
 
-exports.realizarCompra = async(req, res)=>{
-const t = await db.sequelize.transaction();
+exports.realizarCompra = async (req, res) => {
+    const t = await db.sequelize.transaction();
 
-try {
-        const {id_cliente, total_pagar, productos } = req.body;
+    try {
+        const { id_cliente, total_pagar, productos, id_reserva } = req.body;
 
-    // Verificar que todos los campos obligatorios están presentes
-    if (!id_cliente || !total_pagar || !productos || productos.length === 0 ) {
-        return res.status(400).json({ message: 'Datos incompletos en la solicitud' });
-    }
-
-    // Obtener el siguiente número de factura
-    const id_factura = await getNextFacturaNumber();
-
-    // Crear la factura
-    const nuevaFactura = await Facturas.create({
-        id_factura,
-        id_cliente,
-        total_pagar,
-        //serieFactura: 'A',  // Puedes ajustar la serie de factura
-        fecha_factura: new Date()
-        
-        //idEmpleado,
-        //idSucursal,
-        
-    }, { transaction: t });
-
-    // Contador autoincrementable para los detalles
-    let idDetalleIncremental = 1;
-
-    // Crear los detalles de la factura
-    for (let i = 0; i < productos.length; i++) {
-        const producto = productos[i];
-
-        // Validar que los datos del producto estén completos
-        if (!producto.id_producto || !producto.cantidad) {
-            throw new Error('Datos incompletos en los productos');
+        if (!id_cliente || !total_pagar || !productos || productos.length === 0) {
+            return res.status(400).json({ message: 'Datos incompletos en la solicitud' });
         }
 
-        await DetalleFacturas.create({
-            id_detalle_factura: idDetalleIncremental++,  // Incrementa el valor de idDetalle
-            id_factura: nuevaFactura.id_factura,
-            //serieFactura: nuevaFactura.serieFactura,
-            id_producto: producto.id_producto,
-            //noReserva: producto.noReserva || null,
-            cantidad: producto.cantidad
-            //fechaCompra: new Date(),
-            //lugarCompra: producto.lugarCompra
+        const id_factura = await getNextFacturaNumber();
+
+        const nuevaFactura = await Facturas.create({
+            id_factura,
+            id_cliente,
+            total_pagar,
+            fecha_factura: new Date()
         }, { transaction: t });
+
+        let idDetalleIncremental = 1;
+
+        for (let i = 0; i < productos.length; i++) {
+            const producto = productos[i];
+
+            if (!producto.id_producto || !producto.cantidad) {
+                throw new Error('Datos incompletos en los productos');
+            }
+
+            await DetalleFacturas.create({
+                id_detalle_factura: idDetalleIncremental++,
+                id_factura: nuevaFactura.id_factura,
+                id_producto: producto.id_producto,
+                cantidad: producto.cantidad,
+                id_reserva: id_reserva || null // Aquí se guarda el ID_RESERVA si existe
+            }, { transaction: t });
+        }
+
+        await t.commit();
+
+        res.status(201).json({ message: 'Compra realizada con éxito', factura: nuevaFactura });
+    } catch (error) {
+        await t.rollback();
+        console.error('Error en la compra:', error);
+        res.status(500).json({ message: 'Error al realizar la compra', error });
     }
-
-    // Confirmar la transacción
-    await t.commit();
-
-    res.status(201).json({ message: 'Compra realizada con éxito', factura: nuevaFactura });
-} catch (error) {
-    // Hacer rollback en caso de error
-    await t.rollback();
-    console.error('Error en la compra:', error);
-    res.status(500).json({ message: 'Error al realizar la compra', error });
-}
-
 };
+
 
 
 exports.retrieveFacturasByCliente = async (req, res) => {
@@ -166,8 +150,10 @@ exports.getDetallesByFactura = async (req, res) => {
         const detallesFormateados = detalles.map(det => ({
             nombre_producto: det.ListaProducto.NOMBRE,
             precio_unitario: det.ListaProducto.PRECIO,
-            cantidad: det.cantidad
+            cantidad: det.cantidad,
+            id_reserva: det.id_reserva
         }));
+
 
         res.status(200).json({
             message: `Detalles de la factura con ID ${idFacturaNum} obtenidos exitosamente.`,
