@@ -12,7 +12,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [nombreUsuario, setNombreUsuario] = useState('');
   const [logueado, setLogueado] = useState(false);
-  const { carrito } = React.useContext(CarritoContext);
+  const { carrito, cerrarSesion } = useContext(CarritoContext);
   const totalItems = carrito.reduce((acc, item) => acc + item.cantidad, 0);
   const [open, setOpen] = useState(false);
   const [isScrolling, setIsScrolling] = useState(false);
@@ -35,6 +35,12 @@ const Navbar = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+const handleCerrarSesion = () => {
+  cerrarSesion();          // limpia todo
+  navigate('/login');      // redirige
+};
+
 
 useEffect(() => {
   const actualizarEstadoSesion  = () => {
@@ -103,7 +109,7 @@ useEffect(() => {
             <i className="fa-brands fa-facebook nav-icon"></i>
             <i className="fa-brands fa-instagram nav-icon"></i>                
            {logueado ? (
-            <button className="btn btn-outline-danger btn-sm" onClick={cerrarSesion}>
+            <button className="btn btn-outline-danger btn-sm" onClick={handleCerrarSesion}>
               <FontAwesomeIcon icon="sign-out-alt" className="me-2" />
               Cerrar sesión
             </button>
