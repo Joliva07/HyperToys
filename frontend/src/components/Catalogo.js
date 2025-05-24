@@ -37,11 +37,16 @@ const Catalogo = () => {
   };
 
   const handleAgregarAlCarrito = (producto) => {
-    const cantidad = cantidades[producto.ID_PRODUCTO] || 1;
-    agregarProducto({ ...producto, cantidad });
-    alert("¡Producto(s) agregado(s) correctamente!");
-    // Ya NO redirigimos al carrito aquí
-  };
+  if (!clienteId) {
+    alert("Debes iniciar sesión para agregar productos al carrito.");
+    navigate('/login');
+    return;
+  }
+
+  const cantidad = cantidades[producto.ID_PRODUCTO] || 1;
+  agregarProducto({ ...producto, cantidad });
+  alert("¡Producto(s) agregado(s) correctamente!");
+};
 
   const irAlCarrito = () => {
     navigate('/confirmar-compra');
