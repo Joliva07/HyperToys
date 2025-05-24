@@ -56,7 +56,7 @@ useEffect(() => {
     }
   };
 
-  window.addEventListener('storage', actualizarNombre);
+  window.addEventListener('storage', actualizarEstadoSesion);
   actualizarEstadoSesion(); // también al cargar
 
   return () => window.removeEventListener('storage', actualizarEstadoSesion);
