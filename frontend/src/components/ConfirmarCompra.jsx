@@ -198,9 +198,8 @@ return (
                 <button className="summary-btn2 mt-2" onClick={handleReserva}>
                   Reservar
                 </button>
-              </div>
-
-
+              </div>            
+            </div>
             <div className="card mb-4 bg-dark">
             <label htmlFor="reservaId" className="form-label">Agregar ID de Reserva Existente:</label>
             <input
@@ -219,9 +218,7 @@ return (
                 Reserva válida encontrada. Total ${reservaVerificada.total_reserva.toFixed(2)}
               </p>
             )}
-          </div>       
-
-            </div>
+          </div> 
           </div>
         </div>
       </div>
