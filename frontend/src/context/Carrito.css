@@ -67,3 +67,9 @@ button i {
   color: white !important;
   border: none !important;
 }
+
+img.img-fluid.rounded.shadow-sm {
+  border: 1px solid #dee2e6;
+  background-color: #fff;
+  padding: 4px;
+}

@@ -156,24 +156,46 @@ const ConfirmarCompra = () => {
                 <h5 className="mb-0">Carrito de compras</h5>
               </div>
               <div className="card-body">
-                {carrito.map(producto => (
-                  <div className="row mb-3" key={producto.ID_PRODUCTO}>
-                    <div className="col-lg-8">
-                      <p className="mb-0"><strong>{producto.NOMBRE}</strong></p>
-                      <div className="col-lg-5 col-md-6 mb-4 mb-lg-0">
-                        <button className="btn btn-danger btn-sm me-1 mb-2" onClick={() => eliminarProducto(producto.ID_PRODUCTO)} style={{display: 'inline-flex',alignItems: 'center',gap: '5px'}}>
-                          <FontAwesomeIcon icon="trash-alt" /> Eliminar
-                        </button>
-                      </div>
-                      <p className="text-start text-md">Precio: ${producto.PRECIO} x {producto.cantidad}</p>
-                    </div>
-                    <div className="col-lg-4 d-flex justify-content-end align-items-center">
-                      <button className="btn btn-outline-light btn-sm" onClick={() => disminuirCantidad(producto.ID_PRODUCTO)}>-</button>
-                      <span className="mx-2">{producto.cantidad}</span>
-                      <button className="btn btn-outline-light btn-sm" onClick={() => aumentarCantidad(producto.ID_PRODUCTO)}>+</button>
-                    </div>
-                  </div>
-                ))}
+{carrito.map((producto) => (
+  <div className="row mb-3 align-items-center" key={producto.ID_PRODUCTO}>
+    {/* Imagen */}
+    <div className="col-md-2 col-4">
+      <img
+        src={
+          producto.IMAGEN
+            ? `data:image/jpeg;base64,${producto.IMAGEN}`
+            : "https://via.placeholder.com/100"
+        }
+        alt={producto.NOMBRE}
+        className="img-fluid rounded shadow-sm"
+        style={{ maxHeight: "90px", objectFit: "contain" }}
+      />
+    </div>
+
+    {/* Nombre y botón eliminar */}
+    <div className="col-md-5 col-8">
+      <p className="mb-1 fw-bold">{producto.NOMBRE}</p>
+      <p className="mb-1">Precio: ${Number(producto.PRECIO).toFixed(2)} x {producto.cantidad}</p>
+      <button
+        className="btn btn-danger btn-sm"
+        onClick={() => eliminarProducto(producto.ID_PRODUCTO)}
+        style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}
+      >
+        <FontAwesomeIcon icon="trash-alt" /> Eliminar
+      </button>
+    </div>
+
+    {/* Controles de cantidad */}
+    <div className="col-md-5 d-flex justify-content-end align-items-center">
+      <button className="btn btn-outline-light btn-sm" onClick={() => disminuirCantidad(producto.ID_PRODUCTO)}>-</button>
+      <span className="mx-2">{producto.cantidad}</span>
+      <button className="btn btn-outline-light btn-sm" onClick={() => aumentarCantidad(producto.ID_PRODUCTO)}>+</button>
+    </div>
+
+    <hr className="my-3" />
+  </div>
+))}
+
 
                 {reservasVerificadas.length > 0 && <hr className="text-white" />}
 
