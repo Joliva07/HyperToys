@@ -105,7 +105,7 @@ const ConfirmarCompra = () => {
     if (!idReservaInput.trim()) return;
 
     try {
-      const response = await axios.get(\`https://back-hypertoys.onrender.com/HyperToys/reserva/\${idReservaInput}/cliente/\${clienteId}`);
+      const response = await axios.get(`https://back-hypertoys.onrender.com/HyperToys/reserva/\${idReservaInput}/cliente/\${clienteId}`);
       const nuevaReserva = response.data.reserva;
 
       const yaExiste = reservasVerificadas.some(r => r.id_reserva === nuevaReserva.id_reserva);
