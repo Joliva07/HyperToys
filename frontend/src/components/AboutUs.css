@@ -210,3 +210,8 @@
     grid-template-columns: 1fr;
   }
 }
+
+.about-us-container {
+  position: relative;
+  z-index: 1;
+}

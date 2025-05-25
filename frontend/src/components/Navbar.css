@@ -105,39 +105,34 @@
   justify-content: center;
 }
 
+/* Modifica el media query para el navbar-collapse */
 @media (max-width: 991.98px) {
   .navbar-collapse {
     position: fixed;
-    top: 60px; /* Ajusta según la altura de tu navbar */
+    top: 80px; /* Aumenté este valor para dar más espacio */
     left: 0;
     right: 0;
     background-color: #212529;
-    z-index: 1000;
+    z-index: 1050; /* Aumenté el z-index */
     padding: 20px;
-    max-height: calc(100vh - 60px);
+    max-height: calc(100vh - 80px);
     overflow-y: auto;
     transition: all 0.3s ease;
+    transform: translateY(-100%);
+    opacity: 0;
+    visibility: hidden;
   }
   
   .navbar-collapse.show {
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   }
   
-  .navbar-custom.scrolled .navbar-collapse {
-    background-color: #ffffff;
-  }
-  
-  .nav-item {
-    margin-bottom: 10px;
-  }
-  
-  .navbar-icons {
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-  }
-  
-  .navbar-custom.scrolled .navbar-icons {
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  /* Asegura que el navbar principal tenga suficiente z-index */
+  .navbar-custom {
+    z-index: 1100;
+    position: relative;
   }
 }
