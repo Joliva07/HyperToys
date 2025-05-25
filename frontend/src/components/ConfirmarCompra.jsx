@@ -137,53 +137,58 @@ const ConfirmarCompra = () => {
       <div className="container py-5">
         <div className="row d-flex justify-content-center my-4">
           <div className="col-md-8">
-            <h4>Productos en el carrito</h4>
-            {carrito.map(producto => (
-              <div className="card mb-3" key={producto.ID_PRODUCTO}>
-                <div className="card-body d-flex justify-content-between align-items-center">
-                  <div>
-                    <h5 className="card-title">{producto.NOMBRE}</h5>
-                    <p className="card-text text-muted">Precio: Q{producto.PRECIO} x {producto.cantidad}</p>
-                  </div>
-                  <div>
-                    <button className="btn btn-outline-secondary btn-sm" onClick={() => disminuirCantidad(producto.ID_PRODUCTO)}>-</button>
-                    <span className="mx-2">{producto.cantidad}</span>
-                    <button className="btn btn-outline-secondary btn-sm" onClick={() => aumentarCantidad(producto.ID_PRODUCTO)}>+</button>
-                  </div>
-                </div>
+            <div className="card mb-4">
+              <div className="card-header py-3">
+                <h5 className="mb-0">Carrito de compras</h5>
               </div>
-            ))}
-
-            <h4>Reservas verificadas</h4>
-            {reservasVerificadas.map(reserva => (
-              <div className="card mb-3" key={`reserva-${reserva.id_reserva}`}>
-                <div className="card-body d-flex justify-content-between align-items-center">
-                  <div>
-                    <h5 className="card-title">Reserva #{reserva.id_reserva}</h5>
-                    <p className="card-text text-muted">Total: Q{reserva.total_reserva.toFixed(2)}</p>
+              <div className="card-body">
+                {carrito.map(producto => (
+                  <div className="row mb-3" key={producto.ID_PRODUCTO}>
+                    <div className="col-lg-8">
+                      <p className="mb-0"><strong>{producto.NOMBRE}</strong></p>
+                      <p className="text-muted">Precio: Q{producto.PRECIO} x {producto.cantidad}</p>
+                    </div>
+                    <div className="col-lg-4 d-flex justify-content-end align-items-center">
+                      <button className="btn btn-outline-secondary btn-sm" onClick={() => disminuirCantidad(producto.ID_PRODUCTO)}>-</button>
+                      <span className="mx-2">{producto.cantidad}</span>
+                      <button className="btn btn-outline-secondary btn-sm" onClick={() => aumentarCantidad(producto.ID_PRODUCTO)}>+</button>
+                    </div>
                   </div>
-                  <button className="btn btn-danger btn-sm" onClick={() => eliminarReserva(reserva.id_reserva)}>Eliminar</button>
-                </div>
+                ))}
+
+                {reservasVerificadas.length > 0 && <hr />}
+
+                {reservasVerificadas.map(reserva => (
+                  <div className="row mb-3" key={`reserva-${reserva.id_reserva}`}>
+                    <div className="col-lg-8">
+                      <p className="mb-0"><strong>Reserva #{reserva.id_reserva}</strong></p>
+                      <p className="text-muted">Total: Q{reserva.total_reserva.toFixed(2)}</p>
+                    </div>
+                    <div className="col-lg-4 d-flex justify-content-end align-items-center">
+                      <button className="btn btn-danger btn-sm" onClick={() => eliminarReserva(reserva.id_reserva)}>Eliminar</button>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
 
-            <div className="mt-4">
-              <h4 className="text-end">Total a pagar: Q{totalPagar.toFixed(2)}</h4>
-              <button className="btn btn-primary w-100 mt-2" onClick={handleConfirmar}>Confirmar Compra</button>
-              <button className="btn btn-secondary w-100 mt-2" onClick={handleReserva}>Hacer Reserva</button>
-
-              <div className="mt-3">
+            <div className="card mb-4">
+              <div className="card-body">
+                <h5 className="mb-3">Total a pagar: Q{totalPagar.toFixed(2)}</h5>
+                <button className="btn btn-primary w-100 mb-2" onClick={handleConfirmar}>Confirmar Compra</button>
+                <button className="btn btn-secondary w-100 mb-2" onClick={handleReserva}>Hacer Reserva</button>
                 <input
                   type="text"
-                  className="form-control"
+                  className="form-control mb-2"
                   placeholder="ID de reserva"
                   value={idReservaInput}
                   onChange={(e) => setIdReservaInput(e.target.value)}
                 />
-                <button className="btn btn-info mt-2 w-100" onClick={verificarReserva}>Agregar Reserva</button>
-                {reservaError && <div className="text-danger mt-1">{reservaError}</div>}
+                <button className="btn btn-info w-100" onClick={verificarReserva}>Agregar Reserva</button>
+                {reservaError && <div className="text-danger mt-2">{reservaError}</div>}
               </div>
             </div>
+
           </div>
         </div>
       </div>
