@@ -38,7 +38,8 @@ exports.createPaymentIntent = async (req, res) => {
       metadata: {
         id_cliente: ID_CLIENTE,
         productos: JSON.stringify(productosMinimos),
-        total_pagar: TOTAL_PAGAR
+        total_pagar: TOTAL_PAGAR,
+        reservas: req.body.id_reserva ? JSON.stringify(req.body.id_reserva) : null
       }
     });
 
@@ -77,6 +78,10 @@ exports.stripeWebhook = async (req, res) => {
         total_pagar: session.metadata.total_pagar,
         productos: JSON.parse(session.metadata.productos)
       };
+
+      if (session.metadata.reservas) {
+        payload.id_reserva = JSON.parse(session.metadata.reservas);
+      }
 
       // 👇 Llama a tu propia API de backend para crear factura
       const response = await axios.post(
