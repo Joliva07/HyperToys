@@ -3,12 +3,11 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { CarritoContext } from '../context/CarritoContext';
 
-
 const ProductoDetalle = () => {
   const { id } = useParams();
   const [producto, setProducto] = useState(null);
   const [cantidad, setCantidad] = useState(1);
-  const { agregarProducto } = useContext(CarritoContext);
+  const { agregarProducto, clienteId } = useContext(CarritoContext); // ✅ ahora sí se valida
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,7 +37,7 @@ const ProductoDetalle = () => {
 
   if (!producto) return <div className="container mt-5">Cargando producto...</div>;
 
- return (
+  return (
     <div className="container mt-5 text-center">
       <h2>Figura - {producto.NOMBRE}</h2>
       {producto.IMAGEN && (
