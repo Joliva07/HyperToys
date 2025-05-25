@@ -10,7 +10,7 @@ const ConfirmarCompra = () => {
   const navigate = useNavigate();
   const clienteId = parseInt(rawClienteId, 10);
   const [idReservaInput, setIdReservaInput] = useState('');
-  const [reservaVerificada, setReservaVerificada] = useState(null);
+  const [reservasVerificadas, setReservasVerificadas] = useState([]);
   const [reservaError, setReservaError] = useState('');
 
   const aumentarCantidad = (id) => {
@@ -28,12 +28,12 @@ const ConfirmarCompra = () => {
   };
 
   const totalProductos = carrito.reduce((acc, p) => acc + p.PRECIO * p.cantidad, 0);
-  const totalReserva = reservaVerificada ? reservaVerificada.total_reserva : 0;
+  const totalReserva = reservasVerificadas.reduce((acc, r) => acc + r.total_reserva, 0);
   const totalPagar = totalProductos + totalReserva;
 
   const handleConfirmar = async () => {
-    if (!carrito.length && !reservaVerificada) {
-      alert("No hay productos ni reserva para procesar.");
+    if (!carrito.length && reservasVerificadas.length === 0) {
+      alert("No hay productos ni reservas para procesar.");
       return;
     }
 
@@ -57,8 +57,8 @@ const ConfirmarCompra = () => {
         TOTAL_PAGAR: totalPagar
       };
 
-      if (reservaVerificada) {
-        payload.ID_RESERVA = reservaVerificada.id_reserva;
+      if (reservasVerificadas.length > 0) {
+        payload.id_reserva = reservasVerificadas.map(r => r.id_reserva);
       }
 
       const response = await axios.post('https://back-hypertoys.onrender.com/HyperToys/pagar', payload);
@@ -74,8 +74,6 @@ const ConfirmarCompra = () => {
       alert("Tu carrito está vacío.");
       return;
     }
-
-    if (reservaVerificada) return;
 
     try {
       const productosFormateados = carrito.map(p => ({
@@ -103,9 +101,21 @@ const ConfirmarCompra = () => {
 
   const verificarReserva = async () => {
     setReservaError('');
+
+    if (!idReservaInput.trim()) return;
+
     try {
-      const response = await axios.get(`https://back-hypertoys.onrender.com/HyperToys/reserva/${idReservaInput}/cliente/${clienteId}`);
-      setReservaVerificada(response.data.reserva);
+      const response = await axios.get(\`https://back-hypertoys.onrender.com/HyperToys/reserva/\${idReservaInput}/cliente/\${clienteId}`);
+      const nuevaReserva = response.data.reserva;
+
+      const yaExiste = reservasVerificadas.some(r => r.id_reserva === nuevaReserva.id_reserva);
+      if (yaExiste) {
+        setReservaError('Esa reserva ya fue agregada.');
+        return;
+      }
+
+      setReservasVerificadas([...reservasVerificadas, nuevaReserva]);
+      setIdReservaInput('');
     } catch (error) {
       console.error('Error al verificar reserva:', error);
       setReservaError('No se encontró la reserva.');
@@ -130,9 +140,11 @@ return (
                     <div className="col-lg-5 col-md-6 mb-4 mb-lg-0">
                       <p><strong>{p.NOMBRE}</strong></p>
                       <button 
-                      className="btn btn-danger btn-sm me-1 mb-2" onClick={() => eliminarProducto(p.ID_PRODUCTO)} style={{display: 'inline-flex',alignItems: 'center',gap: '5px'}}>
-                      <FontAwesomeIcon icon="trash-alt" /> Eliminar
-                    </button>
+                        className="btn btn-danger btn-sm me-1 mb-2"
+                        onClick={() => eliminarProducto(p.ID_PRODUCTO)}
+                        style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                        <FontAwesomeIcon icon="trash-alt" /> Eliminar
+                      </button>
                     </div>
                     <div className="col-lg-4 col-md-6 mb-4 mb-lg-0">
                       <div className="d-flex mb-4" style={{ maxWidth: '300px' }}>
@@ -186,9 +198,7 @@ return (
                     <span>Gratis</span>
                   </li>
                   <li className="list-group-item resumen-item d-flex justify-content-between align-items-center px-0">
-                    <div>
-                      <strong>Total</strong>
-                    </div>
+                    <div><strong>Total</strong></div>
                     <span><strong>${totalPagar.toFixed(2)}</strong></span>
                   </li>
                 </ul>
@@ -201,26 +211,26 @@ return (
               </div>            
             </div>  
             <div className="card mb-4 bg-dark">
-                <div className="card-header py-3">
-            <label htmlFor="reservaId" className="form-label">Agregar ID de Reserva Existente:</label>
-            <input
-              type="text"
-              className="form-control"
-              id="reservaId"
-              value={idReservaInput}
-              onChange={(e) => setIdReservaInput(e.target.value)}
-            />
-            <button className="btn btn-info mt-2" onClick={verificarReserva}>
-              Verificar Reserva
-            </button>
-            {reservaError && <p className="text-danger mt-2">{reservaError}</p>}
-            {reservaVerificada && (
-              <p className="text-success mt-2">
-                Reserva válida encontrada. Total ${reservaVerificada.total_reserva.toFixed(2)}
-              </p>
-            )}
-          </div>   
-          </div> 
+              <div className="card-header py-3">
+                <label htmlFor="reservaId" className="form-label">Agregar ID de Reserva Existente:</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="reservaId"
+                  value={idReservaInput}
+                  onChange={(e) => setIdReservaInput(e.target.value)}
+                />
+                <button className="btn btn-info mt-2" onClick={verificarReserva}>
+                  Verificar Reserva
+                </button>
+                {reservaError && <p className="text-danger mt-2">{reservaError}</p>}
+                {reservasVerificadas.map((r, i) => (
+                  <p key={i} className="text-success mt-2">
+                    Reserva #{r.id_reserva} válida. Total: ${r.total_reserva.toFixed(2)}
+                  </p>
+                ))}
+              </div>   
+            </div> 
           </div>
         </div>
       </div>
