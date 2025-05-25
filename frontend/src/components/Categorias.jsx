@@ -19,19 +19,10 @@ const Categorias = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-axios.get('https://back-hypertoys.onrender.com/HyperToys/productos/all')
-  .then(res => {
-    const productosTotales = res.data.productos; // 💥 aquí está el array
-    const filtrados = productosTotales.filter(p => p.ID_TIPO_PRODUCTO == id);
-    setProductos(filtrados);
-  })
-  .catch(err => {
-    console.error('Error al obtener productos:', err.message);
-    if (err.response) {
-      console.log('Status:', err.response.status);
-      console.log('Data:', err.response.data);
-    }
-  });
+    axios
+      .get('https://back-hypertoys.onrender.com/HyperToys/tipos-producto/all')
+      .then((res) => setCategorias(res.data.tipos))
+      .catch((err) => console.error('Error al obtener categorías:', err));
   }, []);
 
   const handleClickCategoria = (id) => {
