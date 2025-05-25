@@ -10,7 +10,7 @@ const CategoriasPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-axios.get('https://back-hypertoys.onrender.com/HyperToys/productos/all')
+axios.get('https://back-hypertoys.onrender.com/HyperToys/productos/all?page=1&limit=1000')
   .then(res => {
     const productosTotales = res.data.productos; // 💥 aquí está el array
     const filtrados = productosTotales.filter(p => p.ID_TIPO_PRODUCTO == id);
