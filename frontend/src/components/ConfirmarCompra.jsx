@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import '../context/Carrito.css';
 
-
 const ConfirmarCompra = () => {
   const { carrito, setCarrito, eliminarProducto, clienteId: rawClienteId } = useContext(CarritoContext);
   const navigate = useNavigate();
@@ -13,6 +12,8 @@ const ConfirmarCompra = () => {
   const [idReservaInput, setIdReservaInput] = useState('');
   const [reservasVerificadas, setReservasVerificadas] = useState([]);
   const [reservaError, setReservaError] = useState('');
+  const [fechaSeleccionada, setFechaSeleccionada] = useState('');
+  const [reservaVerificadaBloquea, setReservaVerificadaBloquea] = useState(false);
 
   const aumentarCantidad = (id) => {
     const actualizado = carrito.map(p =>
@@ -35,7 +36,6 @@ const ConfirmarCompra = () => {
   const totalProductos = carrito.reduce((acc, p) => acc + p.PRECIO * p.cantidad, 0);
   const totalReserva = reservasVerificadas.reduce((acc, r) => acc + r.total_reserva, 0);
   const totalPagar = totalProductos + totalReserva;
-  const [reservaVerificadaBloquea, setReservaVerificadaBloquea] = useState(false);
 
   const hayProductoInvalido = carrito.some(
     (p) => p.STOCK === 0 || p.DISPONIBILIDAD === 'Por llegar'
@@ -93,24 +93,29 @@ const ConfirmarCompra = () => {
       return;
     }
 
+    if (!fechaSeleccionada) {
+      alert("Por favor selecciona una fecha de reserva.");
+      return;
+    }
+
     try {
       const productosFormateados = carrito.map(p => ({
         id_producto: p.ID_PRODUCTO,
         cantidad: p.cantidad
       }));
 
-      const fechaReserva = new Date();
       const totalReserva = carrito.reduce((acc, p) => acc + p.PRECIO * p.cantidad, 0);
 
       await axios.post('https://back-hypertoys.onrender.com/HyperToys/reservas', {
         id_cliente: clienteId,
         productos: productosFormateados,
-        fechaReserva: fechaReserva.toISOString(),
+        fechaReserva: new Date(fechaSeleccionada).toISOString(),
         total_reserva: totalReserva
       });
 
       alert('Reserva realizada con éxito');
       setCarrito([]);
+      setFechaSeleccionada('');
     } catch (error) {
       console.error('Error al realizar la reserva:', error);
       alert('Hubo un error al hacer la reserva.');
@@ -156,10 +161,7 @@ const ConfirmarCompra = () => {
                     <div className="col-lg-8">
                       <p className="mb-0"><strong>{producto.NOMBRE}</strong></p>
                       <div className="col-lg-5 col-md-6 mb-4 mb-lg-0">
-                        <button
-                          className="btn btn-danger btn-sm me-1 mb-2"
-                          onClick={() => eliminarProducto(producto.ID_PRODUCTO)}
-                          style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                        <button className="btn btn-danger btn-sm me-1 mb-2" onClick={() => eliminarProducto(producto.ID_PRODUCTO)} style={{display: 'inline-flex',alignItems: 'center',gap: '5px'}}>
                           <FontAwesomeIcon icon="trash-alt" /> Eliminar
                         </button>
                       </div>
@@ -226,6 +228,13 @@ const ConfirmarCompra = () => {
                     <strong>Q{totalPagar.toFixed(2)}</strong>
                   </li>
                 </ul>
+                <label className="form-label mt-3">Fecha deseada para la reserva:</label>
+                <input
+                  type="date"
+                  className="form-control mb-2"
+                  value={fechaSeleccionada}
+                  onChange={(e) => setFechaSeleccionada(e.target.value)}
+                />
                 <button className="btn btn-success w-100 mt-3" onClick={handleConfirmar} disabled={hayProductoInvalido}>
                   Confirmar y Pagar
                 </button>

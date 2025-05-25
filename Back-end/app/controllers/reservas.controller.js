@@ -51,7 +51,7 @@ exports.realizarReserva = async (req, res) => {
     parsedFechaReserva.setHours(0, 0, 0, 0);
 
     const fechaLimitePago = new Date(parsedFechaReserva);
-    fechaLimitePago.setDate(fechaLimitePago.getDate() - 1);
+    fechaLimitePago.setDate(fechaLimitePago.getDate() + 14); // ➕ 2 semanas después
 
     const idReserva = await getNextReservaNumber();
 
@@ -87,6 +87,7 @@ exports.realizarReserva = async (req, res) => {
     res.status(500).json({ message: 'Error al realizar la reserva', error: error.message || error });
   }
 };
+
 
 
 exports.retrieveReservasByCliente = async (req, res) => {
