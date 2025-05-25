@@ -1,51 +1,52 @@
-// src/components/ProductosPorCategoria.js
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-const ProductosPorCategoria = () => {
-  const { id } = useParams();
+const CategoriasPage = () => {
+  const { id } = useParams(); // ID_TIPO_PRODUCTO
   const [productos, setProductos] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchProductos = async () => {
-      try {
-        const res = await axios.get(`https://back-hypertoys.onrender.com/HyperToys/productos/tipo/${id}`);
-        setProductos(res.data);
-      } catch (error) {
-        console.error('Error al obtener productos por categoría:', error);
-      }
-    };
-
-    fetchProductos();
+    axios
+      .get(`https://back-hypertoys.onrender.com/HyperToys/producto/tipo/${id}`)
+      .then((res) => setProductos(res.data))
+      .catch((err) => console.error('Error al obtener productos:', err));
   }, [id]);
 
   return (
-    <div className="container mt-4">
-      <h2 className="mb-4">Productos por Categoría</h2>
+    <div className="container mt-5">
+      <h3 className="mb-4 text-center">Productos de esta categoría</h3>
       <div className="row">
-        {productos.map(producto => (
-          <div className="col-md-4 mb-4" key={producto.ID_PRODUCTO}>
-            <div className="card h-100">
-              <img
-                src={`data:image/jpeg;base64,${producto.IMAGEN}`}
-                alt={producto.NOMBRE}
-                className="card-img-top"
-                style={{ height: '200px', objectFit: 'contain', cursor: 'pointer' }}
-                onClick={() => navigate(`/producto/${producto.ID_PRODUCTO}`)}
-              />
-              <div className="card-body">
-                <h5>{producto.NOMBRE}</h5>
-                <p>{producto.DESCRIPCION}</p>
-                <p><strong>Q{producto.PRECIO}</strong></p>
+        {productos.length === 0 ? (
+          <p className="text-center">No hay productos disponibles para esta categoría.</p>
+        ) : (
+          productos.map((producto) => (
+            <div className="col-md-4 mb-4" key={producto.ID_PRODUCTO}>
+              <div className="card h-100">
+                {producto.IMAGEN && (
+                  <img
+                    src={`data:image/jpeg;base64,${producto.IMAGEN}`}
+                    alt={producto.NOMBRE}
+                    className="card-img-top"
+                    style={{ cursor: 'pointer', maxHeight: '200px', objectFit: 'contain' }}
+                    onClick={() => navigate(`/producto/${producto.ID_PRODUCTO}`)}
+                  />
+                )}
+                <div className="card-body">
+                  <h5 className="card-title text-primary">{producto.NOMBRE}</h5>
+                  <p className="card-text">{producto.DESCRIPCION}</p>
+                  <p><strong>Precio:</strong> ${producto.PRECIO}</p>
+                  <p><strong>Disponibilidad:</strong> {producto.DISPONIBILIDAD}</p>
+                  <p><strong>Stock:</strong> {producto.STOCK}</p>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );
 };
 
-export default ProductosPorCategoria;
+export default CategoriasPage;

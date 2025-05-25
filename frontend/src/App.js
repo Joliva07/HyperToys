@@ -12,7 +12,7 @@ import Footer from './components/Footer';
 import Navbar from './components/Navbar';
 import AboutUs from './components/AboutUs';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import ProductosPorCategoria from './components/CategoriasPage';
+import CategoriasPage from './components/CategoriasPage';
 
 
 

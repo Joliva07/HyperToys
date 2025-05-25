@@ -1,4 +1,6 @@
+// src/components/Categorias.jsx
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Categorias.css';
 
@@ -14,19 +16,30 @@ const imagenes = {
 
 const Categorias = () => {
   const [categorias, setCategorias] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('https://back-hypertoys.onrender.com/HyperToys/tipos-producto/all')
-      .then(res => setCategorias(res.data.tipos))
-      .catch(err => console.error('Error al cargar categorías:', err));
+    axios
+      .get('https://back-hypertoys.onrender.com/HyperToys/tipos-producto/all')
+      .then((res) => setCategorias(res.data.tipos))
+      .catch((err) => console.error('Error al obtener categorías:', err));
   }, []);
+
+  const handleClickCategoria = (id) => {
+    navigate(`/categoria/${id}`); // Ruta dinámica por ID
+  };
 
   return (
     <div className="categorias-container">
-      {categorias.map(cat => (
-        <div className="categoria-item" key={cat.ID_TIPO_PRODUCTO}>
+      {categorias.map((cat) => (
+        <div
+          className="categoria-item"
+          key={cat.ID_TIPO_PRODUCTO}
+          onClick={() => handleClickCategoria(cat.ID_TIPO_PRODUCTO)}
+          style={{ cursor: 'pointer' }}
+        >
           <img
-            src={imagenes[cat.TIPO]}
+            src={imagenes[cat.TIPO] || '/img/default.png'}
             alt={cat.TIPO}
             className="categoria-icono"
           />
