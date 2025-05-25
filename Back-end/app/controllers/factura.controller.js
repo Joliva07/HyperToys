@@ -18,74 +18,70 @@ async function getNextFacturaNumber() {
 
 
 exports.realizarCompra = async (req, res) => {
-    const t = await db.sequelize.transaction();
+  const t = await db.sequelize.transaction();
 
-    try {
-        const { id_cliente, total_pagar, productos, id_reserva } = req.body;
+  try {
+    const { id_cliente, total_pagar, productos, id_reserva } = req.body;
 
-        if (!id_cliente || !total_pagar || !productos || productos.length === 0) {
-            return res.status(400).json({ message: 'Datos incompletos en la solicitud' });
-        }
+    // ✅ Validar al menos productos o reservas
+    const tieneProductos = Array.isArray(productos) && productos.length > 0;
+    const tieneReservas = Array.isArray(id_reserva) && id_reserva.length > 0;
 
-        const id_factura = await getNextFacturaNumber();
-
-        const nuevaFactura = await Facturas.create({
-            id_factura,
-            id_cliente,
-            total_pagar,
-            fecha_factura: new Date()
-        }, { transaction: t });
-
-        let idDetalleIncremental = 1;
-
-        // Insertar los productos del carrito normalmente
-        for (let i = 0; i < productos.length; i++) {
-            const producto = productos[i];
-
-            if (!producto.id_producto || !producto.cantidad) {
-                throw new Error('Datos incompletos en los productos');
-            }
-
-            await DetalleFacturas.create({
-                id_detalle_factura: idDetalleIncremental++,
-                id_factura: nuevaFactura.id_factura,
-                id_producto: producto.id_producto,
-                cantidad: producto.cantidad,
-                id_reserva: null  // No se asocia reserva a productos normales
-            }, { transaction: t });
-        }
-
-        // Si hay una reserva, insertarla como un "producto adicional"
-        if (Array.isArray(id_reserva)) {
-    for (let reservaId of id_reserva) {
-        await DetalleFacturas.create({
-            id_detalle_factura: idDetalleIncremental++,
-            id_factura: nuevaFactura.id_factura,
-            id_producto: null,
-            cantidad: 1,
-            id_reserva: reservaId
-        }, { transaction: t });
-            }
-        } else if (id_reserva) {
-            await DetalleFacturas.create({
-                id_detalle_factura: idDetalleIncremental++,
-                id_factura: nuevaFactura.id_factura,
-                id_producto: null,
-                cantidad: 1,
-                id_reserva: id_reserva
-            }, { transaction: t });
-        }
-
-
-        await t.commit();
-
-        res.status(201).json({ message: 'Compra realizada con éxito', factura: nuevaFactura });
-    } catch (error) {
-        await t.rollback();
-        console.error('Error en la compra:', error);
-        res.status(500).json({ message: 'Error al realizar la compra', error });
+    if (!id_cliente || !total_pagar || (!tieneProductos && !tieneReservas)) {
+      return res.status(400).json({ message: 'Se requiere al menos un producto o una reserva.' });
     }
+
+    const id_factura = await getNextFacturaNumber();
+
+    const nuevaFactura = await Facturas.create({
+      id_factura,
+      id_cliente,
+      total_pagar,
+      fecha_factura: new Date()
+    }, { transaction: t });
+
+    let idDetalleIncremental = 1;
+
+    // ✅ Insertar productos si existen
+    if (tieneProductos) {
+      for (let producto of productos) {
+        if (!producto.id_producto || !producto.cantidad) {
+          throw new Error('Datos incompletos en los productos');
+        }
+
+        await DetalleFacturas.create({
+          id_detalle_factura: idDetalleIncremental++,
+          id_factura: nuevaFactura.id_factura,
+          id_producto: producto.id_producto,
+          cantidad: producto.cantidad,
+          id_reserva: null
+        }, { transaction: t });
+      }
+    }
+
+    // ✅ Insertar reservas si existen
+    if (tieneReservas) {
+      for (let reservaId of id_reserva) {
+        await DetalleFacturas.create({
+          id_detalle_factura: idDetalleIncremental++,
+          id_factura: nuevaFactura.id_factura,
+          id_producto: null,
+          cantidad: 1,
+          id_reserva: reservaId
+        }, { transaction: t });
+      }
+    }
+
+    await t.commit();
+
+    res.status(201).json({ message: 'Compra realizada con éxito', factura: nuevaFactura });
+  } catch (error) {
+    await t.rollback();
+    console.error('Error en la compra:', error);
+    res.status(500).json({ message: 'Error al realizar la compra', error });
+  }
 };
+
 
 
 
