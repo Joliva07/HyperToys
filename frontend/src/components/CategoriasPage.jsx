@@ -16,6 +16,7 @@ const CategoriasPage = () => {
 
   return (
     <div className="container mt-5">
+      <Categorias />
       <h3 className="mb-4 text-center">Productos de esta categoría</h3>
       <div className="row">
         {productos.length === 0 ? (
