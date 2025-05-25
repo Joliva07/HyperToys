@@ -122,9 +122,16 @@ const Catalogo = () => {
               </h5>
               <p className="card-text">{producto.DESCRIPCION}</p>
               <p className="producto-precio">
-                Q{producto.PRECIO.toFixed(2)}{' '}
-                {/* Simula precio anterior */}
-                <span className="precio-original">Q{(producto.PRECIO + 50).toFixed(2)}</span>
+                {isNaN(producto.PRECIO) ? (
+                  `Q${producto.PRECIO}`
+                ) : (
+                  <>
+                    Q{Number(producto.PRECIO).toFixed(2)}
+                    <span className="precio-original">
+                      Q{(Number(producto.PRECIO) + 50).toFixed(2)}
+                    </span>
+                  </>
+                )}
               </p>
               <p><strong>Disponibilidad:</strong> {producto.DISPONIBILIDAD}</p>
               <p><strong>Stock disponible:</strong> {producto.STOCK}</p>
