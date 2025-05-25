@@ -74,7 +74,9 @@ const Catalogo = () => {
           </div>
         </div>
       </div>
+      <div className="row mb-4">
       <Categorias />
+      </div>
       <div className="row">
         {productos.map(producto => (
           <div className="col-md-4 mb-4" key={producto.ID_PRODUCTO}>
