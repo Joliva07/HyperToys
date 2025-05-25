@@ -56,10 +56,11 @@ const Catalogo = () => {
     navigate('/confirmar-compra');
   };
 
-  return (
+return (
+  <>
     <div className="container mt-5">
       <div className="row mb-4">
-  {/* Banner principal grande */}
+        {/* Banner principal grande */}
         <div className="col-md-8">
           <Banner />
         </div>
@@ -70,13 +71,17 @@ const Catalogo = () => {
             <img src={promo1} alt="Promo 1" className="img-fluid banner-lateral" />
           </div>
           <div className="card shadow-sm overflow-hidden">
-            <img src={promo2} alt="Promo 2" className="img-fluid banner-lateral"/>
+            <img src={promo2} alt="Promo 2" className="img-fluid banner-lateral" />
           </div>
         </div>
       </div>
-      <div className="row mb-4">
-      <Categorias />
-      </div>
+    </div>
+
+    {/* 👉 CATEGORÍAS FUERA DEL CONTAINER 👈 */}
+    <Categorias />
+
+    {/* 🔽 Volvemos al contenido limitado al ancho de container */}
+    <div className="container mt-4">
       <div className="row">
         {productos.map(producto => (
           <div className="col-md-4 mb-4" key={producto.ID_PRODUCTO}>
@@ -122,6 +127,7 @@ const Catalogo = () => {
           </div>
         ))}
       </div>
+
       <div className="d-flex justify-content-center mt-4">
         {[...Array(totalPaginas)].map((_, i) => (
           <button
@@ -134,7 +140,9 @@ const Catalogo = () => {
         ))}
       </div>
     </div>
-  );
+  </>
+);
+
 };
 
 export default Catalogo;
