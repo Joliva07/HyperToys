@@ -44,3 +44,9 @@
       padding: 1rem;
     }
   }
+
+    .banner-lateral {
+  border-radius: 12px;
+  height: 195px;
+  object-fit: cover;
+}
