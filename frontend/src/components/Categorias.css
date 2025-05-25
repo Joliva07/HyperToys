@@ -11,13 +11,13 @@
 }
 
 .categoria-item {
-  flex: 0 1 120px;
+  flex: 0 1 140px;
   text-align: center;
 }
 
 .categoria-icono {
-  width: 90px;
-  height: 90px;
+  width: 110px;
+  height: 110px;
   border-radius: 50%;
   object-fit: cover;
   background-color: #212529;
