@@ -44,9 +44,6 @@ const Banner = () => {
           <Carousel.Caption className="banner-caption">
             <h3>{banner.titulo}</h3>
             <p>{banner.descripcion}</p>
-            <a href={banner.enlace} className="btn btn-banner">
-              Ver Más
-            </a>
           </Carousel.Caption>
         </Carousel.Item>
       ))}
