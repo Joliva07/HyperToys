@@ -50,3 +50,35 @@
     flex: 0 0 auto;
   }
 }
+
+
+.categorias-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.flecha-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: white;
+  border: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.flecha-btn.izquierda {
+  left: 0;
+}
+
+.flecha-btn.derecha {
+  right: 0;
+}
