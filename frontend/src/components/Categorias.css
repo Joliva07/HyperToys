@@ -1,18 +1,22 @@
 .categorias-container {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-wrap: nowrap; /* 🔄 Siempre en una línea */
+  overflow-x: auto;   /* 🔄 Scroll horizontal si se desborda */
   gap: 2rem;
   padding: 1.5rem 2rem;
   background-color: #fff;
   margin-bottom: 2rem;
   width: 100%;
   box-sizing: border-box;
+  scrollbar-width: thin;         /* Firefox */
+  scrollbar-color: #ccc #f5f5f5; /* Firefox */
 }
 
+
 .categoria-item {
-  flex: 0 1 140px;
+  flex: 0 0 auto;       /* ❗ No permite que se ajuste en varias líneas */
   text-align: center;
+  width: 140px;         /* Nuevo tamaño más grande */
 }
 
 .categoria-icono {
@@ -21,15 +25,15 @@
   border-radius: 50%;
   object-fit: cover;
   background-color: #212529;
-  padding: 5px;
+  padding: 6px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   border: 2px solid black;
 }
 
 .categoria-nombre {
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
-  font-weight: 500;
+  margin-top: 0.7rem;
+  font-size: 1rem;
+  font-weight: 600;
 }
 
 /* --- Modo móvil: scroll horizontal --- */
