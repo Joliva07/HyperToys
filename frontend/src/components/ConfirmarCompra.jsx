@@ -71,6 +71,8 @@ const ConfirmarCompra = () => {
         id_reserva: reservasVerificadas.length > 0 ? reservasVerificadas.map(r => r.id_reserva) : null
       };
 
+      console.log("📦 Payload enviado a /pagar:", JSON.stringify(payload, null, 2));
+
       const response = await axios.post('https://back-hypertoys.onrender.com/HyperToys/pagar', payload);
       window.location.href = response.data.url;
     } catch (error) {
