@@ -2,7 +2,7 @@ const db = require('../config/databse.config');
 const Facturas = db.Factura;
 const DetalleFacturas = db.DetalleFactura;
 const ListaProductos = db.ListaProductos;
-
+const Clientes = db.Clientes;
 
 async function getNextFacturaNumber() {
     try {
