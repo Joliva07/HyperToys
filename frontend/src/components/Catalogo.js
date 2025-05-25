@@ -123,12 +123,12 @@ const Catalogo = () => {
               <p className="card-text">{producto.DESCRIPCION}</p>
               <p className="producto-precio">
                 {isNaN(producto.PRECIO) ? (
-                  `Q${producto.PRECIO}`
+                  `$${producto.PRECIO}`
                 ) : (
                   <>
-                    Q{Number(producto.PRECIO).toFixed(2)}
+                    ${Number(producto.PRECIO).toFixed(2)}
                     <span className="precio-original">
-                      Q{(Number(producto.PRECIO) + 50).toFixed(2)}
+                      ${(Number(producto.PRECIO) + 50).toFixed(2)}
                     </span>
                   </>
                 )}
