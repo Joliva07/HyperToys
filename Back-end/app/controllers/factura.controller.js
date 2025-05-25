@@ -56,15 +56,26 @@ exports.realizarCompra = async (req, res) => {
         }
 
         // Si hay una reserva, insertarla como un "producto adicional"
-        if (id_reserva) {
+        if (Array.isArray(id_reserva)) {
+    for (let reservaId of id_reserva) {
+        await DetalleFacturas.create({
+            id_detalle_factura: idDetalleIncremental++,
+            id_factura: nuevaFactura.id_factura,
+            id_producto: null,
+            cantidad: 1,
+            id_reserva: reservaId
+        }, { transaction: t });
+            }
+        } else if (id_reserva) {
             await DetalleFacturas.create({
                 id_detalle_factura: idDetalleIncremental++,
                 id_factura: nuevaFactura.id_factura,
-                id_producto: null,  // No aplica producto
-                cantidad: 1,        // 1 unidad de “reserva”
+                id_producto: null,
+                cantidad: 1,
                 id_reserva: id_reserva
             }, { transaction: t });
         }
+
 
         await t.commit();
 
