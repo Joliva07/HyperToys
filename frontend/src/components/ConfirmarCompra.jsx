@@ -181,7 +181,7 @@ const ConfirmarCompra = () => {
                   <div className="row mb-3" key={`reserva-${reserva.id_reserva}`}>
                     <div className="col-lg-8">
                       <p className="mb-0"><strong>Reserva #{reserva.id_reserva}</strong></p>
-                      <p className="text-muted">Total: Q{reserva.total_reserva.toFixed(2)}</p>
+                      <p className="text-muted">Total: ${reserva.total_reserva.toFixed(2)}</p>
                     </div>
                     <div className="col-lg-4 d-flex justify-content-end align-items-center">
                       <button className="btn btn-danger btn-sm" onClick={() => eliminarReserva(reserva.id_reserva)}>Eliminar</button>
@@ -217,7 +217,7 @@ const ConfirmarCompra = () => {
                 <ul className="list-group list-group-flush">
                   <li className="list-group-item resumen-item d-flex justify-content-between align-items-center px-0 bg-dark text-white">
                     Productos + Reservas
-                    <span>Q{totalPagar.toFixed(2)}</span>
+                    <span>${totalPagar.toFixed(2)}</span>
                   </li>
                   <li className="list-group-item resumen-item d-flex justify-content-between align-items-center px-0 bg-dark text-white">
                     Envío
@@ -225,7 +225,7 @@ const ConfirmarCompra = () => {
                   </li>
                   <li className="list-group-item resumen-item d-flex justify-content-between align-items-center px-0 bg-dark text-white">
                     <strong>Total</strong>
-                    <strong>Q{totalPagar.toFixed(2)}</strong>
+                    <strong>${totalPagar.toFixed(2)}</strong>
                   </li>
                 </ul>
                 <label className="form-label mt-3">Fecha deseada para la reserva:</label>
