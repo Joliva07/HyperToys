@@ -141,7 +141,8 @@ body.modal-open {
 }
 
 .producto-img {
-  max-height: 200px;
+  max-height: 250px;        /* antes 200px */
+  min-height: 200px;
   object-fit: contain;
   padding: 10px;
   border-radius: 12px;
@@ -156,7 +157,7 @@ body.modal-open {
 .producto-precio {
   font-size: 1.1rem;
   font-weight: bold;
-  color: #000;
+  color: #198754;
 }
 
 .precio-original {
@@ -190,3 +191,8 @@ body.modal-open {
 .estado-producto.express {
   background-color: #fd7e14;
 }
+
+.producto-precio:hover {
+  color: #157347;            /* tono más oscuro al pasar el mouse */
+}
+
