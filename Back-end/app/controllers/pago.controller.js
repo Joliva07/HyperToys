@@ -7,7 +7,7 @@ const axios = require('axios'); // 👈 NUEVO
 // Crear sesión de pago en Stripe
 exports.createPaymentIntent = async (req, res) => {
   try {
-    const { ID_CLIENTE, ID_PRODUCTOS, TOTAL_PAGAR } = req.body;
+    const { ID_CLIENTE, ID_PRODUCTOS, TOTAL_PAGAR, id_reserva } = req.body;
     console.log("🧪 ID_PRODUCTOS recibido:", ID_PRODUCTOS);
 
     const cliente = await Cliente.findByPk(ID_CLIENTE);
@@ -39,7 +39,7 @@ exports.createPaymentIntent = async (req, res) => {
         id_cliente: ID_CLIENTE,
         productos: JSON.stringify(productosMinimos),
         total_pagar: TOTAL_PAGAR,
-        reservas: req.body.id_reserva ? JSON.stringify(req.body.id_reserva) : null
+        reservas: id_reserva ? JSON.stringify(id_reserva) : null
       }
     });
 
@@ -59,7 +59,7 @@ exports.stripeWebhook = async (req, res) => {
     event = stripe.webhooks.constructEvent(
       req.body,
       sig,
-      env.STRIPE_WEBHOOK_SECRET // 👈 usa env, no process.env directamente
+      env.STRIPE_WEBHOOK_SECRET
     );
   } catch (err) {
     console.error("❌ Error verificando la firma del webhook:", err.message);
@@ -83,7 +83,6 @@ exports.stripeWebhook = async (req, res) => {
         payload.id_reserva = JSON.parse(session.metadata.reservas);
       }
 
-      // 👇 Llama a tu propia API de backend para crear factura
       const response = await axios.post(
         'https://back-hypertoys.onrender.com/HyperToys/realizarcompra',
         payload
