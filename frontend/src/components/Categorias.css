@@ -1,0 +1,30 @@
+.categorias-container {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: #fff;
+}
+
+.categoria-item {
+  flex: 0 0 auto;
+  text-align: center;
+  width: 100px;
+}
+
+.categoria-icono {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: #ffe4c4;
+  padding: 5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.categoria-nombre {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}

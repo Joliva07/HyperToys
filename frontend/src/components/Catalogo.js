@@ -6,6 +6,7 @@ import Banner from './Banner'
 import '../context/Catalogo.css';
 import promo2 from '../Images/banners/promo2.jpg';
 import promo1 from '../Images/banners/promo1.jpg';
+import Categorias from './Categorias';
 
 
 const Catalogo = () => {
@@ -73,6 +74,7 @@ const Catalogo = () => {
           </div>
         </div>
       </div>
+      <Categorias />
       <div className="row">
         {productos.map(producto => (
           <div className="col-md-4 mb-4" key={producto.ID_PRODUCTO}>
