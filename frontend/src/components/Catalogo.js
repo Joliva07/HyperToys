@@ -66,10 +66,10 @@ const Catalogo = () => {
 
         {/* Banners pequeños a la derecha */}
         <div className="col-md-4 d-flex flex-column gap-3">
-          <div className="card shadow-sm overflow-hidden banner" onClick={() => navigate(`/categoria`)}>
+          <div className="card shadow-sm overflow-hidden banner" onClick={() => navigate(`/categoria/4`)}>
             <img src={promo1} alt="Promo 1" className="img-fluid banner-lateral" />
           </div>
-          <div className="card shadow-sm overflow-hidden banner" onClick={() => navigate(`/categoria`)}>
+          <div className="card shadow-sm overflow-hidden banner" onClick={() => navigate(`/categoria/1`)}>
             <img src={promo2} alt="Promo 2" className="img-fluid banner-lateral"/>
           </div>
         </div>
