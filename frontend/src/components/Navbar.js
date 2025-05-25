@@ -90,14 +90,16 @@ useEffect(() => {
               </span>
             </li>
 
-            <li className="nav-item position-relative" onClick={() => navigate('/confirmar-compra')}>
-              <span className="nav-link d-flex align-items-center">
-                <FontAwesomeIcon icon="cart-shopping" />
-                {totalItems > 0 && (
-                  <span className="badge bg-danger rounded-circle position-absolute top-0 start-100 translate-middle p-1">
-                    {totalItems}
-                  </span>
-                )}
+            <li className="nav-item" onClick={() => navigate('/confirmar-compra')}>
+              <span className="nav-link d-flex align-items-center justify-content-center">
+                <span className="d-flex align-items-center">
+                  <FontAwesomeIcon icon="cart-shopping" />
+                  {totalItems > 0 && (
+                    <span className="badge bg-danger rounded-circle ms-1">
+                      {totalItems}
+                    </span>
+                  )}
+                </span>
                 <span className="ms-2">Ver Carrito</span>
               </span>
             </li>

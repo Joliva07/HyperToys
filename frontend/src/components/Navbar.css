@@ -81,3 +81,43 @@
 .navbar-toggler{
   color: white;
 }
+
+/* Ajustes para el elemento del carrito */
+.nav-item.position-relative {
+  display: flex;
+  align-items: center;
+}
+
+/* Ajuste específico para el badge del carrito */
+.badge.bg-danger {
+  position: relative; /* Cambiamos de absolute a relative */
+  top: auto;
+  start: auto;
+  transform: none;
+  margin-left: 5px; /* Pequeño espacio entre icono y número */
+  font-size: 0.7rem;
+  padding: 0.25em 0.4em;
+}
+
+/* Asegurar que el contenedor del carrito mantenga alineación */
+.nav-link.d-flex {
+  align-items: center;
+  justify-content: center;
+}
+
+/* Ajustes específicos para móvil */
+@media (max-width: 991.98px) {
+  .navbar-nav {
+    align-items: center; /* Centrar todos los items */
+  }
+  
+  .nav-item {
+    width: 100%; /* Ocupar todo el ancho */
+    text-align: center;
+    padding: 0.5rem 0;
+  }
+  
+  .nav-link.d-flex {
+    justify-content: center !important;
+  }
+}
