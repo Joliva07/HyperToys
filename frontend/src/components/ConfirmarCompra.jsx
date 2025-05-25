@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import '../context/Carrito.css';
+const [reservaVerificadaBloquea, setReservaVerificadaBloquea] = useState(false);
 
 const ConfirmarCompra = () => {
   const { carrito, setCarrito, eliminarProducto, clienteId: rawClienteId } = useContext(CarritoContext);
@@ -111,7 +112,7 @@ const ConfirmarCompra = () => {
     }
   };
 
-  const verificarReserva = async () => {
+    const verificarReserva = async () => {
     setReservaError('');
 
     if (!idReservaInput.trim()) return;
@@ -128,6 +129,7 @@ const ConfirmarCompra = () => {
 
       setReservasVerificadas([...reservasVerificadas, nuevaReserva]);
       setIdReservaInput('');
+      setReservaVerificadaBloquea(true);
     } catch (error) {
       console.error('Error al verificar reserva:', error);
       setReservaError('No se encontró la reserva.');
@@ -212,7 +214,7 @@ const ConfirmarCompra = () => {
                   </li>
                 </ul>
                 <button className="btn btn-success w-100 mt-3" onClick={handleConfirmar}>Confirmar y Pagar</button>
-                <button className="btn btn-secondary w-100 mt-2" onClick={handleReserva}>Reservar</button>
+                <button className="btn btn-secondary w-100 mt-2" onClick={handleReserva} disabled={reservaVerificadaBloquea}>Reservar</button>
               </div>
             </div>
 
