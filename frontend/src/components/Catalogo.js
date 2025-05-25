@@ -4,6 +4,9 @@ import { CarritoContext } from '../context/CarritoContext';
 import { useNavigate } from 'react-router-dom';
 import Banner from './Banner'
 import '../context/Catalogo.css';
+import promo2 from '../Images/banners/promo2.jpg';
+import promo1 from '../Images/banners/promo1.jpg';
+
 
 const Catalogo = () => {
   const [pagina, setPagina] = useState(1);
@@ -54,13 +57,22 @@ const Catalogo = () => {
 
   return (
     <div className="container mt-5">
-      <header className="catalogo-header sticky-top">
-          <h1 className="titulo-principal">
-            <span className="texto-hyper">Cáta</span>
-            <span className="texto-toys">logo</span>
-          </h1>
-      </header>
-      <Banner />
+      <div className="row mb-4">
+  {/* Banner principal grande */}
+        <div className="col-md-8">
+          <Banner />
+        </div>
+
+        {/* Banners pequeños a la derecha */}
+        <div className="col-md-4 d-flex flex-column gap-3">
+          <div className="card shadow-sm overflow-hidden">
+            <img src={promo1} alt="Promo 1" className="img-fluid banner-lateral" />
+          </div>
+          <div className="card shadow-sm overflow-hidden">
+            <img src={promo2} alt="Promo 2" className="img-fluid banner-lateral"/>
+          </div>
+        </div>
+      </div>
       <div className="row">
         {productos.map(producto => (
           <div className="col-md-4 mb-4" key={producto.ID_PRODUCTO}>

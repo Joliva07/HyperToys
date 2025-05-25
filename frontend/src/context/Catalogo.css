@@ -102,3 +102,11 @@
   transform: scale(1.02);
   opacity: 0.9;
 }
+
+.catalogo-header {
+  margin-bottom: 20px;
+}
+
+.card img {
+  object-fit: cover;
+}
