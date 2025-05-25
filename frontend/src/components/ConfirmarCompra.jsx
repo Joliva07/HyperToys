@@ -41,7 +41,7 @@ const ConfirmarCompra = () => {
       return;
     }
 
-    const carritoValido = carrito.every(p => p.NOMBRE && p.PRECIO && p.cantidad > 0);
+    const carritoValido = carrito.length === 0 || carrito.every(p => p.NOMBRE && p.PRECIO && p.cantidad > 0);
     if (!carritoValido) {
       alert("Tu carrito contiene productos inválidos.");
       return;
@@ -68,7 +68,7 @@ const ConfirmarCompra = () => {
         ID_CLIENTE: clienteId,
         ID_PRODUCTOS: todosLosItems,
         TOTAL_PAGAR: totalPagar,
-        id_reserva: reservasVerificadas.map(r => r.id_reserva)
+        id_reserva: reservasVerificadas.length > 0 ? reservasVerificadas.map(r => r.id_reserva) : null
       };
 
       const response = await axios.post('https://back-hypertoys.onrender.com/HyperToys/pagar', payload);
