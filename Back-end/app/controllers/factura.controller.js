@@ -23,7 +23,7 @@ exports.realizarCompra = async (req, res) => {
   try {
     const { id_cliente, total_pagar, productos, id_reserva } = req.body;
 
-    // ✅ Validar al menos productos o reservas
+    // ✅ Validar que haya al menos productos o reservas
     const tieneProductos = Array.isArray(productos) && productos.length > 0;
     const tieneReservas = Array.isArray(id_reserva) && id_reserva.length > 0;
 
@@ -42,9 +42,16 @@ exports.realizarCompra = async (req, res) => {
 
     let idDetalleIncremental = 1;
 
-    // ✅ Insertar productos si existen
+    // ✅ Insertar productos reales (filtrando reservas disfrazadas)
     if (tieneProductos) {
       for (let producto of productos) {
+        if (
+          typeof producto.id_producto === 'string' &&
+          producto.id_producto.startsWith('reserva-')
+        ) {
+          continue; // No insertar reservas como producto
+        }
+
         if (!producto.id_producto || !producto.cantidad) {
           throw new Error('Datos incompletos en los productos');
         }
@@ -59,7 +66,7 @@ exports.realizarCompra = async (req, res) => {
       }
     }
 
-    // ✅ Insertar reservas si existen
+    // ✅ Insertar reservas si vienen
     if (tieneReservas) {
       for (let reservaId of id_reserva) {
         await DetalleFacturas.create({
