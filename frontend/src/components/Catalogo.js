@@ -53,6 +53,9 @@ const Catalogo = () => {
 
   const handleAgregarAlCarrito = (producto) => {
   if (!clienteId) {
+    document.body.classList.remove('modal-open');
+    setProductoSeleccionado(null);
+    // Cerrar modal si estaba abierto
     alert("Debes iniciar sesión para agregar productos al carrito.");
     navigate('/login');
     return;
