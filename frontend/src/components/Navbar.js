@@ -1,14 +1,12 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CarritoContext } from '../context/CarritoContext';
 import './Navbar.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import '../context/Catalogo.css';
 
-
-
-
 const Navbar = () => {
+  const navbarRef = useRef(null);
   const navigate = useNavigate();
   const [nombreUsuario, setNombreUsuario] = useState('');
   const [logueado, setLogueado] = useState(false);
@@ -41,6 +39,18 @@ const handleCerrarSesion = () => {
   navigate('/login');      // redirige
 };
 
+useEffect(() => {
+  const handleClickOutside = (event) => {
+    if (navbarRef.current && !navbarRef.current.contains(event.target)) {
+      setOpen(false);
+    }
+  };
+
+  document.addEventListener('mousedown', handleClickOutside);
+  return () => {
+    document.removeEventListener('mousedown', handleClickOutside);
+  };
+}, []);
 
 useEffect(() => {
   const actualizarEstadoSesion  = () => {
@@ -62,10 +72,13 @@ useEffect(() => {
   return () => window.removeEventListener('storage', actualizarEstadoSesion);
 }, []);
 
+  const closeNavbar = () => {
+  setOpen(false);
+};
 
   return (
     <>
-    <nav className={`navbar-custom navbar navbar-expand-lg fixed-top ${isScrolling ? 'scrolled' : ''}`}>
+    <nav ref={navbarRef} className={`navbar-custom navbar navbar-expand-lg fixed-top ${isScrolling ? 'scrolled' : ''}`}>
       <div className="container d-flex justify-content-between align-items-center">
         <h1 className="navbar-brand mb-0" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
         <img src={isScrolling ? "/LOGO2.png" : "/LOGOBLANCO.png"} alt="Logo HyperToys" className="logonav img-fluid"/>
@@ -77,20 +90,20 @@ useEffect(() => {
 
         <div className={`collapse navbar-collapse ${open ? 'show' : ''}`}>
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0 text-center">
-            <li className="nav-item" onClick={() => navigate('/')}>
+            <li className="nav-item" onClick={() => {navigate('/'); closeNavbar();}}>
               <span className="nav-link">Inicio</span>
             </li>
             <li className="nav-item">
-              <span className="nav-link" onClick={() => navigate('/AboutUs')} >Acerca de nosotros</span>
+              <span className="nav-link" onClick={() => {navigate('/AboutUs'); closeNavbar();}} >Acerca de nosotros</span>
             </li>
-            <li className="nav-item" onClick={() => navigate('/perfil')}>
+            <li className="nav-item" onClick={() => {navigate('/perfil'); closeNavbar();}}>
               <span className="nav-link">
                 <FontAwesomeIcon icon="circle-user" className="me-2" />
                 {nombreUsuario ? nombreUsuario : 'Mi Perfil'}
               </span>
             </li>
 
-            <li className="nav-item" onClick={() => navigate('/confirmar-compra')}>
+            <li className="nav-item" onClick={() => {navigate('/confirmar-compra'); closeNavbar();}}>
               <span className="nav-link d-flex align-items-center justify-content-center">
                 <span className="d-flex align-items-center">
                   <FontAwesomeIcon icon="cart-shopping" />

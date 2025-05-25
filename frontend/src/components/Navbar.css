@@ -105,19 +105,39 @@
   justify-content: center;
 }
 
-/* Ajustes específicos para móvil */
 @media (max-width: 991.98px) {
-  .navbar-nav {
-    align-items: center; /* Centrar todos los items */
+  .navbar-collapse {
+    position: fixed;
+    top: 60px; /* Ajusta según la altura de tu navbar */
+    left: 0;
+    right: 0;
+    background-color: #212529;
+    z-index: 1000;
+    padding: 20px;
+    max-height: calc(100vh - 60px);
+    overflow-y: auto;
+    transition: all 0.3s ease;
+  }
+  
+  .navbar-collapse.show {
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .navbar-custom.scrolled .navbar-collapse {
+    background-color: #ffffff;
   }
   
   .nav-item {
-    width: 100%; /* Ocupar todo el ancho */
-    text-align: center;
-    padding: 0.5rem 0;
+    margin-bottom: 10px;
   }
   
-  .nav-link.d-flex {
-    justify-content: center !important;
+  .navbar-icons {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .navbar-custom.scrolled .navbar-icons {
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
   }
 }
