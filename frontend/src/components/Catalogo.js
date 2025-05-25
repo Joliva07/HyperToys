@@ -90,47 +90,63 @@ const Catalogo = () => {
       </div>
       <div className="row">
         {productos.map(producto => (
-          <div className="col-md-4 mb-4" key={producto.ID_PRODUCTO}>
-            <div className="card h-100">
-              {producto.IMAGEN && (
-                <img
-                  src={`data:image/jpeg;base64,${producto.IMAGEN}`}
-                  alt={producto.NOMBRE}
-                  className="card-img-top"
-                  style={{ cursor: 'pointer', maxHeight: '200px', objectFit: 'contain' }}
-                 onClick={() => setProductoSeleccionado(producto)}
-                />
-              )}
-              <div className="card-body d-flex flex-column">
-                <h5
-                  className="card-title text-primary"
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => setProductoSeleccionado(producto)}
-                >
-                  {producto.NOMBRE}
-                </h5>
-                <p className="card-text">{producto.DESCRIPCION}</p>
-                <p><strong>Precio:</strong> ${producto.PRECIO}</p>
-                <p><strong>Disponibilidad:</strong> {producto.DISPONIBILIDAD}</p>
-                <p><strong>Stock disponible:</strong> {producto.STOCK}</p>
-                <label>Cantidad:</label>
-                <input
-                  type="number"
-                  min="1"
-                  className="form-control mb-2"
-                  value={cantidades[producto.ID_PRODUCTO] || 1}
-                  onChange={(e) => handleCantidadChange(producto.ID_PRODUCTO, e.target.value)}
-                />
-                <button
-                  className="btn btn-primary"
-                  onClick={() => handleAgregarAlCarrito(producto)}
-                  disabled={producto.STOCK === 0 || ['Agotado', 'Descontinuado'].includes(producto.DISPONIBILIDAD)}
-                >
-                  Agregar al Carrito
-                </button>
-              </div>
+                <div className="col-md-4 mb-4" key={producto.ID_PRODUCTO}>
+          <div className="card producto-card h-100 shadow-sm position-relative">
+            {/* Etiqueta de estado */}
+            {(producto.DISPONIBILIDAD === 'Agotado' || producto.STOCK === 0) && (
+              <span className="badge estado-producto agotado">Agotado</span>
+            )}
+            {producto.DISPONIBILIDAD === 'Por llegar' && (
+              <span className="badge estado-producto por-llegar">Por llegar</span>
+            )}
+            {producto.DISPONIBILIDAD === 'Express' && (
+              <span className="badge estado-producto express">Express</span>
+            )}
+
+            {producto.IMAGEN && (
+              <img
+                src={`data:image/jpeg;base64,${producto.IMAGEN}`}
+                alt={producto.NOMBRE}
+                className="card-img-top producto-img"
+                style={{ cursor: 'pointer' }}
+                onClick={() => setProductoSeleccionado(producto)}
+              />
+            )}
+            <div className="card-body d-flex flex-column">
+              <h5
+                className="card-title text-primary producto-nombre"
+                style={{ cursor: 'pointer' }}
+                onClick={() => setProductoSeleccionado(producto)}
+              >
+                {producto.NOMBRE}
+              </h5>
+              <p className="card-text">{producto.DESCRIPCION}</p>
+              <p className="producto-precio">
+                Q{producto.PRECIO.toFixed(2)}{' '}
+                {/* Simula precio anterior */}
+                <span className="precio-original">Q{(producto.PRECIO + 50).toFixed(2)}</span>
+              </p>
+              <p><strong>Disponibilidad:</strong> {producto.DISPONIBILIDAD}</p>
+              <p><strong>Stock disponible:</strong> {producto.STOCK}</p>
+              <label>Cantidad:</label>
+              <input
+                type="number"
+                min="1"
+                className="form-control mb-2"
+                value={cantidades[producto.ID_PRODUCTO] || 1}
+                onChange={(e) => handleCantidadChange(producto.ID_PRODUCTO, e.target.value)}
+              />
+              <button
+                className="btn btn-primary"
+                onClick={() => handleAgregarAlCarrito(producto)}
+                disabled={producto.STOCK === 0 || ['Agotado', 'Descontinuado'].includes(producto.DISPONIBILIDAD)}
+              >
+                Agregar al Carrito
+              </button>
             </div>
           </div>
+        </div>
+
         ))}
       </div>
       <div className="d-flex justify-content-center mt-4">
