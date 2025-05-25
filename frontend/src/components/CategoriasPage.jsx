@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { CarritoContext } from '../context/CarritoContext';
 import axios from 'axios';
 import Categorias from './Categorias';
 
