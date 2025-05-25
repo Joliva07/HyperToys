@@ -19,7 +19,7 @@ module.exports = (sequelize, Sequelize) => {
         },
         id_reserva: {
             type: Sequelize.INTEGER,
-            field: 'ID_RESERVA'
+            field: 'ID_RESERVAS'
         }
     }, {
         tableName: 'DETALLE_FACTURAS',
