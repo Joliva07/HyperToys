@@ -3,6 +3,7 @@ const Facturas = db.Factura;
 const DetalleFacturas = db.DetalleFactura;
 const ListaProductos = db.ListaProductos;
 
+
 async function getNextFacturaNumber() {
     try {
         // Ejecutar el query para obtener el próximo número de la secuencia
@@ -23,7 +24,6 @@ exports.realizarCompra = async (req, res) => {
   try {
     const { id_cliente, total_pagar, productos, id_reserva } = req.body;
 
-    // ✅ Validar que haya al menos productos o reservas
     const tieneProductos = Array.isArray(productos) && productos.length > 0;
     const tieneReservas = Array.isArray(id_reserva) && id_reserva.length > 0;
 
@@ -41,20 +41,30 @@ exports.realizarCompra = async (req, res) => {
     }, { transaction: t });
 
     let idDetalleIncremental = 1;
+    let totalPuntos = 0; // Acumulador de puntos para el cliente
 
-    // ✅ Insertar productos reales (filtrando reservas disfrazadas)
     if (tieneProductos) {
       for (let producto of productos) {
         if (
           typeof producto.id_producto === 'string' &&
           producto.id_producto.startsWith('reserva-')
-        ) {
-          continue; // No insertar reservas como producto
-        }
+        ) continue;
 
         if (!producto.id_producto || !producto.cantidad) {
           throw new Error('Datos incompletos en los productos');
         }
+
+        const productoBD = await ListaProductos.findByPk(producto.id_producto, { transaction: t });
+
+        if (!productoBD) throw new Error(`Producto con ID ${producto.id_producto} no encontrado.`);
+        if (productoBD.STOCK < producto.cantidad) throw new Error(`Stock insuficiente para el producto ${productoBD.NOMBRE}.`);
+
+        // Descontar del stock
+        productoBD.STOCK -= producto.cantidad;
+        await productoBD.save({ transaction: t });
+
+        // Sumar puntos
+        totalPuntos += productoBD.PUNTOS * producto.cantidad;
 
         await DetalleFacturas.create({
           id_detalle_factura: idDetalleIncremental++,
@@ -66,7 +76,6 @@ exports.realizarCompra = async (req, res) => {
       }
     }
 
-    // ✅ Insertar reservas si vienen
     if (tieneReservas) {
       for (let reservaId of id_reserva) {
         await DetalleFacturas.create({
@@ -79,17 +88,22 @@ exports.realizarCompra = async (req, res) => {
       }
     }
 
+    // Sumar puntos al cliente
+    const cliente = await Clientes.findByPk(id_cliente, { transaction: t });
+    if (!cliente) throw new Error('Cliente no encontrado');
+
+    cliente.PUNTOS_COMPRA = (cliente.PUNTOS_COMPRA || 0) + totalPuntos;
+    await cliente.save({ transaction: t });
+
     await t.commit();
 
     res.status(201).json({ message: 'Compra realizada con éxito', factura: nuevaFactura });
   } catch (error) {
     await t.rollback();
     console.error('Error en la compra:', error);
-    res.status(500).json({ message: 'Error al realizar la compra', error });
+    res.status(500).json({ message: 'Error al realizar la compra', error: error.message });
   }
 };
-
-
 
 
 
