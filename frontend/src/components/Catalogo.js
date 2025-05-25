@@ -11,6 +11,7 @@ import Categorias from './Categorias';
 
 const Catalogo = () => {
   const [pagina, setPagina] = useState(1);
+  const [productoSeleccionado, setProductoSeleccionado] = useState(null);
   const [totalPaginas, setTotalPaginas] = useState(1);
   const [productos, setProductos] = useState([]);
   const [cantidades, setCantidades] = useState({});
@@ -87,14 +88,14 @@ const Catalogo = () => {
                   alt={producto.NOMBRE}
                   className="card-img-top"
                   style={{ cursor: 'pointer', maxHeight: '200px', objectFit: 'contain' }}
-                  onClick={() => navigate(`/producto/${producto.ID_PRODUCTO}`)}
+                 onClick={() => setProductoSeleccionado(producto)}
                 />
               )}
               <div className="card-body d-flex flex-column">
                 <h5
                   className="card-title text-primary"
                   style={{ cursor: 'pointer' }}
-                  onClick={() => navigate(`/producto/${producto.ID_PRODUCTO}`)}
+                  onClick={() => setProductoSeleccionado(producto)}
                 >
                   {producto.NOMBRE}
                 </h5>
@@ -133,6 +134,72 @@ const Catalogo = () => {
           </button>
         ))}
       </div>
+
+        {/* Modal de producto */}
+        {productoSeleccionado && (
+              <div
+                className="modal fade show"
+                style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.5)' }}
+                tabIndex="-1"
+                role="dialog"
+              >
+                <div className="modal-dialog modal-lg" role="document">
+                  <div className="modal-content">
+                    <div className="modal-header">
+                      <h5 className="modal-title">{productoSeleccionado.NOMBRE}</h5>
+                      <button
+                        type="button"
+                        className="btn-close"
+                        onClick={() => setProductoSeleccionado(null)}
+                      ></button>
+                    </div>
+                    <div className="modal-body text-center">
+                      {productoSeleccionado.IMAGEN && (
+                        <img
+                          src={`data:image/jpeg;base64,${productoSeleccionado.IMAGEN}`}
+                          alt={productoSeleccionado.NOMBRE}
+                          className="img-fluid mb-3"
+                          style={{ maxHeight: '300px', objectFit: 'contain' }}
+                        />
+                      )}
+                      <p><strong>Descripción:</strong> {productoSeleccionado.DESCRIPCION}</p>
+                      <p><strong>Precio:</strong> ${productoSeleccionado.PRECIO}</p>
+                      <p><strong>Disponibilidad:</strong> {productoSeleccionado.DISPONIBILIDAD}</p>
+                      <p><strong>Stock:</strong> {productoSeleccionado.STOCK}</p>
+                      <div className="form-group w-25 mx-auto">
+                        <label>Cantidad:</label>
+                        <input
+                          type="number"
+                          min="1"
+                          className="form-control"
+                          value={cantidades[productoSeleccionado.ID_PRODUCTO] || 1}
+                          onChange={(e) => handleCantidadChange(productoSeleccionado.ID_PRODUCTO, e.target.value)}
+                        />
+                      </div>
+                    </div>
+                    <div className="modal-footer">
+                      <button
+                        className="btn btn-secondary"
+                        onClick={() => setProductoSeleccionado(null)}
+                      >
+                        Cerrar
+                      </button>
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => handleAgregarAlCarrito(productoSeleccionado)}
+                        disabled={
+                          productoSeleccionado.STOCK === 0 ||
+                          ['Agotado', 'Descontinuado'].includes(productoSeleccionado.DISPONIBILIDAD)
+                        }
+                      >
+                        Agregar al carrito
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
     </div>
   );
 };
