@@ -93,7 +93,7 @@ const Catalogo = () => {
       </div>
       <div className="row">
         {productos.map(producto => (
-                <div className="col-md-4 mb-4" key={producto.ID_PRODUCTO}>
+        <div className="col-md-4 mb-4" key={producto.ID_PRODUCTO}>
           <div className="card producto-card h-100 shadow-sm position-relative">
             {/* Etiqueta de estado */}
             {(producto.DISPONIBILIDAD === 'Agotado' || producto.STOCK === 0) && (
