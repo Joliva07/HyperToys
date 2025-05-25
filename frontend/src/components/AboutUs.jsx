@@ -36,7 +36,7 @@ const navigate = useNavigate();
               entendemos.
             </p>
           </div>
-          <img src="/team.jpeg" alt="Equipo HyperToys" />
+          <img src="/team.jpeg" alt="Equipo HyperToys" className="img-fluid" style={{ maxHeight: '500px' }} />
         </div>
       </section>
 

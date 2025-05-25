@@ -66,13 +66,16 @@
   margin-bottom: 1.5rem;
 }
 
-.team-image {
-  display: block;
-  max-width: 100%;
+/* Reemplaza la regla .team-image por esto: */
+.our-story img {
+  width: 100%;
+  max-width: 800px;
   height: auto;
-  margin: 0 auto;
+  display: block;
+  margin: 2rem auto;
   border-radius: 10px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  object-fit: cover;
 }
 
 /* Nuestra Misión */
@@ -192,8 +195,23 @@
   box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
 
+
+
 /* Responsive */
 @media (max-width: 768px) {
+
+    .our-story img {
+    max-width: 100%;
+    margin: 1rem auto;
+    border-radius: 8px;
+  }
+}
+
+@media (max-width: 576px) {
+  .our-story img {
+    border-radius: 5px;
+  }
+
   .hero-overlay h1 {
     font-size: 2rem;
   }
@@ -215,3 +233,4 @@
   position: relative;
   z-index: 1;
 }
+
