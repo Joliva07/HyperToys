@@ -38,6 +38,7 @@ exports.realizarCompra = async (req, res) => {
 
         let idDetalleIncremental = 1;
 
+        // Insertar los productos del carrito normalmente
         for (let i = 0; i < productos.length; i++) {
             const producto = productos[i];
 
@@ -50,7 +51,18 @@ exports.realizarCompra = async (req, res) => {
                 id_factura: nuevaFactura.id_factura,
                 id_producto: producto.id_producto,
                 cantidad: producto.cantidad,
-                id_reserva: id_reserva || null // Aquí se guarda el ID_RESERVA si existe
+                id_reserva: null  // No se asocia reserva a productos normales
+            }, { transaction: t });
+        }
+
+        // Si hay una reserva, insertarla como un "producto adicional"
+        if (id_reserva) {
+            await DetalleFacturas.create({
+                id_detalle_factura: idDetalleIncremental++,
+                id_factura: nuevaFactura.id_factura,
+                id_producto: null,  // No aplica producto
+                cantidad: 1,        // 1 unidad de “reserva”
+                id_reserva: id_reserva
             }, { transaction: t });
         }
 
@@ -63,6 +75,7 @@ exports.realizarCompra = async (req, res) => {
         res.status(500).json({ message: 'Error al realizar la compra', error });
     }
 };
+
 
 
 
