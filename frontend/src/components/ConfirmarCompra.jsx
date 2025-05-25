@@ -165,7 +165,7 @@ const ConfirmarCompra = () => {
                           <FontAwesomeIcon icon="trash-alt" /> Eliminar
                         </button>
                       </div>
-                      <p className="text-start text-md-center">Precio: ${producto.PRECIO} x {producto.cantidad}</p>
+                      <p className="text-start text-md">Precio: ${producto.PRECIO} x {producto.cantidad}</p>
                     </div>
                     <div className="col-lg-4 d-flex justify-content-end align-items-center">
                       <button className="btn btn-outline-light btn-sm" onClick={() => disminuirCantidad(producto.ID_PRODUCTO)}>-</button>
