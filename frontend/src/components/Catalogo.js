@@ -152,6 +152,12 @@ const Catalogo = () => {
                 style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.5)' }}
                 tabIndex="-1"
                 role="dialog"
+                  onClick={(e) => {
+                  // si se da clic directamente en el fondo (y no en el modal-content), cerrar
+                  if (e.target.classList.contains('modal') || e.target.classList.contains('fade')) {
+                    setProductoSeleccionado(null);
+                  }
+                }}
               >
                 <div className="modal-dialog modal-lg" role="document">
                   <div className="modal-content">

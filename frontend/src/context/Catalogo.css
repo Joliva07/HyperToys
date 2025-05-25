@@ -121,5 +121,10 @@
 }
 
 body.modal-open {
-  overflow: hidden;
+  overflow: hidden !important;
+}
+
+.modal.fade.show {
+  transition: opacity 0.3s ease;
+  opacity: 1;
 }
