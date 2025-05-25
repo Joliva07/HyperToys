@@ -36,7 +36,11 @@ const ConfirmarCompra = () => {
   const totalReserva = reservasVerificadas.reduce((acc, r) => acc + r.total_reserva, 0);
   const totalPagar = totalProductos + totalReserva;
   const [reservaVerificadaBloquea, setReservaVerificadaBloquea] = useState(false);
-  
+
+  const hayProductoInvalido = carrito.some(
+    (p) => p.STOCK === 0 || p.DISPONIBILIDAD === 'Por llegar'
+  );
+
   const handleConfirmar = async () => {
     if (!carrito.length && reservasVerificadas.length === 0) {
       alert("No hay productos ni reservas para procesar.");
@@ -113,7 +117,7 @@ const ConfirmarCompra = () => {
     }
   };
 
-    const verificarReserva = async () => {
+  const verificarReserva = async () => {
     setReservaError('');
 
     if (!idReservaInput.trim()) return;
@@ -151,12 +155,14 @@ const ConfirmarCompra = () => {
                   <div className="row mb-3" key={producto.ID_PRODUCTO}>
                     <div className="col-lg-8">
                       <p className="mb-0"><strong>{producto.NOMBRE}</strong></p>
-                    <div className="col-lg-5 col-md-6 mb-4 mb-lg-0">                      
-                      <button 
-                      className="btn btn-danger btn-sm me-1 mb-2" onClick={() => eliminarProducto(producto.ID_PRODUCTO)} style={{display: 'inline-flex',alignItems: 'center',gap: '5px'}}>
-                      <FontAwesomeIcon icon="trash-alt" /> Eliminar
-                    </button>
-                    </div>
+                      <div className="col-lg-5 col-md-6 mb-4 mb-lg-0">
+                        <button
+                          className="btn btn-danger btn-sm me-1 mb-2"
+                          onClick={() => eliminarProducto(producto.ID_PRODUCTO)}
+                          style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                          <FontAwesomeIcon icon="trash-alt" /> Eliminar
+                        </button>
+                      </div>
                       <p className="text-muted">Precio: Q{producto.PRECIO} x {producto.cantidad}</p>
                     </div>
                     <div className="col-lg-4 d-flex justify-content-end align-items-center">
@@ -220,7 +226,14 @@ const ConfirmarCompra = () => {
                     <strong>Q{totalPagar.toFixed(2)}</strong>
                   </li>
                 </ul>
-                <button className="btn btn-success w-100 mt-3" onClick={handleConfirmar}>Confirmar y Pagar</button>
+                <button className="btn btn-success w-100 mt-3" onClick={handleConfirmar} disabled={hayProductoInvalido}>
+                  Confirmar y Pagar
+                </button>
+                {hayProductoInvalido && (
+                  <p className="text-warning mt-2">
+                    No puedes confirmar la compra porque hay productos con stock agotado o en estado "Por llegar".
+                  </p>
+                )}
                 <button className="btn btn-secondary w-100 mt-2" onClick={handleReserva} disabled={reservaVerificadaBloquea}>Reservar</button>
               </div>
             </div>
