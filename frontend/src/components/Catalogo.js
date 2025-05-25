@@ -29,6 +29,10 @@ const Catalogo = () => {
     }
   };
 
+
+  obtenerProductos();
+}, [pagina]);
+
   useEffect(() => {
   if (productoSeleccionado) {
     document.body.classList.add('modal-open');
@@ -37,9 +41,6 @@ const Catalogo = () => {
   }
 }, [productoSeleccionado]);
 
-
-  obtenerProductos();
-}, [pagina]);
 
   const handleCantidadChange = (id, valor) => {
     setCantidades({ ...cantidades, [id]: parseInt(valor) });
