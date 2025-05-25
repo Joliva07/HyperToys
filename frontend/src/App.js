@@ -12,6 +12,7 @@ import Footer from './components/Footer';
 import Navbar from './components/Navbar';
 import AboutUs from './components/AboutUs';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import ProductosPorCategoria from './components/ProductosPorCategoria';
 
 
 
@@ -31,6 +32,7 @@ function App() {
           <Route path="/perfil" element={<PerfilCliente />} />
           <Route path="/producto/:id" element={<ProductoDetalle />} />
           <Route path="/AboutUs" element={<AboutUs />} />
+          <Route path="/categoria/:id" element={<ProductosPorCategoria />} />
         </Routes>
       </div>
       <Footer />
