@@ -1,8 +1,8 @@
 .categorias-container {
   display: flex;
-  justify-content: center; /* Cambiado de 'start' a 'center' para distribuir */
-  flex-wrap: wrap; /* Permite múltiples líneas si es necesario */
-  gap: 2rem; /* Más separación horizontal y vertical */
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
   padding: 1.5rem 2rem;
   background-color: #fff;
   margin-bottom: 2rem;
@@ -11,7 +11,7 @@
 }
 
 .categoria-item {
-  flex: 0 1 120px; /* Permite que se adapten mejor y ocupen más espacio */
+  flex: 0 1 120px;
   text-align: center;
 }
 
@@ -23,11 +23,26 @@
   background-color: #212529;
   padding: 5px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  border: 2px solid black; /* Puedes cambiar el color si deseas */
+  border: 2px solid black;
 }
 
 .categoria-nombre {
   margin-top: 0.5rem;
   font-size: 0.9rem;
   font-weight: 500;
+}
+
+/* --- Modo móvil: scroll horizontal --- */
+@media (max-width: 768px) {
+  .categorias-container {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .categoria-item {
+    flex: 0 0 auto;
+  }
 }
