@@ -22,7 +22,7 @@ const Categorias = () => {
   }, []);
 
   return (
-    <div className="categorias-container">
+    <div className="categorias-container container-fluid">
       {categorias.map(cat => (
         <div className="categoria-item" key={cat.ID_TIPO_PRODUCTO}>
           <img

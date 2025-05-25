@@ -2,9 +2,12 @@
   display: flex;
   flex-wrap: nowrap;
   overflow-x: auto;
-  gap: 1rem;
-  padding: 1rem;
+  gap: 1.5rem;
+  padding: 1rem 2rem;
   background-color: #fff;
+  margin-bottom: 2rem;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .categoria-item {
@@ -18,7 +21,7 @@
   height: 80px;
   border-radius: 50%;
   object-fit: cover;
-  background-color: #ffe4c4;
+  background-color: #212529;
   padding: 5px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
