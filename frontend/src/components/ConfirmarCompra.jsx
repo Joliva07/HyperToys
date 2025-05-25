@@ -151,6 +151,13 @@ const ConfirmarCompra = () => {
                   <div className="row mb-3" key={producto.ID_PRODUCTO}>
                     <div className="col-lg-8">
                       <p className="mb-0"><strong>{producto.NOMBRE}</strong></p>
+                    <div className="col-lg-5 col-md-6 mb-4 mb-lg-0">
+                      <p><strong>{p.NOMBRE}</strong></p>
+                      <button 
+                      className="btn btn-danger btn-sm me-1 mb-2" onClick={() => eliminarProducto(p.ID_PRODUCTO)} style={{display: 'inline-flex',alignItems: 'center',gap: '5px'}}>
+                      <FontAwesomeIcon icon="trash-alt" /> Eliminar
+                    </button>
+                    </div>
                       <p className="text-muted">Precio: Q{producto.PRECIO} x {producto.cantidad}</p>
                     </div>
                     <div className="col-lg-4 d-flex justify-content-end align-items-center">
