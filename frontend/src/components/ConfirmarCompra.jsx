@@ -199,10 +199,9 @@ return (
                   Reservar
                 </button>
               </div>            
-            </div>
-      <div className="col-md-4">
-        <div className="card-header py-3">
+            </div>  
             <div className="card mb-4 bg-dark">
+                <div className="card-header py-3">
             <label htmlFor="reservaId" className="form-label">Agregar ID de Reserva Existente:</label>
             <input
               type="text"
@@ -220,9 +219,8 @@ return (
                 Reserva válida encontrada. Total ${reservaVerificada.total_reserva.toFixed(2)}
               </p>
             )}
+          </div>   
           </div> 
-        </div>  
-      </div>       
           </div>
         </div>
       </div>
