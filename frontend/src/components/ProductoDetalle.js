@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { CarritoContext } from '../context/CarritoContext';
 
+
 const ProductoDetalle = () => {
   const { id } = useParams();
   const [producto, setProducto] = useState(null);
@@ -24,6 +25,12 @@ const ProductoDetalle = () => {
   }, [id]);
 
   const handleAgregarAlCarrito = () => {
+    if (!clienteId) {
+      alert('Debes iniciar sesión para agregar productos al carrito.');
+      navigate('/login');
+      return;
+    }
+
     agregarProducto({ ...producto, cantidad: parseInt(cantidad) });
     alert('¡Producto agregado al carrito!');
     navigate('/');
@@ -31,7 +38,7 @@ const ProductoDetalle = () => {
 
   if (!producto) return <div className="container mt-5">Cargando producto...</div>;
 
-  return (
+ return (
     <div className="container mt-5 text-center">
       <h2>Figura - {producto.NOMBRE}</h2>
       {producto.IMAGEN && (
