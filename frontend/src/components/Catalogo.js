@@ -29,6 +29,15 @@ const Catalogo = () => {
     }
   };
 
+  useEffect(() => {
+  if (productoSeleccionado) {
+    document.body.classList.add('modal-open');
+  } else {
+    document.body.classList.remove('modal-open');
+  }
+}, [productoSeleccionado]);
+
+
   obtenerProductos();
 }, [pagina]);
 
