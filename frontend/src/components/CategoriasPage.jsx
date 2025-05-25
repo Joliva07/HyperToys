@@ -78,29 +78,71 @@ const handleAgregarAlCarrito = (producto) => {
         {productos.length === 0 ? (
           <p className="text-center">No hay productos disponibles para esta categoría.</p>
         ) : (
-          productos.map((producto) => (
-            <div className="col-md-4 mb-4" key={producto.ID_PRODUCTO}>
-              <div className="card h-100">
-                {producto.IMAGEN && (
-                  <img
-                    src={`data:image/jpeg;base64,${producto.IMAGEN}`}
-                    alt={producto.NOMBRE}
-                    className="card-img-top producto-img"
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => setProductoSeleccionado(producto)}
-                  />
+productos.map((producto) => (
+  <div className="col-md-4 mb-4" key={producto.ID_PRODUCTO}>
+    <div className="card producto-card h-100 shadow-sm position-relative">
+      {/* Etiqueta de estado */}
+      {(producto.DISPONIBILIDAD === 'Agotado' || producto.STOCK === 0) && (
+        <span className="badge estado-producto agotado">Agotado</span>
+      )}
+      {producto.DISPONIBILIDAD === 'Por llegar' && (
+        <span className="badge estado-producto por-llegar">Por llegar</span>
+      )}
+      {producto.DISPONIBILIDAD === 'Express' && (
+        <span className="badge estado-producto express">Express</span>
+      )}
 
-                )}
-                <div className="card-body">
-                  <h5 className="card-title text-primary producto-nombre" style={{ cursor: 'pointer' }} onClick={() => setProductoSeleccionado(producto)}>{producto.NOMBRE}</h5>
-                  <p className="card-text">{producto.DESCRIPCION}</p>
-                  <p><strong>Precio:</strong> ${producto.PRECIO}</p>
-                  <p><strong>Disponibilidad:</strong> {producto.DISPONIBILIDAD}</p>
-                  <p><strong>Stock:</strong> {producto.STOCK}</p>
-                </div>
-              </div>
-            </div>
-          ))
+      {producto.IMAGEN && (
+        <img
+          src={`data:image/jpeg;base64,${producto.IMAGEN}`}
+          alt={producto.NOMBRE}
+          className="card-img-top producto-img"
+          style={{ cursor: 'pointer' }}
+          onClick={() => setProductoSeleccionado(producto)}
+        />
+      )}
+      <div className="card-body d-flex flex-column">
+        <h5
+          className="card-title text-primary producto-nombre"
+          style={{ cursor: 'pointer' }}
+          onClick={() => setProductoSeleccionado(producto)}
+        >
+          {producto.NOMBRE}
+        </h5>
+        <p className="card-text">{producto.DESCRIPCION}</p>
+        <p className="producto-precio">
+          {isNaN(producto.PRECIO) ? (
+            `$${producto.PRECIO}`
+          ) : (
+            <>
+              ${Number(producto.PRECIO).toFixed(2)}
+              <span className="precio-original">
+                ${(Number(producto.PRECIO) + 50).toFixed(2)}
+              </span>
+            </>
+          )}
+        </p>
+        <p><strong>Disponibilidad:</strong> {producto.DISPONIBILIDAD}</p>
+        <p><strong>Stock disponible:</strong> {producto.STOCK}</p>
+        <label>Cantidad:</label>
+        <input
+          type="number"
+          min="1"
+          className="form-control mb-2"
+          value={cantidades[producto.ID_PRODUCTO] || 1}
+          onChange={(e) => handleCantidadChange(producto.ID_PRODUCTO, e.target.value)}
+        />
+        <button
+          className="btn btn-primary"
+          onClick={() => handleAgregarAlCarrito(producto)}
+          disabled={['Agotado', 'Descontinuado'].includes(producto.DISPONIBILIDAD)}
+        >
+          Agregar al Carrito
+        </button>
+      </div>
+    </div>
+  </div>
+))
         )}
       </div>
 
