@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import '../context/Carrito.css';
-const [reservaVerificadaBloquea, setReservaVerificadaBloquea] = useState(false);
+
 
 const ConfirmarCompra = () => {
   const { carrito, setCarrito, eliminarProducto, clienteId: rawClienteId } = useContext(CarritoContext);
@@ -35,7 +35,8 @@ const ConfirmarCompra = () => {
   const totalProductos = carrito.reduce((acc, p) => acc + p.PRECIO * p.cantidad, 0);
   const totalReserva = reservasVerificadas.reduce((acc, r) => acc + r.total_reserva, 0);
   const totalPagar = totalProductos + totalReserva;
-
+  const [reservaVerificadaBloquea, setReservaVerificadaBloquea] = useState(false);
+  
   const handleConfirmar = async () => {
     if (!carrito.length && reservasVerificadas.length === 0) {
       alert("No hay productos ni reservas para procesar.");
