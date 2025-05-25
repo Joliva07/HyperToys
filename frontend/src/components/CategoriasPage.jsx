@@ -6,19 +6,33 @@ import Categorias from './Categorias';
 const CategoriasPage = () => {
   const { id } = useParams(); // ID_TIPO_PRODUCTO
   const [productos, setProductos] = useState([]);
+  const [nombreCategoria, setNombreCategoria] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get(`https://back-hypertoys.onrender.com/HyperToys/producto/tipo/${id}`)
-      .then((res) => setProductos(res.data))
-      .catch((err) => console.error('Error al obtener productos:', err));
+    // Obtener todos los productos
+    axios.get('https://back-hypertoys.onrender.com/HyperToys/productos/all')
+      .then(res => {
+        const filtrados = res.data.filter(p => p.ID_TIPO_PRODUCTO == id);
+        setProductos(filtrados);
+      })
+      .catch(err => console.error('Error al obtener productos:', err));
+  }, [id]);
+
+  useEffect(() => {
+    // Obtener nombre de la categoría
+    axios.get(`https://back-hypertoys.onrender.com/HyperToys/tipos-producto/${id}`)
+      .then(res => setNombreCategoria(res.data.TIPO))
+      .catch(err => console.error('Error al obtener categoría:', err));
   }, [id]);
 
   return (
     <div className="container mt-5">
       <Categorias />
-      <h3 className="mb-4 text-center">Productos de esta categoría</h3>
+      <h3 className="mb-4 text-center">
+        {nombreCategoria ? `Productos de la categoría: ${nombreCategoria}` : 'Cargando...'}
+      </h3>
+
       <div className="row">
         {productos.length === 0 ? (
           <p className="text-center">No hay productos disponibles para esta categoría.</p>
