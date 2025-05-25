@@ -137,7 +137,7 @@ const ConfirmarCompra = () => {
       <div className="container py-5">
         <div className="row d-flex justify-content-center my-4">
           <div className="col-md-8">
-            <div className="card mb-4">
+            <div className="card mb-4 bg-dark text-white">
               <div className="card-header py-3">
                 <h5 className="mb-0">Carrito de compras</h5>
               </div>
@@ -149,14 +149,14 @@ const ConfirmarCompra = () => {
                       <p className="text-muted">Precio: Q{producto.PRECIO} x {producto.cantidad}</p>
                     </div>
                     <div className="col-lg-4 d-flex justify-content-end align-items-center">
-                      <button className="btn btn-outline-secondary btn-sm" onClick={() => disminuirCantidad(producto.ID_PRODUCTO)}>-</button>
+                      <button className="btn btn-outline-light btn-sm" onClick={() => disminuirCantidad(producto.ID_PRODUCTO)}>-</button>
                       <span className="mx-2">{producto.cantidad}</span>
-                      <button className="btn btn-outline-secondary btn-sm" onClick={() => aumentarCantidad(producto.ID_PRODUCTO)}>+</button>
+                      <button className="btn btn-outline-light btn-sm" onClick={() => aumentarCantidad(producto.ID_PRODUCTO)}>+</button>
                     </div>
                   </div>
                 ))}
 
-                {reservasVerificadas.length > 0 && <hr />}
+                {reservasVerificadas.length > 0 && <hr className="text-white" />}
 
                 {reservasVerificadas.map(reserva => (
                   <div className="row mb-3" key={`reserva-${reserva.id_reserva}`}>
@@ -172,23 +172,62 @@ const ConfirmarCompra = () => {
               </div>
             </div>
 
-            <div className="card mb-4">
+            <div className="card mb-4 bg-dark text-white">
               <div className="card-body">
-                <h5 className="mb-3">Total a pagar: Q{totalPagar.toFixed(2)}</h5>
-                <button className="btn btn-primary w-100 mb-2" onClick={handleConfirmar}>Confirmar Compra</button>
-                <button className="btn btn-secondary w-100 mb-2" onClick={handleReserva}>Hacer Reserva</button>
-                <input
-                  type="text"
-                  className="form-control mb-2"
-                  placeholder="ID de reserva"
-                  value={idReservaInput}
-                  onChange={(e) => setIdReservaInput(e.target.value)}
-                />
-                <button className="btn btn-info w-100" onClick={verificarReserva}>Agregar Reserva</button>
-                {reservaError && <div className="text-danger mt-2">{reservaError}</div>}
+                <p><strong>Envío estimado:</strong></p>
+                <p className="mb-0">En las próximas 48 horas</p>
               </div>
             </div>
 
+            <div className="card mb-4 bg-dark text-white">
+              <div className="card-body">
+                <p><strong>Aceptamos</strong></p>
+                <img className="me-2" width="45px" src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/visa.svg" alt="Visa" />
+                <img className="me-2" width="45px" src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/amex.svg" alt="American Express" />
+                <img className="me-2" width="45px" src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/mastercard.svg" alt="Mastercard" />
+              </div>
+            </div>
+          </div>
+
+          <div className="col-md-4">
+            <div className="card mb-4 bg-dark text-white">
+              <div className="card-header py-3">
+                <h5 className="mb-0">Resumen</h5>
+              </div>
+              <div className="card-body">
+                <ul className="list-group list-group-flush">
+                  <li className="list-group-item resumen-item d-flex justify-content-between align-items-center px-0 bg-dark text-white">
+                    Productos + Reservas
+                    <span>Q{totalPagar.toFixed(2)}</span>
+                  </li>
+                  <li className="list-group-item resumen-item d-flex justify-content-between align-items-center px-0 bg-dark text-white">
+                    Envío
+                    <span>Gratis</span>
+                  </li>
+                  <li className="list-group-item resumen-item d-flex justify-content-between align-items-center px-0 bg-dark text-white">
+                    <strong>Total</strong>
+                    <strong>Q{totalPagar.toFixed(2)}</strong>
+                  </li>
+                </ul>
+                <button className="btn btn-success w-100 mt-3" onClick={handleConfirmar}>Confirmar y Pagar</button>
+                <button className="btn btn-secondary w-100 mt-2" onClick={handleReserva}>Reservar</button>
+              </div>
+            </div>
+
+            <div className="card mb-4 bg-dark text-white">
+              <div className="card-header py-3">
+                <label htmlFor="reservaId" className="form-label">Agregar ID de Reserva Existente:</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="reservaId"
+                  value={idReservaInput}
+                  onChange={(e) => setIdReservaInput(e.target.value)}
+                />
+                <button className="btn btn-info mt-2" onClick={verificarReserva}>Verificar Reserva</button>
+                {reservaError && <p className="text-danger mt-2">{reservaError}</p>}
+              </div>
+            </div>
           </div>
         </div>
       </div>
