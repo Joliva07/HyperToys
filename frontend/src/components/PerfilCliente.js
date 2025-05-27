@@ -175,6 +175,7 @@ const PerfilCliente = () => {
                 <button className="btn btn-deep-purple btn-half" onClick={() => setEditando(true)}>
                   Editar Perfil
                 </button>
+                <p><strong>Puntos:</strong> {cliente.PUNTOS_COMPRA}</p>
               </>
             )}
 
