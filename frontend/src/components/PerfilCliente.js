@@ -147,6 +147,7 @@ const PerfilCliente = () => {
             <p><strong>Apellidos:</strong> {cliente.APELLIDOS}</p>
             <p><strong>Correo:</strong> {cliente.CORREO_ELECTRONICO}</p>
             <p><strong>Dirección:</strong> {cliente.DIRECCION}</p>
+            <p><strong>Puntos:</strong> {cliente.PUNTOS_COMPRA}</p>
             <button className="btn btn-primary" onClick={() => setEditando(true)}>Editar Perfil</button>
           </>
         )}
